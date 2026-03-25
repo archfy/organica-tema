@@ -1,0 +1,464 @@
+<style>
+  .price__discount-badge {
+    background-color: #ff0000;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 13px;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1;
+    position: relative;
+    margin-left: 5px;
+    bottom: 5px;
+  }
+  value-parcela-pdp-default{
+  display:inline-block!important;
+}
+   @media (min-width: 767px) {
+    .break-mobile {
+      display: block;
+    }
+  }
+  /* No desktop, ele volta ao normal (um ao lado do outro) */
+  @media (min-width: 768px) {
+    .break-mobile {
+      display: inline;
+    }
+  }
+</style>
+
+
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+  assign discount_percentage = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round
+
+  comment
+    ============================================
+    PARCELAMENTO PDP - parcela mínima R$50 (5000 centavos)
+    ============================================
+  endcomment
+  assign min_installment_cents = 4999
+  assign max_installments = 10
+  assign installment_count = 0
+  assign possible_installments = price | divided_by: min_installment_cents
+  if possible_installments >= 2
+    assign installment_count = possible_installments
+    if installment_count > max_installments
+      assign installment_count = max_installments
+    endif
+  endif
+  if installment_count > 0
+    assign installment_value = price | divided_by: installment_count
+  endif
+-%}
+
+{%- comment -%} 
+  ========================================
+  WRAPPER PRINCIPAL - Este div será atualizado via innerHTML
+  ========================================
+{%- endcomment -%}
+<div id="price-pdp-wrapper" data-price-wrapper>
+  <div
+    class="
+      bls__price
+      {%- if available == false %} price--sold-out {% endif -%}
+      {%- if compare_at_price > price %} price--on-sale {% endif -%}
+      {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+    "
+  >
+    <div class="bls__product-price flex flex-wrap align-items-center mt-3">
+      <div class="price__regular">
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span class="price{%- if compare_at_price > price %} special-price {% endif -%}" data-product-price>
+     {{ money_price }}
+        </span>
+      </div>
+      {%- if compare_at_price > price %}
+        {%- unless product.price_varies == false and product.compare_at_price_varies %}
+          <div class="price__sale grey-color" data-sale-price-wrapper>
+              <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+              <span>
+                <s class="price-item compare-price" data-compare-price>
+                  {% if settings.currency_code_enabled %}
+                    {{ compare_at_price | money_with_currency }}
+                  {% else %}
+                    {{ compare_at_price | money }}
+                  {% endif %}
+                </s>
+              </span>
+              <span class="price__discount-badge" data-discount-badge>
+                {{ discount_percentage }}% OFF
+              </span>
+          </div>
+        {%- endunless -%}
+      {%- endif -%}
+
+      
+
+      {% if product.selected_or_first_available_variant.unit_price_measurement != null %}
+        <small class="unit-price caption">
+          <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+          <span class="price-item price-item--last">
+            <span class="number">{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+            <span aria-hidden="true">/</span>
+            <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+            <span class="unit">
+              {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+              {%- endif -%}
+              {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+            </span>
+          </span>
+        </small>
+      {% endif %}
+    </div>
+    {%- comment -%} PARCELAMENTO DINÂMICO {%- endcomment -%}
+      {%- if installment_count > 0 -%}
+        <div class="price__installments" data-installments-wrapper>
+          <span class="text-gray-600 text-[12px] text-juros-grid">
+            ou {{ installment_count }}x de
+            <span class="value-parcela-pdp" style="display:inline-block">{{ installment_value | money }}</span>
+          </span>
+        </div>
+      {%- endif -%}
+  </div>
+</div>
+
+<script>
+(function() {
+  console.log('🔥 PRICE-PDP v4.0 CARREGADO (com parcelamento dinâmico)!');
+  
+  // ========================================
+  // DADOS DO PRODUTO
+  // ========================================
+  const variants = {{ product.variants | json }};
+  const priceWrapper = document.getElementById('price-pdp-wrapper');
+  
+  if (!priceWrapper) {
+    console.error('❌ [PRICE-PDP v4.0] Wrapper não encontrado!');
+    return;
+  }
+  
+  console.log('📦 [PRICE-PDP v4.0] Variantes disponíveis:', variants.length);
+  
+  // ========================================
+  // FUNÇÃO FORMATAR PREÇO
+  // ========================================
+  function formatMoney(cents) {
+    return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+  }
+  
+  // ========================================
+  // FUNÇÃO CALCULAR PARCELAMENTO
+  // Regra: parcela mínima R$50 (5000 centavos)
+  // Se não dá pra dividir em pelo menos 2x com parcela >= R$50, não parcela
+  // Teto: 12x
+  // ========================================
+  function calcInstallments(priceCents) {
+    const MIN_INSTALLMENT = 5000; // R$50 em centavos
+    const MAX_INSTALLMENTS = 12;
+    
+    let count = Math.floor(priceCents / MIN_INSTALLMENT);
+    
+    if (count < 2) return null; // Sem parcelamento
+    if (count > MAX_INSTALLMENTS) count = MAX_INSTALLMENTS;
+    
+    const value = Math.floor(priceCents / count);
+    
+    return { count, value };
+  }
+  
+  // ========================================
+  // FUNÇÃO PRINCIPAL - RECONSTRÓI HTML
+  // ========================================
+  function updatePriceHTML(variantId) {
+    console.log('🎯 [PRICE-PDP v4.0] Atualizando para variante:', variantId);
+    
+    const variant = variants.find(v => v.id === parseInt(variantId));
+    
+    if (!variant) {
+      console.warn('⚠️ [PRICE-PDP v4.0] Variante não encontrada:', variantId);
+      return;
+    }
+    
+    console.log('✅ [PRICE-PDP v4.0] Variante:', variant.title);
+    console.log('💰 [PRICE-PDP v4.0] Preço:', variant.price, '| Compare:', variant.compare_at_price);
+    
+    const price = variant.price;
+    const compareAtPrice = variant.compare_at_price;
+    const hasDiscount = compareAtPrice && compareAtPrice > price;
+    
+    let discountPercent = 0;
+    if (hasDiscount) {
+      discountPercent = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+      console.log('🏷️ [PRICE-PDP v4.0] Desconto:', discountPercent + '%');
+    }
+    
+    // Calcula parcelamento
+    const installments = calcInstallments(price);
+    
+    // ========================================
+    // MONTA HTML COMPLETO
+    // ========================================
+    let priceHTML = `
+      <div class="bls__price ${!variant.available ? 'price--sold-out' : ''} ${hasDiscount ? 'price--on-sale' : ''}">
+        <div class="bls__product-price flex flex-wrap align-items-center mt-3">
+          <div class="price__regular">
+            <span class="visually-hidden visually-hidden--inline">Preço normal</span>
+            <span class="price${hasDiscount ? ' special-price' : ''}" data-product-price>
+              ${formatMoney(price)}
+            </span>
+          </div>
+    `;
+    
+    // Desconto
+    if (hasDiscount) {
+      priceHTML += `
+          <div class="price__sale grey-color" data-sale-price-wrapper style="display: flex !important; align-items: center;">
+            <span class="visually-hidden visually-hidden--inline">Preço promocional</span>
+            <span>
+              <s class="price-item compare-price" data-compare-price>
+                ${formatMoney(compareAtPrice)}
+              </s>
+            </span>
+            <span class="price__discount-badge" data-discount-badge style="
+              background-color: #ff0000 !important;
+              color: #FFFFFF !important;
+              padding: 5px 10px !important;
+              border-radius: 13px !important;
+              font-size: 1rem !important;
+              font-weight: bold !important;
+              line-height: 1 !important;
+              position: relative !important;
+              margin-left: 5px !important;
+              display: inline-block !important;
+            ">
+              ${discountPercent}% OFF
+            </span>
+          </div>
+      `;
+    }
+    
+    // Parcelamento dinâmico
+    if (installments) {
+      priceHTML += `
+          <div class="price__installments" data-installments-wrapper>
+            <span class="text-gray-600 text-[12px] text-juros-grid">
+              ou ${installments.count}x de
+              <span class="value-parcela-pdp">${formatMoney(installments.value)}</span>
+            </span>
+          </div>
+      `;
+      console.log('💳 [PRICE-PDP v4.0] Parcelamento:', installments.count + 'x de', formatMoney(installments.value));
+    } else {
+      console.log('💳 [PRICE-PDP v4.0] Sem parcelamento (parcela ficaria < R$50)');
+    }
+    
+    priceHTML += `
+        </div>
+      </div>
+    `;
+    
+    // ========================================
+    // SUBSTITUI HTML DO WRAPPER
+    // ========================================
+    priceWrapper.innerHTML = priceHTML;
+    console.log('✅ [PRICE-PDP v4.0] HTML do preço atualizado!');
+    
+    // ========================================
+    // ATUALIZA PREÇOS DENAVITA (parcela e à vista) - elementos externos
+    // ========================================
+    document.querySelectorAll('.value-vista-pdp').forEach(el => {
+      el.textContent = formatMoney(price);
+    });
+    
+    if (installments) {
+      document.querySelectorAll('.value-parcela-pdp').forEach(el => {
+        el.textContent = formatMoney(installments.value);
+      });
+    }
+    
+    // ========================================
+    // ATUALIZA LABELS DE DESCONTO DENAVITA
+    // ========================================
+    if (hasDiscount) {
+      document.querySelectorAll('.bls__sale-label').forEach(el => {
+        el.textContent = `-${discountPercent}%`;
+        el.style.display = '';
+      });
+      
+      document.querySelectorAll('#bls__product-label, .bls__product-label').forEach(el => {
+        el.style.display = '';
+      });
+      
+      document.querySelectorAll('.bls__product-label-detail').forEach(el => {
+        el.style.display = '';
+      });
+    } else {
+      document.querySelectorAll('.bls__sale-label').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      document.querySelectorAll('#bls__product-label, .bls__product-label').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+    
+    console.log('✨ [PRICE-PDP v4.0] Todos os preços atualizados!');
+  }
+  
+  // ========================================
+  // LISTENERS DE EVENTOS
+  // ========================================
+  
+  // Guarda último variant ID para re-renders
+  let lastKnownVariantId = null;
+  let isUpdatingNow = false;
+  
+  // Wrapper do updatePriceHTML que controla flag
+  function safeUpdatePrice(variantId) {
+    isUpdatingNow = true;
+    updatePriceHTML(variantId);
+    lastKnownVariantId = variantId;
+    // Reset flag depois de um tick para permitir observer detectar mudanças externas
+    setTimeout(function() { isUpdatingNow = false; }, 50);
+  }
+  
+  // 1. Evento variant:change
+  document.addEventListener('variant:change', function(e) {
+    console.log('🔔 [PRICE-PDP v4.0] Evento variant:change recebido!');
+    if (e.detail && e.detail.variant) {
+      safeUpdatePrice(e.detail.variant.id);
+    }
+  });
+  
+  // 2. Evento variant:id-change
+  document.addEventListener('variant:id-change', function(e) {
+    console.log('🔔 [PRICE-PDP v4.0] Evento variant:id-change recebido!');
+    if (e.detail && e.detail.variantId) {
+      safeUpdatePrice(e.detail.variantId);
+    }
+  });
+  
+  // 3. Mudança no input[name="id"] do formulário principal
+  const mainVariantInput = document.querySelector('form[data-type="add-to-cart-form"]:not([id*="sticky"]) input[name="id"]');
+  if (mainVariantInput) {
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+          console.log('🔔 [PRICE-PDP v4.0] Input value mudou via atributo');
+          safeUpdatePrice(mainVariantInput.value);
+        }
+      });
+    });
+    observer.observe(mainVariantInput, { attributes: true, attributeFilter: ['value'] });
+    
+    mainVariantInput.addEventListener('change', function() {
+      console.log('🔔 [PRICE-PDP v4.0] Input change event');
+      safeUpdatePrice(this.value);
+    });
+  }
+  
+  // 4. Intercepta cliques em swatches — com retries longos para vencer section rendering
+  document.addEventListener('click', function(e) {
+    const swatch = e.target.closest('.bls__option-swatch');
+    if (swatch) {
+      console.log('🔔 [PRICE-PDP v4.0] Swatch clicado:', swatch.dataset.value);
+      
+      [150, 600, 1200, 2000, 3000].forEach(function(delay) {
+        setTimeout(function() {
+          const input = document.querySelector('form[data-type="add-to-cart-form"]:not([id*="sticky"]) input[name="id"]');
+          if (input && input.value) {
+            safeUpdatePrice(input.value);
+          }
+        }, delay);
+      });
+    }
+  }, true);
+  
+  // 5. Mesmo para mousedown (PATCH v3.1 captura mousedown)
+  document.addEventListener('mousedown', function(e) {
+    const swatch = e.target.closest('.bls__option-swatch');
+    if (swatch) {
+      [150, 600, 1200, 2000, 3000].forEach(function(delay) {
+        setTimeout(function() {
+          const input = document.querySelector('form[data-type="add-to-cart-form"]:not([id*="sticky"]) input[name="id"]');
+          if (input && input.value) {
+            safeUpdatePrice(input.value);
+          }
+        }, delay);
+      });
+    }
+  }, true);
+  
+  // ========================================
+  // 🛡️ MUTATION OBSERVER - DETECTA QUANDO O TEMA SOBRESCREVE O PREÇO
+  // E RECONSTRÓI O PARCELAMENTO AUTOMATICAMENTE
+  // ========================================
+  if (priceWrapper) {
+    const wrapperObserver = new MutationObserver(function() {
+      if (isUpdatingNow) return; // Ignora mudanças feitas por nós
+      
+      // Verifica se parcelamento sumiu
+      const hasInstallments = priceWrapper.querySelector('[data-installments-wrapper]');
+      if (!hasInstallments && lastKnownVariantId) {
+        console.log('🛡️ [PRICE-PDP v4.0] Parcelamento sumiu! Reconstruindo...');
+        safeUpdatePrice(lastKnownVariantId);
+      }
+    });
+    
+    wrapperObserver.observe(priceWrapper, {
+      childList: true,
+      subtree: true
+    });
+    
+    // Observer no pai também — caso o tema substitua o wrapper inteiro
+    if (priceWrapper.parentNode) {
+      const parentObserver = new MutationObserver(function() {
+        if (isUpdatingNow) return;
+        
+        setTimeout(function() {
+          const wrapper = document.getElementById('price-pdp-wrapper');
+          if (wrapper) {
+            const hasInstallments = wrapper.querySelector('[data-installments-wrapper]');
+            if (!hasInstallments && lastKnownVariantId) {
+              console.log('🛡️ [PRICE-PDP v4.0] Wrapper pai mudou! Reconstruindo parcelamento...');
+              safeUpdatePrice(lastKnownVariantId);
+            }
+          }
+        }, 100);
+      });
+      
+      parentObserver.observe(priceWrapper.parentNode, {
+        childList: true,
+        subtree: false
+      });
+    }
+    
+    console.log('🛡️ [PRICE-PDP v4.0] MutationObservers instalados!');
+  }
+  
+  // Inicializa lastKnownVariantId com a variante atual
+  if (mainVariantInput && mainVariantInput.value) {
+    lastKnownVariantId = parseInt(mainVariantInput.value);
+  }
+  
+  console.log('✅ [PRICE-PDP v4.0] Todos os listeners instalados!');
+  
+})();
+</script>

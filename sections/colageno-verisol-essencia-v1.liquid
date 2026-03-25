@@ -1,0 +1,624 @@
+  {% comment %}
+    O QUE É E COMO FUNCIONA A LINKAGEM CSS/JS DE SEÇÕES LIQUID:
+
+    Este bloco Liquid (section-essencia-sinergia.liquid) é uma seção dinâmica
+    do Shopify Theme. Para manter o código organizado e performático,
+    seus estilos CSS e scripts JavaScript devem ser externalizados
+    para arquivos separados no diretório 'assets' do tema.
+
+    1. ARQUIVOS EXTERNOS NO DIRETÓRIO 'assets':
+    - Stylesheets (CSS): Geralmente nomeados 'section-essencia-sinergia.css'
+    ou 'section-essencia-sinergia.min.css'.
+    - Scripts (JavaScript): Geralmente nomeados 'section-essencia-sinergia.js'
+    ou 'section-essencia-sinergia.min.js'.
+
+    2. COMO A LINKAGEM É FEITA NESTE ARQUIVO LIQUID:
+    Para o CSS:
+    A inclusão do CSS é feita geralmente no <head> do layout do tema
+    (por exemplo, theme.liquid) usando uma tag Liquid 'stylesheet_tag'.
+    Exemplo de inclusão no theme.liquid:
+    {{ 'section-essencia-sinergia.css' | asset_url | stylesheet_tag }}
+    Isso garante que o CSS seja carregado de forma assíncrona ou no início da página,
+    evitando render-blocking.
+
+    Para o JavaScript:
+    A inclusão do JavaScript é feita geralmente antes do fechamento da tag </body>
+    no layout do tema (por exemplo, theme.liquid) usando uma tag Liquid 'script_tag'.
+    Exemplo de inclusão no theme.liquid:
+    {{ 'section-essencia-sinergia.js' | asset_url | script_tag }}
+    Isso permite que o HTML e o CSS sejam renderizados primeiro, melhorando a performance
+    e evitando erros de script em elementos não carregados.
+
+    MOTIVOS PARA A EXTERNALIZAÇÃO:
+    - Organização do Código: Facilita a manutenção, leitura e colaboração.
+    - Performance: O navegador pode fazer cache desses arquivos externos,
+    evitando que sejam carregados novamente a cada página, e otimiza a
+    renderização inicial da página (FCP e LCP).
+    - Reutilização: Os mesmos estilos e scripts podem ser aplicados a várias instâncias
+    da seção ou em outras partes do tema.
+    - Evita 'render-blocking': Ao separar CSS e JS, o navegador pode carregar o HTML
+    e o CSS primeiro, exibindo o conteúdo da página antes mesmo do JavaScript ser executado.
+
+    DIRETRIZES INVIOLÁVEIS PARA O CONJUNTO FUNCIONAR:
+
+    1. Nomeclatura e Consistência:
+    - O nome do arquivo no 'assets' DEVE corresponder exatamente ao nome usado
+    na tag de inclusão Liquid (ex: 'section-essencia-sinergia.css').
+    - Prefira nomes que sigam a estrutura da seção (ex: 'section-NOME_DA_SECAO.css/js').
+
+    2. Localização Correta:
+    - Todos os arquivos CSS e JS externos PERTENCENTES à seção DEVEM estar no
+    diretório 'assets' do seu tema Shopify.
+
+    3. Inclusão no 'theme.liquid' (ou arquivo de layout apropriado):
+    - As tags `stylesheet_tag` e `script_tag` DEVEM ESTAR PRESENTES no arquivo
+    de layout principal do seu tema (geralmente `theme.liquid`).
+    - O CSS DEVE ser incluído no `<head>` para carregamento rápido.
+    - O JS DEVE ser incluído no final do `<body>` para evitar bloqueios.
+
+    4. Escopo CSS:
+    - Use classes CSS com prefixos únicos (ex: `essencia-sinergia__`) para evitar
+    conflitos de estilo com outras partes do tema. Isso é CRÍTICO.
+    - Evite estilos globais que possam afetar outros componentes.
+
+    5. Referências de Imagens/Fontes no CSS:
+    - Se seu CSS externo referenciar imagens ou fontes do tema, use o filtro
+    'asset_url' DENTRO do CSS para que o Shopify gere o caminho correto.
+    Exemplo: `background-image: url({{ 'minha-imagem.png' | asset_url }});`
+    (Note que isso só funciona em arquivos `.liquid.css` ou `.liquid.scss`).
+    Para arquivos `.css` puros, o caminho deve ser relativo ou absoluto.
+
+    O QUE OCORRE (ERROS DOS BLOCOS) SE AS DIRETRIZES NÃO FOREM OBSERVADAS:
+
+    1. CSS Não Carregado (Estilos Quebrados):
+    - Causa: Arquivo CSS não encontrado no 'assets', nome incorreto na tag `stylesheet_tag`,
+    ou `stylesheet_tag` ausente no `theme.liquid`.
+    - Erro: A seção aparecerá sem nenhum estilo, desorganizada, e pode até
+    apresentar o 'FOUC' (Flash Of Unstyled Content - conteúdo sem estilo por um breve momento).
+    - Exemplo: Você adiciona o bloco e ele aparece como texto puro sem cores, fontes,
+    alinhamentos, etc.
+
+    2. JavaScript Não Carregado (Funcionalidades Quebradas):
+    - Causa: Arquivo JS não encontrado no 'assets', nome incorreto na tag `script_tag`,
+    ou `script_tag` ausente no `theme.liquid`.
+    - Erro: Interações, animações ou lógicas programadas para os blocos não funcionarão.
+    - Exemplo: Se houvesse uma galeria de imagens nos blocos, ela não mudaria as imagens,
+    ou o botão de âncora não rolaria a página.
+
+    3. Conflitos de Estilo/Script (Comportamento Inesperado):
+    - Causa: Uso de classes CSS genéricas (ex: `.container`, `.button`) que já existem
+    em outras partes do tema, ou variáveis JS globais que sobrescrevem outras.
+    - Erro: Sua seção pode afetar o estilo ou comportamento de outras seções,
+    ou ser afetada por elas de forma indesejada.
+    - Exemplo: Seu botão muda de cor para a cor padrão do tema, ou uma imagem
+    de outra seção muda de tamanho.
+
+    4. Performance Ruim:
+    - Causa: CSS/JS inline excessivo dentro do próprio arquivo Liquid da seção
+    (o que foi corrigido para você).
+    - Erro: A página demora mais para carregar e renderizar, impactando a experiência
+    do usuário e o SEO.
+  {% endcomment %}
+
+
+
+{%- liquid
+  assign current_section_id_aq = section.id
+  assign background_color = section.settings.background_color
+
+  assign show_header_image = section.settings.show_header_image
+  assign header_image_url = section.settings.header_image.src
+  assign header_image_alt = section.settings.header_image.alt | default: 'Imagem de Destaque do Produto'
+  assign header_image_width_desktop = section.settings.header_image_width_desktop
+  assign header_image_width_mobile = section.settings.header_image_width_mobile
+
+  assign main_title = section.settings.main_title
+  assign main_title_color = section.settings.main_title_color
+  assign main_title_font_size = section.settings.main_title_font_size
+  assign main_title_font_size_mobile = section.settings.main_title_font_size_mobile
+  assign main_title_font_weight = section.settings.main_title_font_weight
+  assign main_title_letter_spacing = section.settings.main_title_letter_spacing
+  assign main_title_line_height = section.settings.main_title_line_height
+  assign main_subtitle = section.settings.main_subtitle
+  assign main_subtitle_color = section.settings.main_subtitle_color
+
+  assign show_composition_blocks = section.settings.show_composition_blocks
+
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+  assign button_anchor = section.settings.button_anchor
+  assign button_bg_color = section.settings.button_bg_color
+  assign button_text_color = section.settings.button_text_color
+  assign button_border_radius = section.settings.button_border_radius
+  assign button_padding_y = section.settings.button_padding_y
+  assign button_padding_x = section.settings.button_padding_x
+  assign button_align = section.settings.button_align
+
+  assign block_content_align_desktop = section.settings.block_content_align_desktop
+  assign block_image_width_desktop = section.settings.block_image_width_desktop
+  assign block_image_width_mobile = section.settings.block_image_width_mobile
+-%}
+
+<style>
+.header-image-texto{
+  width: {{ header_image_width_desktop }}%;
+}
+@media (max-width: 767px) {
+.header-image-texto{
+  width: {{ header_image_width_mobile }}%;
+}
+}
+</style>
+<section class="section-essencia-sinergia-AQ-{{ current_section_id_aq }}" data-section-id="essencia-sinergia-AQ-{{ current_section_id_aq }}" style="background-color: {{ background_color }}; padding: 40px 0;">
+  <div class="essencia-sinergia__container-AQ" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; box-sizing: border-box;">
+    {% if show_header_image and header_image_url != blank %}
+      <div class="essencia-sinergia__header-image-AQ" style="text-align: center; padding-top: 40px; margin-bottom: 30px;">
+        <img class="header-image-texto" src="{{ header_image_url | img_url: 'master' }}" alt="{{ header_image_alt }}" loading="lazy" draggable="false" style="display: inline-block; height: auto; max-width: 100%;">
+      </div>
+    {% endif %}
+    <div class="essencia-sinergia__main-header-AQ" style="text-align: center; margin-bottom: 30px;">
+      {% if main_title != blank %}
+        <h2 class="essencia-sinergia__main-title-AQ" style="color: {{ main_title_color }}; font-size: {{ main_title_font_size }}px; font-weight: {{ main_title_font_weight }}; letter-spacing: {{ main_title_letter_spacing }}px; line-height: {{ main_title_line_height }}em; margin-bottom: 15px; padding: 0 30px;">{{ main_title | replace: '[strong]', '<strong>' | replace: '[/strong]', '</strong>' }}</h2>
+      {% endif %}
+      {% if main_subtitle != blank %}
+        <p class="essencia-sinergia__main-subtitle-AQ" style="color: {{ main_subtitle_color }}; font-size: 16px; line-height: 1.5; max-width: 800px; margin: 0 auto; padding: 0 20px;">{{ main_subtitle }}</p>
+      {% endif %}
+    </div>
+
+    {% if show_composition_blocks and section.blocks.size > 0 %}
+      <div class="essencia-sinergia__composition-grid-AQ" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 0;">
+        {% for block in section.blocks %}
+          {%- liquid
+            assign block_layout = block.settings.block_layout_desktop
+            assign block_image_reverse = block.settings.reverse_image_order
+          -%}
+          <div class="essencia-sinergia__composition-block-AQ {% if block_image_reverse %}reverse-order{% endif %}"
+               id="essencia-sinergia-block-AQ-{{ block.id }}"
+               data-layout="{{ block_layout }}"
+               style="background-color: {{ block.settings.block_bg_color }}; border: {{ block.settings.block_border_thickness }}px solid {{ block.settings.block_border_color }}; border-radius: {{ block.settings.block_border_radius }}px; padding: 20px; width: 100%; max-width: 400px; box-sizing: border-box; display: flex; align-items: {{ block_content_align_desktop }};">
+            <div style="width: 100%;">
+              <div style="width: 100%;">
+                {% if block.settings.block_title != blank %}
+                  <h3 style="color: {{ block.settings.block_title_color }}; font-size: {{ block.settings.block_title_size }}px; font-weight: {{ block.settings.block_title_weight }}; letter-spacing: {{ block.settings.block_title_spacing }}px;">{{ block.settings.block_title }}</h3>
+                {% endif %}
+                {% if block.settings.block_description != blank %}
+                  <div style="color: {{ block.settings.block_description_color }}; font-size: {{ block.settings.block_description_size }}px; font-weight: {{ block.settings.block_description_weight }}; line-height: {{ block.settings.block_description_line_height }}em;">{{ block.settings.block_description }}</div>
+                {% endif %}
+              </div>
+              {% if block.settings.block_image != blank %}
+                <div style="margin-top: 20px; text-align: center;">
+                  <img src="{{ block.settings.block_image | img_url: 'master' }}" alt="{{ block.settings.block_image.alt | default: block.settings.block_title }}" loading="lazy" style="max-width: {{ block_image_width_desktop }}%; height: auto; display: block; margin: 0 auto;">
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color: #888; font-size: 16px; text-align: center;">Nenhum bloco de composição adicionado. Adicione blocos no editor de tema.</p>
+    {% endif %}
+
+    {% if button_text != blank %}
+      <div class="essencia-sinergia__button-wrapper-AQ" style="width: 100%; margin-top: 40px; text-align: {{ button_align }};">
+        <a href="{% if button_link != blank %}{{ button_link }}{% else %}{{ button_anchor }}{% endif %}" class="essencia-sinergia__button-AQ" id="essencia-sinergia-button-AQ-{{ current_section_id_aq }}" style="background-color: {{ button_bg_color }}; color: {{ button_text_color }}; padding: {{ button_padding_y }}px {{ button_padding_x }}px; border-radius: {{ button_border_radius }}px; text-decoration: none; display: inline-block; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          {{ button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if button_link == blank and button_anchor != blank %}
+  <script>
+    (function() {
+      const btn = document.getElementById('essencia-sinergia-button-AQ-{{ current_section_id_aq }}');
+      if (!btn) return;
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector('{{ button_anchor | escape_js }}');
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      });
+    })();
+  </script>
+{% endif %}
+{% schema %}
+{
+  "name": "Colágeno Essência V1",
+  "tag": "section",
+  "class": "section-essencia-sinergia-AQ",
+  "max_blocks": 9,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais da Seção"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de Fundo da Seção",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "header",
+      "content": "Imagem de Destaque (Banner)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_image",
+      "label": "Mostrar Imagem de Destaque",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "header_image",
+      "label": "Imagem de Destaque (Banner)",
+      "info": "Imagem exibida no topo da seção."
+    },
+    {
+      "type": "range",
+      "id": "header_image_width_desktop",
+      "min": 20, "max": 100, "step": 5, "unit": "%", "label": "Largura da Imagem (Desktop)",
+      "default": 40,
+      "info": "Largura da imagem em relação ao container em desktops."
+    },
+    {
+      "type": "range",
+      "id": "header_image_width_mobile",
+      "min": 20, "max": 100, "step": 5, "unit": "%", "label": "Largura da Imagem (Mobile)",
+      "default": 80,
+      "info": "Largura da imagem em relação ao container em mobile."
+    },
+    {
+      "type": "header",
+      "content": "Título e Subtítulo Principais"
+    },
+    {
+      "type": "text",
+      "id": "main_title",
+      "label": "Título Principal",
+      "default": "[strong]O que você vai encontrar[/strong] dentro de cada cápsula?"
+    },
+    {
+      "type": "color",
+      "id": "main_title_color",
+      "label": "Cor do Título Principal",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "range",
+      "id": "main_title_font_size",
+      "min": 24, "max": 60, "step": 2, "unit": "px", "label": "Tamanho da Fonte (Desktop)",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "main_title_font_size_mobile",
+      "min": 18, "max": 40, "step": 1, "unit": "px", "label": "Tamanho da Fonte (Mobile)",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "main_title_font_weight",
+      "label": "Peso da Fonte",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "main_title_letter_spacing",
+      "min": -2, "max": 5, "step": 0.1, "unit": "px", "label": "Espaçamento entre Letras",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "main_title_line_height",
+      "min": 0.8, "max": 2.5, "step": 0.1, "unit": "em", "label": "Altura da Linha",
+      "default": 1.2
+    },
+    {
+      "type": "textarea",
+      "id": "main_subtitle",
+      "label": "Subtítulo Principal",
+      "default": "Um Blend de ingredientes combinados para acelerar o metabolismo do intestino, inibir o apetite e reduzir medidas de forma natural."
+    },
+    {
+      "type": "color",
+      "id": "main_subtitle_color",
+      "label": "Cor do Subtítulo Principal",
+      "default": "#555555"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Blocos"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_composition_blocks",
+      "label": "Mostrar Blocos de Composição",
+      "default": true,
+      "info": "Marque para exibir os blocos de composição adicionados."
+    },
+    {
+      "type": "range",
+      "id": "block_image_width_desktop",
+      "min": 10, "max": 50, "step": 1, "unit": "%", "label": "Largura da Imagem no Bloco (Desktop)",
+      "default": 33,
+      "info": "Define a largura da imagem dentro de cada bloco de composição em desktop."
+    },
+    {
+      "type": "range",
+      "id": "block_image_width_mobile",
+      "min": 10, "max": 100, "step": 1, "unit": "%", "label": "Largura da Imagem no Bloco (Mobile)",
+      "default": 60,
+      "info": "Define a largura da imagem dentro de cada bloco de composição em mobile."
+    },
+    {
+      "type": "select",
+      "id": "block_content_align_desktop",
+      "label": "Alinhamento do Conteúdo do Bloco (Desktop)",
+      "options": [
+        { "value": "flex-start", "label": "Topo" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Fundo" }
+      ],
+      "default": "center",
+      "info": "Alinha verticalmente o conteúdo (texto e imagem) dentro de cada bloco de composição em desktop."
+    },
+    {
+      "type": "header",
+      "content": "Botão de Chamada para Ação"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto do Botão",
+      "default": "COMPRAR AGORA"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do Botão",
+      "info": "Se preenchido, o botão navegará para este URL. Caso contrário, rolará para a âncora."
+    },
+    {
+      "type": "text",
+      "id": "button_anchor",
+      "label": "ID da Âncora para Rolagem (se não houver Link)",
+      "default": "#produtos",
+      "info": "Ex: #minha-secao. O botão rolará suavemente para este ID se o 'Link do Botão' estiver vazio."
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Cor de Fundo do Botão",
+      "default": "#FF5A5F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Cor do Texto do Botão",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "min": 10, "max": 30, "step": 1, "unit": "px", "label": "Preenchimento Vertical do Botão",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "min": 20, "max": 150, "step": 5, "unit": "px", "label": "Preenchimento Horizontal do Botão",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "label": "Raio da Borda do Botão",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "button_align",
+      "label": "Alinhamento do Botão",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "composition_item",
+      "name": "Item de Composição",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Layout e Cores do Item"
+        },
+        {
+          "type": "text",
+          "id": "block_title",
+          "label": "Título do Item",
+          "default": "INGREDIENTE PRINCIPAL"
+        },
+        {
+          "type": "richtext",
+          "id": "block_description",
+          "label": "Descrição do Item",
+          "default": "<p>Breve descrição do ingrediente e seus benefícios.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "block_image",
+          "label": "Imagem do Item"
+        },
+        {
+          "type": "checkbox",
+          "id": "reverse_image_order",
+          "label": "Imagem à Esquerda (Desktop)",
+          "default": false,
+          "info": "Em desktop, a imagem será exibida à esquerda e o texto à direita."
+        },
+        {
+          "type": "select",
+          "id": "block_layout_desktop",
+          "label": "Layout do Bloco (Desktop)",
+          "options": [
+            { "value": "half-width", "label": "Metade da Largura (Padrão)" },
+            { "value": "full-width", "label": "Largura Total (em sua própria linha)" },
+            { "value": "full-width-center", "label": "Largura Total (centralizado, metade da largura)" }
+          ],
+          "default": "half-width",
+          "info": "Define se o bloco ocupará metade ou a largura total em desktop."
+        },
+        {
+          "type": "color",
+          "id": "block_bg_color",
+          "label": "Cor de Fundo do Bloco",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "block_border_color",
+          "label": "Cor da Borda do Bloco",
+          "default": "#cccccc"
+        },
+        {
+          "type": "range",
+          "id": "block_border_thickness",
+          "label": "Espessura da Borda do Bloco",
+          "min": 0, "max": 5, "step": 1, "unit": "px", "default": 1
+        },
+        {
+          "type": "range",
+          "id": "block_border_radius",
+          "min": 0, "max": 30, "step": 1, "unit": "px", "label": "Raio da Borda do Bloco",
+          "default": 12
+        },
+        {
+          "type": "header",
+          "content": "Cores e Fontes do Texto"
+        },
+        {
+          "type": "color",
+          "id": "block_title_color",
+          "label": "Cor do Título do Bloco",
+          "default": "#333333"
+        },
+        {
+          "type": "range",
+          "id": "block_title_size",
+          "min": 14, "max": 28, "step": 1, "unit": "px", "label": "Tamanho da Fonte do Título",
+          "default": 20
+        },
+        {
+          "type": "select",
+          "id": "block_title_weight",
+          "label": "Peso da Fonte do Título",
+          "options": [
+            { "value": "400", "label": "Normal" },
+            { "value": "500", "label": "Medium" },
+            { "value": "600", "label": "Semi-bold" },
+            { "value": "700", "label": "Bold" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "range",
+          "id": "block_title_spacing",
+          "min": -1, "max": 5, "step": 0.1, "unit": "px", "label": "Espaçamento entre Letras do Título",
+          "default": 0
+        },
+        {
+          "type": "color",
+          "id": "block_description_color",
+          "label": "Cor da Descrição",
+          "default": "#666666"
+        },
+        {
+          "type": "range",
+          "id": "block_description_size",
+          "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Tamanho da Fonte da Descrição",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "block_description_weight",
+          "label": "Peso da Fonte da Descrição",
+          "options": [
+            { "value": "300", "label": "Light" },
+            { "value": "400", "label": "Normal" },
+            { "value": "500", "label": "Medium" }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "range",
+          "id": "block_description_line_height",
+          "min": 1.0, "max": 2.0, "step": 0.1, "unit": "em", "label": "Altura da Linha da Descrição",
+          "default": 1.6
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colágeno Essência V1",
+      "category": "Conteúdo",
+      "blocks": [
+        {
+          "type": "composition_item",
+          "settings": {
+            "block_title": "QUITOSANA",
+            "block_description": "<p>Fibra natural derivada de frutos do mar que, ao ser ingerida, forma uma camada de gel no estômago e prolonga a sensação de saciedade, auxiliando no controle do apetite.</p>",
+            "block_bg_color": "#fff4d5",
+            "block_border_color": "#d0021b"
+          }
+        },
+        {
+          "type": "composition_item",
+          "settings": {
+            "block_title": "TRIPTOFANO",
+            "block_description": "<p>Aminoácido presente em algumas proteínas do organismo, auxilia na produção de serotonina, barrando as toxinas que aumentam a ansiedade e aumentam o apetite.</p>",
+            "block_bg_color": "#e6f7ff",
+            "block_border_color": "#1890ff"
+          }
+        },
+        {
+          "type": "composition_item",
+          "settings": {
+            "block_title": "ÁGAR-ÁGAR",
+            "block_description": "<p>Fibra solúvel, auxilia na redução do apetite ao criar uma sensação de saciedade no estômago. Além disso, esse composto ajuda a estabilizar os níveis de açúcar no sangue, evitando picos e quedas bruscas de energia.</p>",
+            "block_bg_color": "#f0fff0",
+            "block_border_color": "#52c41a"
+          }
+        },
+        {
+          "type": "composition_item",
+          "settings": {
+            "block_title": "GOMA GUAR",
+            "block_description": "<p>Fibra solúvel que contribui para o controle do apetite. Ela forma um gel espesso no estômago, prolongando a sensação de saciedade e reduzindo a ingestão de calorias. Além disso, a goma guar ajuda a estabilizar os níveis de açúcar no sangue, o que é essencial para evitar os picos de fome relacionados à baixa de glicose.</p>",
+            "block_bg_color": "#fefbe0",
+            "block_border_color": "#faad14"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1041 @@
+{
+  "versao": "1.0.0",
+  "atualizado": "2025-10-26T00:00:00Z",
+  "cupons": {
+    "10OFF72H": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "15PRAVC": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "20VIPDN": {
+      "desconto": 20,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "20XDJ": {
+      "desconto": 20,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "30DNVIP": {
+      "desconto": 30,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ALENCAR": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ALERY10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ALEXIA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ALFACINHA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "AMANDAMARQUES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANAFISIO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANAT10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANILY": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANNAB": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANNABORGES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANNABORGES10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANALYUZAC": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANDREA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ANDRESSA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ARI10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ARIELYLIRA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ARIROQUE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "AUTO_CUPONS_10_OFF_20251024_025845": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BACK10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BARBARAUBER": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BELELISBOA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BELEZACOMMARI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BELLANUTRI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BEMESTAR10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BETAFRIAS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BIATORRES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BLUSH10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BORGES10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BRUAGUILAR": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BRUFELICIANO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BRUNABEAUTY": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "BRUNINHA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMIFIT": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMILA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMILADIAS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMILAMONTEIRO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMILLA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAMILLA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAROLJONAS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CAROLPELICARI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CHEFMILA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CINTIA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CLAUDIA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CLIENTE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CLIENTEVIP": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CRISAMARONUTRI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "CUIDEHOJE": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DADY10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DANI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DANIBAIRRAL": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DANICOUTINHO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DANIMENEZES10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DANISERRANO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DEBORA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DENA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DENAVITA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DENAVITASX303": {
+      "desconto": 30,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DENAVITAZM020": {
+      "desconto": 20,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DENISE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DEZA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DIGE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DN15OFF": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DN30VIP": {
+      "desconto": 30,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DRURSINHO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DUDA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DUDA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DUDABORGES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DUDABRASIL": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "DUTRA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "EL10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ENERGIA15": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ERIKA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ESPECIAL": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ESPECIAL20": {
+      "desconto": 20,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "EUGOSDICASA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "EXECUTIVA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FABYCORREDORA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FATIMA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FEGOMMES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FERFERRAZ": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FINALIZA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FITCAMILE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FITFOODMENU": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "FRAN10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "GABIBEL10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "GABIMARTINEZ": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "GABISANTIOFF": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "GIOMAZONI10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "GRISALHEIEAGORA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "HELLENCRIS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "HYNGRED": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ILZA_MZ": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ISANOGUEIRA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ISAP10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JANE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JANY10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JATESTEI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JEANE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JEFELIX10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JEZLAUAR": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JLO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JOISOARES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JOYCE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JU10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JUFITNESS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JUFONSECA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JULIANA": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JULIANAPOMPEU": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "JULYE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "KAMILA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "KAROLC10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LAILA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LANALOPES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LARIC10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LARIMICHELIN": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LARIPERSONAL": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LARISSALEMOS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LAV10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LEVENAVIAGEM": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LINA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LORE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LORENACOELHO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LORENAALVES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LUCIANA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LUCIANAOLIVE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LUFIT": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LUIZA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LUIZAANDRADE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "LULY": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MADU": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MAFIT": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MAIRA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MAIRADIAS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MAIS10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARIAARANHA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARIAMONTEIRO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARICPM": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARITZA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MARYFONTES10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MAYARA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MENDES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "METREINAGABI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MICHELE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MINIPONEI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MIRUBACK10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MONIQUE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "MORGANAW": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NATHBARROS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NATINGRACI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NICOLE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NOGUEIRA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRICRIS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIFRAN10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIGIO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIJE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIJU10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRILAILABOMTEMPO": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRILARI10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIPRIBASTOS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "NUTRIRAPHA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PAULAMARTINS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PAUSA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PELE15": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PESQUISA30": {
+      "desconto": 30,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PETRA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PICCININ": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PRI10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PRILAR": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PRIMEIRACOMPRA": {
+      "desconto": 15,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "PRIPESSANHA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "QUERO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "RAFAAMORIM": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "RAFANAROTINA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "RAISA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "REBECA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "RECOMECE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "ROMANA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "SARAH": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "SAUDADE25": {
+      "desconto": 25,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "SEREIA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "SIRI": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "SOLANGE": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "STENATUS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "TAINA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "TAISLINS": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "TALYTA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "TENORIO10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "THAISFN": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "THAMIRES": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "THAUANE10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "THAYLA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "THAYNARA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VAL10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VALEBONUS": {
+      "desconto": 70,
+      "tipo": "fixo",
+      "ativo": true
+    },
+    "VALESKA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VANESSA": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VIP10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VITORIA10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VOLTEI10": {
+      "desconto": 10,
+      "tipo": "porcentagem",
+      "ativo": true
+    },
+    "VOUCHER300": {
+      "desconto": 300,
+      "tipo": "fixo",
+      "ativo": true
+    },
+    "XJH20OFF": {
+      "desconto": 20,
+      "tipo": "porcentagem",
+      "ativo": true
+    }
+  }
+}

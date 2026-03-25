@@ -1,0 +1,1002 @@
+{% comment %}
+  Seção Shopify: Landing Quitosana Reforjada e Assinada por Sophia AQ
+  - Bloco de duas colunas com imagem de fundo, conteúdo textual rico e SVGs dinâmicos.
+  - Totalmente responsiva com layout empilhado em mobile e grid em desktop.
+  - Múltiplos ícones SVG customizáveis via blocos:
+    - `svg_item_full_width`: Para 2 SVGs superiores que ocupam quase toda a largura, um sobre o outro.
+  - `svg_item_column`: Para SVGs que se alinham em 3 colunas em desktop.
+  - Opções de personalização avançadas para cores, textos, imagens e alinhamentos.
+  - Todas as classes CSS e IDs HTML são unicamente identificadas com a assinatura '-sophiaAQ'
+  - Todas as opções de SVG (código, upload, URL externa) estão disponíveis para ambos os tipos de SVG.
+  - **AGORA:** Altura e largura customizáveis individualmente para CADA SVG, aplicada diretamente via style inline.
+  - **INTEGRAÇÃO:** Botão de customização mantido com todas as suas funcionalidades e posicionamento.
+{% endcomment %}
+
+{%- liquid
+  assign current_section_id = section.id
+  assign background_image = section.settings.background_image
+  assign background_color = section.settings.background_color
+  assign altura_maxima_crl = section.settings.altura_maxima_crl
+  assign col2_image = section.settings.col2_image
+  assign botao_bg_color = section.settings.botao_bg_color
+  assign botao_text_color = section.settings.botao_text_color
+  assign botao_link = section.settings.botao_link
+  assign botao_label = section.settings.botao_label
+  assign text_align = section.settings.text_align
+  assign content_vertical_align = section.settings.content_vertical_align
+  assign title_color = section.settings.title_color
+  assign subtitle_color = section.settings.subtitle_color
+  assign description_color = section.settings.description_color
+  assign reverse_columns = section.settings.reverse_columns
+  assign section_padding_top = section.settings.section_padding_top
+  assign section_padding_bottom = section.settings.section_padding_bottom
+  assign inner_padding = section.settings.inner_padding
+  assign border_radius = section.settings.border_radius
+  assign container_margin_left = section.settings.container_margin_left
+  assign container_margin_right = section.settings.container_margin_right
+  assign button_intro_size = section.settings.button_intro_size
+  assign button_padding_x = section.settings.button_padding_x
+  assign button_padding_y = section.settings.button_padding_y
+  assign button_margin_top = section.settings.button_margin_top
+
+  assign title_font_weight_desktop = section.settings.title_font_weight_desktop
+  assign title_letter_spacing_desktop = section.settings.title_letter_spacing_desktop
+  assign title_line_height_desktop = section.settings.title_line_height_desktop
+  assign title_font_size_desktop = section.settings.title_font_size_desktop
+  assign title_font_weight_mobile = section.settings.title_font_weight_mobile
+  assign title_letter_spacing_mobile = section.settings.title_letter_spacing_mobile
+  assign title_line_height_mobile = section.settings.title_line_height_mobile
+  assign title_font_size_mobile = section.settings.title_font_size_mobile
+
+  assign subtitle_font_weight_desktop = section.settings.subtitle_font_weight_desktop
+  assign subtitle_letter_spacing_desktop = section.settings.subtitle_letter_spacing_desktop
+  assign subtitle_line_height_desktop = section.settings.subtitle_line_height_desktop
+  assign subtitle_font_size_desktop = section.settings.subtitle_font_size_desktop
+  assign subtitle_font_weight_mobile = section.settings.subtitle_font_weight_mobile
+  assign subtitle_letter_spacing_mobile = section.settings.subtitle_letter_spacing_mobile
+  assign subtitle_line_height_mobile = section.settings.subtitle_line_height_mobile
+  assign subtitle_font_size_mobile = section.settings.subtitle_font_size_mobile
+-%}
+
+{%- style -%}
+  /* ========== [INÍCIO] CSS da Seção Shopify: Landing Quitosana Reforçada e Assinada por Sophia AQ ========== */
+  /* Todas as classes recebem a assinatura '-sophiaAQ' */
+  .section-landing-quitosana-sophiaAQ-{{ current_section_id }} {
+    padding-top: {{ section_padding_top | default: 40 }}px;
+    padding-bottom: {{ section_padding_bottom | default: 40 }}px;
+    margin-left: {{ container_margin_left | default: 0 }}px;
+    margin-right: {{ container_margin_right | default: 0 }}px;
+    padding-top: 0px!important;
+  }
+
+  .x20custom-container-sophiaAQ {
+    {% if background_image != blank %}
+      background-image: url({{ background_image | img_url: 'master' }});
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    {% else %}
+      background-color: {{ background_color }}; /* Nova opção de cor de fundo */
+    {% endif %}
+    border-radius: {{ border_radius }}px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: {{ inner_padding }}px;
+    overflow: hidden;
+    display: flex;
+    align-items: {{ content_vertical_align }};
+    justify-content: center;
+  }
+
+  .x20grid-container-sophiaAQ {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .col-5-sophiaAQ, .col-7-sophiaAQ {
+    width: 100%;
+  }
+
+  .x20content-column-sophiaAQ {
+    display: flex;
+    flex-direction: column;
+    align-items: {{ text_align }};
+    justify-content: center;
+    text-align: {{ text_align }};
+  }
+
+  .x20section-title-sophiaAQ {
+    color: {{ title_color }};
+    font-size: {{ title_font_size_desktop | default: 2.5 }}rem;
+    line-height: {{ title_line_height_desktop | default: 1.2 }};
+    margin-bottom: 0.5rem;
+    font-weight: {{ title_font_weight_desktop | default: 700 }};
+    letter-spacing: {{ title_letter_spacing_desktop | default: 0 }}px;
+  }
+  .x20section-subtitle-sophiaAQ {
+    color: {{ subtitle_color }};
+    font-size: {{ subtitle_font_size_desktop | default: 1.5 }}rem;
+    line-height: {{ subtitle_line_height_desktop | default: 1.3 }};
+    margin-bottom: 1rem;
+    font-weight: {{ subtitle_font_weight_desktop | default: 500 }};
+    letter-spacing: {{ subtitle_letter_spacing_desktop | default: 0 }}px;
+  }
+  .x20section-description-sophiaAQ {
+    color: {{ description_color }};
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Wrapper para os 2 SVGs de largura total */
+  .x20svgs-full-width-wrapper-sophiaAQ {
+    display: flex;
+    flex-direction: column; /* Sempre um sobre o outro */
+    align-items: {{ text_align }}; /* Alinha SVGs com o texto */
+    gap: 20px; /* Espaço entre os 2 SVGs */
+    margin-bottom: 25px; /* Espaço antes do grupo de 3 colunas */
+    width: 100%;
+  }
+
+  .x20svg-item-full-width-sophiaAQ {
+    display: flex;
+    justify-content: {{ text_align }}; /* Alinha o SVG dentro de seu próprio container */
+    height: auto; /* Mantém a proporção se a altura não for definida via setting */
+    fill: currentColor;
+  }
+  .x20svg-item-full-width-sophiaAQ img,
+  .x20svg-item-full-width-sophiaAQ svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+
+  /* Container para múltiplos SVGs em Colunas */
+  .x20svgs-column-wrapper-sophiaAQ {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Espaço entre os SVGs */
+    justify-content: {{ text_align }};
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .x20svg-item-column-sophiaAQ {
+    height: auto; /* Mantém a proporção se a altura não for definida via setting */
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+  .x20svg-item-column-sophiaAQ img,
+  .x20svg-item-column-sophiaAQ svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+
+  /* Botão de ação (Desktop) */
+  .x20custom-button-sophiaAQ.desktop-button {
+    background-color: {{ botao_bg_color }};
+    color: {{ botao_text_color }};
+    border-radius: 50px;
+    padding: {{ button_padding_y }}px {{ button_padding_x }}px;
+    margin-top: {{ button_margin_top }}px;
+    width: auto;
+    min-width: 250px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    /*font-size: 1.125rem;*/
+    font-size: {{ button_intro_size }}px;
+    transition: background-color 0.3s ease;
+  }
+
+  .x20custom-button-sophiaAQ.desktop-button:hover {
+    filter: brightness(1.1);
+  }
+
+  /* Botão de ação (Mobile) */
+  .x20custom-button-sophiaAQ.mobile-button {
+    background-color: {{ botao_bg_color }};
+    color: {{ botao_text_color }};
+    border-radius: 50px;
+    padding: {{ button_padding_y }}px {{ button_padding_x }}px;
+    margin-top: {{ button_margin_top }}px;
+    width: auto;
+    min-width: unset;
+    display: block; /* Ocupa a largura total */
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .x20custom-button-sophiaAQ.mobile-button:hover {
+    filter: brightness(1.1);
+  }
+
+  /* Imagem principal da segunda coluna */
+  .x20main-image-wrapper-sophiaAQ {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 117.89%;
+    position: relative;
+  }
+
+  .x20main-image-wrapper-sophiaAQ img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ========== Media Queries para Responsividade ========== */
+  @media (max-width: 767px) {
+    .section-landing-quitosana-sophiaAQ-{{ current_section_id }} {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .x20custom-container-sophiaAQ {
+      padding: 30px 15px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    /* Título e Subtítulo para Mobile */
+    .x20section-title-sophiaAQ {
+      font-size: {{ title_font_size_mobile | default: 1.8 }}rem;
+      font-weight: {{ title_font_weight_mobile | default: 700 }};
+      letter-spacing: {{ title_letter_spacing_mobile | default: 0 }}px;
+      line-height: {{ title_line_height_mobile | default: 1.2 }};
+    }
+    .x20section-subtitle-sophiaAQ {
+      font-size: {{ subtitle_font_size_mobile | default: 1.25 }}rem;
+      font-weight: {{ subtitle_font_weight_mobile | default: 500 }};
+      letter-spacing: {{ subtitle_letter_spacing_mobile | default: 0 }}px;
+      line-height: {{ subtitle_line_height_mobile | default: 1.3 }};
+    }
+    .x20custom-button-sophiaAQ.desktop-button {
+      display: none; /* Esconde o botão desktop em mobile */
+    }
+    .x20custom-button-sophiaAQ.mobile-button {
+      display: block; /* Mostra o botão mobile em mobile */
+      padding: 15px 30px;
+    }
+    .x20main-image-wrapper-sophiaAQ {
+      padding-bottom: 80%;
+    }
+    /* SVG de largura total em mobile - Largura controlada pelo setting svg_width_mobile via inline style */
+  }
+
+  @media (min-width: 768px) {
+    .x20grid-container-sophiaAQ {
+      flex-direction: row;
+      grid-template-columns: var(--col1-width, 5fr) var(--col2-width, 7fr);
+      gap: 3rem;
+    }
+    {% if reverse_columns %}
+      .x20grid-container-sophiaAQ {
+        flex-direction: row-reverse;
+      }
+    {% endif %}
+
+    .col-5-sophiaAQ {
+      flex: 5;
+      width: auto;
+    }
+    .col-7-sophiaAQ {
+      flex: 7;
+      width: auto;
+    }
+    .x20custom-container-sophiaAQ {
+      padding: {{ inner_padding | default: 60 }}px;
+     {% if altura_maxima_crl == true %} max-height: 600px;{% endif %}
+     padding-top:0px;
+    }
+
+     .x20main-image-wrapper-sophiaAQ {  
+    padding-bottom: 95%;
+  }
+
+    /* Otimização ABSOLUTA para o Padrão de 3 Colunas de SVGs em Desktop */
+    .x20svgs-column-wrapper-sophiaAQ {
+      justify-content: {{ text_align }};
+    }
+
+    .x20svg-item-column-sophiaAQ {
+      /* Calcula a largura para que 3 itens caibam perfeitamente, considerando o gap */
+      /*flex-basis: calc((100% - (2 * 16px)) / 3); */
+      max-width: calc((100% - (2 * 16px)) / 3);
+      /* A largura e altura customizadas serão aplicadas via inline style */
+      width: unset; /* Permite que flex-basis e inline style assumam */
+    }
+
+    /* Ajustes para os 2 SVGs de largura total em desktop */
+    .x20svgs-full-width-wrapper-sophiaAQ {
+      align-items: {{ text_align }}; /* Mantém alinhamento com o texto */
+    }
+
+    .x20custom-button-sophiaAQ.desktop-button {
+      display: inline-block; /* Mostra o botão desktop em desktop */
+    }
+    .x20custom-button-sophiaAQ.mobile-button {
+      display: none; /* Esconde o botão mobile em desktop */
+    }
+  }
+
+  /* ========== [FIM] CSS da Seção Shopify: Landing Quitosana Reforçada e Assinada por Sophia AQ ========== */
+{%- endstyle -%}
+
+<section class="section-landing-quitosana-sophiaAQ-{{ current_section_id }}" data-section-id="{{ current_section_id }}">
+  <div class="x20custom-container-sophiaAQ">
+    <div class="x20grid-container-sophiaAQ">
+      <div class="col-5-sophiaAQ x20content-column-sophiaAQ">
+        {% if section.settings.title %}
+          <h2 class="x20section-title-sophiaAQ">{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.subtitle %}
+          <h3 class="x20section-subtitle-sophiaAQ">{{ section.settings.subtitle }}</h3>
+        {% endif %}
+        {% if section.settings.description %}
+          <div class="x20section-description-sophiaAQ">{{ section.settings.description }}</div>
+        {% endif %}
+
+        {% comment %} Renderiza os blocos de SVG de largura total {% endcomment %}
+        {%- assign has_full_width_svgs = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'svg_item_full_width' -%}
+            {%- assign has_full_width_svgs = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {% if has_full_width_svgs %}
+          <div class="x20svgs-full-width-wrapper-sophiaAQ">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'svg_item_full_width' %}
+                  {%- assign svg_item_width = block.settings.svg_width | default: 200 -%}
+                  {%- assign svg_item_width_mobile = block.settings.svg_width_mobile | default: 150 -%}
+                  {%- assign svg_item_height = block.settings.svg_height | default: 'auto' -%}
+                  {%- assign svg_item_height_mobile = block.settings.svg_height_mobile | default: 'auto' -%}
+                  <div class="x20svg-item-full-width-sophiaAQ">
+                    <span style="
+                      {% if block.settings.svg_code != blank %}color: {{ block.settings.svg_color }};{% endif %}
+                      width: {{ svg_item_width }}px;
+                      height: {{ svg_item_height }};
+                      {% comment %} Para mobile, aplica a largura mobile diretamente ao elemento SVG/IMG {% endcomment %}
+                      @media (max-width: 767px) {
+                        width: {{ svg_item_width_mobile }}px !important;
+                        height: {{ svg_item_height_mobile }} !important;
+                      }
+                      display: flex; /* Para centralizar o SVG/Imagem */
+                      justify-content: center;
+                      align-items: center;
+                      ">
+                      {% comment %} Prioridade: URL Externa > Upload Shopify > Código SVG Direto {% endcomment %}
+                      {% if block.settings.svg_external_url != blank %}
+                        <img src="{{ block.settings.svg_external_url }}" alt="Ícone SVG Externo" loading="lazy" style="max-width: 100%; height: auto;">
+                      {% elsif block.settings.svg_image_url != blank %}
+                        <img src="{{ block.settings.svg_image_url | img_url: 'master' }}" alt="Ícone SVG" loading="lazy" style="max-width: 100%; height: auto;">
+                      {% elsif block.settings.svg_code != blank %}
+                        {{ block.settings.svg_code }}
+                      {% endif %}
+                    </span>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% comment %} Renderiza os blocos de SVG em colunas {% endcomment %}
+        {%- assign has_column_svgs = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'svg_item_column' -%}
+            {%- assign has_column_svgs = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {% if has_column_svgs %}
+          <div class="x20svgs-column-wrapper-sophiaAQ">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'svg_item_column' %}
+                  {%- assign svg_item_width = block.settings.svg_width | default: 100 -%}
+                  {%- assign svg_item_height = block.settings.svg_height | default: 'auto' -%}
+                  <div class="x20svg-item-column-sophiaAQ">
+                    <span style="
+                      {% if block.settings.svg_code != blank %}color: {{ block.settings.svg_color }};{% endif %}
+                      width: {{ svg_item_width }}px;
+                      height: {{ svg_item_height }};
+                      {% comment %} Para mobile, mantém a largura padrão de 80px ou pode ser customizada aqui {% endcomment %}
+                      @media (max-width: 767px) {
+                        width: 80px !important; /* Mantém o padrão mobile ou pode ser um setting */
+                      }
+                      display: flex; /* Para centralizar o SVG/Imagem */
+                      justify-content: center;
+                      align-items: center;
+                      ">
+                      {% comment %} Prioridade: URL Externa > Upload Shopify > Código SVG Direto {% endcomment %}
+                      {% if block.settings.svg_external_url != blank %}
+                        <img src="{{ block.settings.svg_external_url }}" alt="Ícone SVG Externo" loading="lazy" style="max-width: 100%; height: auto;">
+                      {% elsif block.settings.svg_image_url != blank %}
+                        <img src="{{ block.settings.svg_image_url | img_url: 'master' }}" alt="Ícone SVG" loading="lazy" style="max-width: 100%; height: auto;">
+                      {% elsif block.settings.svg_code != blank %}
+                        {{ block.settings.svg_code }}
+                      {% endif %}
+                    </span>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if botao_link != blank and botao_label != blank %}
+          <a href="{{ botao_link }}" class="x20custom-button-sophiaAQ desktop-button" id="botao-compra-desktop-sophiaAQ">
+            {{ botao_label }}
+          </a>
+        {% endif %}
+      </div>
+      <div class="col-7-sophiaAQ x20image-column-sophiaAQ">
+        <div class="x20main-image-wrapper-sophiaAQ">
+          {% if col2_image != blank %}
+            <img class="x20pe-nodrag"
+                 src="{{ col2_image | img_url: 'master' }}"
+                 alt="{{ col2_image.alt | default: 'Imagem principal' }}"
+                 width="{{ col2_image.width }}"
+                 height="{{ col2_image.height }}"
+                 loading="lazy">
+          {% else %}
+            <img class="x20pe-nodrag"
+                 src="https://cdn.shopify.com/s/files/1/0257/4716/1139/files/quitosana-secao-0-a3.webp?v=1748007594"
+                 alt="Placeholder Imagem Principal"
+                 loading="lazy">
+          {% endif %}
+        </div>
+      </div>
+      {% if botao_link != blank and botao_label != blank %}
+        <div class="col-12-sophiaAQ mobile-button-wrapper-sophiaAQ">
+          <a href="{{ botao_link }}" class="x20custom-button-sophiaAQ mobile-button" id="botao-compra-mobile-sophiaAQ">
+            {{ botao_label }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Jejoom Início",
+  "tag": "section",
+  "class": "section-landing-quitosana-sophiaAQ",
+  "max_blocks": 7,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais da Seção"
+    },
+     {
+      "type": "checkbox",
+      "id": "altura_maxima_crl",
+      "label": "Ativar função altura max da secao (Desktop)",
+      "default": true,
+      "info": "Em desktop, a altura máxima do bloco terá um limite"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de fundo do container",
+      "default": "#f8f8f8",
+      "info": "Define uma cor sólida para o fundo do container da seção. A imagem de fundo tem prioridade se for selecionada."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagem de fundo da área",
+      "info": "Esta imagem será usada como o fundo de todo o container da seção (tem prioridade sobre a cor de fundo)."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Espaçamento superior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Espaçamento inferior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "inner_padding",
+      "label": "Espaçamento interno do container",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 60,
+      "info": "Espaçamento entre a borda do container e seu conteúdo interno."
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Raio da borda do container",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "container_margin_left",
+      "label": "Margem Esquerda do Container",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "container_margin_right",
+      "label": "Margem Direita do Container",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 0
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align",
+      "label": "Alinhamento Vertical do Conteúdo",
+      "options": [
+        { "value": "flex-start", "label": "Topo" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Fundo" }
+      ],
+      "default": "center",
+      "info": "Alinha verticalmente o conteúdo dentro do container principal."
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Conteúdo (Esquerda)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Benefícios Incríveis para Sua Saúde!"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Cor do Título",
+      "default": "#222222"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight_desktop",
+      "label": "Espessura da fonte (Título - Desktop)",
+      "options": [
+        { "value": "300", "label": "Leve" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" },
+        { "value": "800", "label": "Extra-negrito" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_desktop",
+      "label": "Tamanho da fonte (Título - Desktop)",
+      "min": 1, "max": 5, "step": 0.1, "unit": "rem", "default": 2.5
+    },
+    {
+      "type": "range",
+      "id": "title_line_height_desktop",
+      "label": "Altura da linha (Título - Desktop)",
+      "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing_desktop",
+      "label": "Espaçamento entre letras (Título - Desktop)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight_mobile",
+      "label": "Espessura da fonte (Título - Mobile)",
+      "options": [
+        { "value": "300", "label": "Leve" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" },
+        { "value": "800", "label": "Extra-negrito" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_mobile",
+      "label": "Tamanho da fonte (Título - Mobile)",
+      "min": 1, "max": 3, "step": 0.1, "unit": "rem", "default": 1.8
+    },
+    {
+      "type": "range",
+      "id": "title_line_height_mobile",
+      "label": "Altura da linha (Título - Mobile)",
+      "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing_mobile",
+      "label": "Espaçamento entre letras (Título - Mobile)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Descubra o poder da Quitosana."
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Cor do Subtítulo",
+      "default": "#444444"
+    },
+    {
+      "type": "select",
+      "id": "subtitle_font_weight_desktop",
+      "label": "Espessura da fonte (Subtítulo - Desktop)",
+      "options": [
+        { "value": "300", "label": "Leve" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" },
+        { "value": "800", "label": "Extra-negrito" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size_desktop",
+      "label": "Tamanho da fonte (Subtítulo - Desktop)",
+      "min": 1, "max": 3, "step": 0.1, "unit": "rem", "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "subtitle_line_height_desktop",
+      "label": "Altura da linha (Subtítulo - Desktop)",
+      "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.3
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacing_desktop",
+      "label": "Espaçamento entre letras (Subtítulo - Desktop)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "select",
+      "id": "subtitle_font_weight_mobile",
+      "label": "Espessura da fonte (Subtítulo - Mobile)",
+      "options": [
+        { "value": "300", "label": "Leve" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" },
+        { "value": "800", "label": "Extra-negrito" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "500"
+    },
+
+    {
+
+  "type": "range",
+  "id": "subtitle_font_size_mobile",
+  "label": "Tamanho da fonte (Subtítulo - Mobile)",
+  "min": 0.8, "max": 2, "step": 0.1, "unit": "rem",
+  "default": 1.2 // Alterado de 1.25 para 1.2
+},
+
+   
+    {
+      "type": "range",
+      "id": "subtitle_line_height_mobile",
+      "label": "Altura da linha (Subtítulo - Mobile)",
+      "min": 0.5, "max": 2.5, "step": 0.1, "default": 1.3
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacing_mobile",
+      "label": "Espaçamento entre letras (Subtítulo - Mobile)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descrição",
+      "default": "<p>Este espaço é perfeito para destacar os principais benefícios e características do seu produto de forma clara e impactante.</p>"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Cor da Descrição",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alinhamento do Texto",
+      "options": [
+        { "value": "flex-start", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Imagem (Direita)"
+    },
+    {
+      "type": "image_picker",
+      "id": "col2_image",
+      "label": "Imagem principal da segunda coluna",
+      "info": "Esta imagem aparecerá na coluna da direita (ou esquerda se invertido)."
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão"
+    },
+    {
+      "type": "color",
+      "id": "botao_bg_color",
+      "label": "Cor de fundo do botão",
+      "default": "#367300"
+    },
+    {
+      "type": "color",
+      "id": "botao_text_color",
+      "label": "Cor do texto do botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "url",
+      "id": "botao_link",
+      "label": "Link ou âncora do botão",
+      "info": "Ex: /collections/all ou #id-da-secao"
+    },
+    {
+      "type": "text",
+      "id": "botao_label",
+      "label": "Texto do botão",
+      "default": "ESCOLHER SABOR"
+    },
+    {
+      "type": "range",
+      "id": "button_intro_size",
+      "label": "Tamanho da fonte (Botão)",
+      "min": 10, "max": 65, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "label": "Padding Horizontal do Botão",
+      "min": 10, "max": 300, "step": 5, "unit": "px", "default": 90
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "label": "Padding Vertical do Botão",
+      "min": 10, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_margin_top",
+      "label": "Margem Superior do Botão",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout Avançado"
+    },     
+    {
+      "type": "checkbox",
+      "id": "reverse_columns",
+      "label": "Inverter ordem das colunas (imagem à esquerda)",
+      "default": false,
+      "info": "Em desktop, a imagem será exibida à esquerda e o texto à direita."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "svg_item_full_width",
+      "name": "Ícone SVG (Largura Total)",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "url",
+          "id": "svg_external_url",
+          "label": "Link para SVG externo (URL)",
+          "info": "Insira uma URL direta para um arquivo SVG hospedado na web. Esta opção tem prioridade."
+        },
+        {
+          "type": "image_picker",
+          "id": "svg_image_url",
+          "label": "Ou Imagem SVG (Upload Shopify)",
+          "info": "Faça upload de um arquivo SVG para o Shopify. Esta opção é secundária."
+        },
+        {
+          "type": "liquid",
+          "id": "svg_code",
+          "label": "Ou Código SVG (Cole aqui)",
+          "info": "Cole o código SVG completo. Certifique-se de que não contenha 'fill' ou 'color' fixos para que a cor do tema possa ser aplicada via CSS. Esta é a última opção."
+        },
+        {
+          "type": "range",
+          "id": "svg_width",
+          "label": "Largura do Ícone (Desktop)",
+          "min": 50, "max": 400, "step": 10, "unit": "px", "default": 200,
+          "info": "Define a largura do SVG em telas de desktop."
+        },
+        {
+          "type": "range",
+          "id": "svg_height",
+          "label": "Altura do Ícone (Desktop)",
+          "min": 50, "max": 400, "step": 10, "unit": "px", "default": 200,
+          "info": "Define a altura do SVG em telas de desktop. Use 'auto' para manter a proporção."
+        },
+        {
+          "type": "range",
+          "id": "svg_width_mobile",
+          "label": "Largura do Ícone (Mobile)",
+          "min": 20, "max": 200, "step": 5, "unit": "px", "default": 150,
+          "info": "Define a largura do SVG em telas de mobile."
+        },
+        {
+          "type": "range",
+          "id": "svg_height_mobile",
+          "label": "Altura do Ícone (Mobile)",
+          "min": 20, "max": 200, "step": 5, "unit": "px", "default": 150,
+          "info": "Define a altura do SVG em telas de mobile. Use 'auto' para manter a proporção."
+        },
+        {
+          "type": "color",
+          "id": "svg_color",
+          "label": "Cor do Ícone SVG",
+          "default": "#000000",
+          "info": "Esta cor será aplicada apenas se o SVG for inserido via Código SVG. SVGs de URL externa ou Upload podem não respeitar esta cor."
+        }
+      ]
+    },
+    {
+      "type": "svg_item_column",
+      "name": "Ícone SVG (Em Colunas)",
+      "settings": [
+        {
+          "type": "url",
+          "id": "svg_external_url",
+          "label": "Link para SVG externo (URL)",
+          "info": "Insira uma URL direta para um arquivo SVG hospedado na web. Esta opção tem prioridade."
+        },
+        {
+          "type": "image_picker",
+          "id": "svg_image_url",
+          "label": "Ou Imagem SVG (Upload Shopify)",
+          "info": "Faça upload de um arquivo SVG para o Shopify. Esta opção é secundária."
+        },
+        {
+          "type": "liquid",
+          "id": "svg_code",
+          "label": "Ou Código SVG (Cole aqui)",
+          "info": "Cole o código SVG completo. Certifique-se de que não contenha 'fill' ou 'color' fixos para que a cor do tema possa ser aplicada via CSS. Esta é a última opção."
+        },
+        {
+          "type": "range",
+          "id": "svg_width",
+          "label": "Largura do Ícone",
+          "min": 20, "max": 300, "step": 5, "unit": "px", "default": 100
+        },
+        {
+          "type": "range",
+          "id": "svg_height",
+          "label": "Altura do Ícone",
+          "min": 20, "max": 300, "step": 5, "unit": "px", "default": 100
+        },
+        {
+          "type": "color",
+          "id": "svg_color",
+          "label": "Cor do Ícone SVG",
+          "default": "#4CAF50",
+          "info": "Esta cor será aplicada apenas se o SVG for inserido via Código SVG. SVGs de URL externa ou Upload podem não respeitar esta cor."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jejoom Início",
+      "category": "Layout",
+      "settings": {
+        "background_color": "#f8f8f8",
+        "title_font_weight_desktop": "700",
+        "title_font_size_desktop": 2.5,
+        "title_line_height_desktop": 1.2,
+        "title_letter_spacing_desktop": 0,
+        "title_font_weight_mobile": "700",
+        "title_font_size_mobile": 1.8,
+        "title_line_height_mobile": 1.2,
+        "title_letter_spacing_mobile": 0,
+        "subtitle_font_weight_desktop": "500",
+        "subtitle_font_size_desktop": 1.5,
+        "subtitle_line_height_desktop": 1.3,
+        "subtitle_letter_spacing_desktop": 0,
+        "subtitle_font_weight_mobile": "500",
+        "subtitle_font_size_mobile": 1.25,
+        "subtitle_line_height_mobile": 1.3,
+        "subtitle_letter_spacing_mobile": 0
+      },
+      "blocks": [
+        {
+          "type": "svg_item_full_width",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='#000' d='M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z'/></svg>",
+            "svg_width": 250,
+            "svg_height": 250,
+            "svg_width_mobile": 120,
+            "svg_height_mobile": 120
+          }
+        },
+        {
+          "type": "svg_item_full_width",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='#000' d='M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z'/></svg>",
+            "svg_width": 250,
+            "svg_height": 250,
+            "svg_width_mobile": 120,
+            "svg_height_mobile": 120
+          }
+        },
+        {
+          "type": "svg_item_column",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_color": "#28A745"
+          }
+        },
+        {
+          "type": "svg_item_column",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_color": "#28A745"
+          }
+        },
+        {
+          "type": "svg_item_column",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_color": "#28A745"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

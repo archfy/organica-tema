@@ -1,0 +1,472 @@
+{% comment %}
+  Seção Shopify: Letreiro Horizontal
+  - Bloco de letreiro com texto e ícones customizáveis que se move horizontalmente.
+  - Permite múltiplos itens (blocos) com texto e ícone individual.
+  - Opções de cor de fundo, texto, ícone, tamanho de fonte e ícone, velocidade e direção.
+  - Pausa ao passar o mouse para melhor usabilidade.
+  - Compatível com o editor de temas Shopify.
+{% endcomment %}
+
+{% comment %}
+  Seção Shopify: Letreiro Horizontal
+  - Agora com loop infinito perfeito sem espaços em branco
+{% endcomment %}
+
+{%- liquid
+  assign current_section_id = section.id
+  assign bg_color = section.settings.bg_color
+  assign altura_letreiro = section.settings.altura_letreiro
+  assign reverse_icon = section.settings.reverse_icon
+  assign text_color = section.settings.text_color
+  assign icon_color = section.settings.icon_color
+  assign font_size = section.settings.font_size
+  assign font_weight = section.settings.font_weight
+  assign icon_size = section.settings.icon_size
+  assign speed = section.settings.speed
+  assign reverse = section.settings.reverse
+  assign pause_on_hover = section.settings.pause_on_hover
+  assign item_spacing = section.settings.item_spacing
+  assign item_spacing_bloco = section.settings.item_spacing_bloco
+-%}
+
+{%- style -%}
+  .bls__shipping{
+  padding-right: 0px!important;
+  padding-left: 90px!important;
+  }
+
+  .marquee-section-{{ current_section_id }} {
+    width: 100%;
+    overflow: hidden; /* Garante que nada vaze */
+    
+  }
+
+  .marquee-container-{{ current_section_id }} {
+    background-color: {{ bg_color }};
+    overflow: hidden;
+    white-space: nowrap;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height:{{ altura_letreiro }}px;
+  }
+
+  .marquee-wrapper-{{ current_section_id }} {
+    display: flex;
+    width: fit-content; /* Ajusta ao conteúdo */
+  }
+
+  .marquee-content-{{ current_section_id }} {
+    display: inline-flex;
+    align-items: center;
+    animation: scroll-{{ current_section_id }} {{ speed }}s linear infinite;
+    will-change: transform; /* Otimização de performance */
+  }
+
+  /* Duplicamos o conteúdo via CSS para evitar JavaScript */
+  .marquee-content-{{ current_section_id }} .marquee-duplicate {
+    display: inline-flex;
+  }
+
+  .marquee-item-{{ current_section_id }} {
+    display: flex;
+    align-items: center;
+    color: {{ text_color }};
+    font-size: {{ font_size }}px;
+    font-weight: {{ font_weight }};
+    flex-shrink: 0;
+  }
+  .marquee-item-text-a{
+    margin-right: {{ item_spacing }}px;
+  }
+  .marquee-item-text-b{
+    margin-left: {{ item_spacing }}px;
+  }
+
+  .marquee-icon-{{ current_section_id }} {
+    margin-left: {{ item_spacing_bloco | divided_by: 2 }}px;
+    color: {{ icon_color }};
+    width: {{ icon_size }}px;
+    height: {{ icon_size }}px;
+    display: inline-flex;
+    fill: currentColor;
+  }
+  .img-letreiro{
+    width: {{icon_size }}px!important;
+    height: {{icon_size }}px!important;
+  }
+
+  @keyframes scroll-{{ current_section_id }} {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Move apenas metade do conteúdo duplicado */
+  }
+
+  /* Versão reversa */
+  {% if reverse %}
+    .marquee-content-{{ current_section_id }} {
+      animation: scroll-reverse-{{ current_section_id }} {{ speed }}s linear infinite;
+    }
+    @keyframes scroll-reverse-{{ current_section_id }} {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+  {% endif %}
+
+  .marquee-container-{{ current_section_id }}.is-paused .marquee-content-{{ current_section_id }} {
+    animation-play-state: paused;
+  }
+{%- endstyle -%}
+
+<section class="marquee-section-{{ current_section_id }}">
+  <div class="marquee-container-{{ current_section_id }}"
+       data-section-id="{{ current_section_id }}"
+       data-pause-on-hover="{{ pause_on_hover }}"
+       data-reverse="{{ reverse }}">
+    <div class="marquee-wrapper-{{ current_section_id }}">
+      <div class="marquee-content-{{ current_section_id }}">
+        <!-- Conteúdo original -->
+        {%- for block in section.blocks -%}
+          <div class="marquee-item-{{ current_section_id }}">
+            {% if reverse_icon == true %}
+            <span class="marquee-item-text-a">{{ block.settings.item_text }}</span>
+            {% if block.settings.item_icon != 'none' %}
+              <span class="marquee-icon-{{ current_section_id }}">
+                {% case block.settings.item_icon %}
+                  {% when 'favorite' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>
+                  {% when 'shopping_cart' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                  {% when 'check' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                  {% when 'star' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z"/></svg>
+                  {% when 'custom_svg' %}{{ block.settings.custom_svg_code }}
+                  {% when 'custom_image' %}{% if block.settings.custom_image_url %}
+                    <img class="img-letreiro" src="{{ block.settings.custom_image_url | img_url: 'medium' }}">{% endif %}
+                {% endcase %}
+              </span>
+            {% endif %}
+            {% else %}
+            {% if block.settings.item_icon != 'none' %}
+              <span class="marquee-icon-{{ current_section_id }}">
+                {% case block.settings.item_icon %}
+                  {% when 'favorite' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>
+                  {% when 'shopping_cart' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                  {% when 'check' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                  {% when 'star' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z"/></svg>
+                  {% when 'custom_svg' %}{{ block.settings.custom_svg_code }}
+                  {% when 'custom_image' %}{% if block.settings.custom_image_url %}
+                    <img class="img-letreiro" src="{{ block.settings.custom_image_url | img_url: 'medium' }}">{% endif %}
+                {% endcase %}
+              </span>
+            {% endif %}
+            <span class="marquee-item-text-b">{{ block.settings.item_text }}</span>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+        
+        <!-- Conteúdo duplicado para o loop infinito -->
+        {%- for block in section.blocks -%}
+          <div class="marquee-item-{{ current_section_id }} marquee-duplicate">
+            {% if reverse_icon == true %}
+            <span class="marquee-item-text-a">{{ block.settings.item_text }}</span>
+            {% if block.settings.item_icon != 'none' %}
+              <span class="marquee-icon-{{ current_section_id }}">
+                {% case block.settings.item_icon %}
+                  {% when 'favorite' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>
+                  {% when 'shopping_cart' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                  {% when 'check' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                  {% when 'star' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z"/></svg>
+                  {% when 'custom_svg' %}{{ block.settings.custom_svg_code }}
+                  {% when 'custom_image' %}{% if block.settings.custom_image_url %}
+                    <img class="img-letreiro" src="{{ block.settings.custom_image_url | img_url: 'medium' }}">{% endif %}
+                {% endcase %}
+              </span>
+            {% endif %}
+            {% else %}
+            {% if block.settings.item_icon != 'none' %}
+              <span class="marquee-icon-{{ current_section_id }}">
+                {% case block.settings.item_icon %}
+                  {% when 'favorite' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>
+                  {% when 'shopping_cart' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                  {% when 'check' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                  {% when 'star' %}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z"/></svg>
+                  {% when 'custom_svg' %}{{ block.settings.custom_svg_code }}
+                  {% when 'custom_image' %}{% if block.settings.custom_image_url %}
+                    <img class="img-letreiro" src="{{ block.settings.custom_image_url | img_url: 'medium' }}">{% endif %}
+                {% endcase %}
+              </span>
+            {% endif %}
+            <span class="marquee-item-text-b">{{ block.settings.item_text }}</span>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Função para pausar no hover
+  function initMarqueeHover(sectionId) {
+    const marquee = document.querySelector(`.marquee-container-${sectionId}`);
+    if (!marquee) return;
+
+    const pauseOnHover = marquee.dataset.pauseOnHover === 'true';
+    
+    if (pauseOnHover) {
+      marquee.addEventListener('mouseenter', () => {
+        marquee.classList.add('is-paused');
+      });
+      marquee.addEventListener('mouseleave', () => {
+        marquee.classList.remove('is-paused');
+      });
+    }
+  }
+
+  // Inicializa todos os letreiros
+  document.querySelectorAll('[data-section-type="marquee-section"]').forEach(section => {
+    initMarqueeHover(section.dataset.sectionId);
+  });
+
+  // Suporte ao editor do Shopify
+  if (window.Shopify.designMode) {
+    document.addEventListener('shopify:section:load', function(event) {
+      initMarqueeHover(event.detail.sectionId);
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Jejoom Letreiro 1",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use este letreiro para exibir mensagens importantes ou promoções."
+    },
+    {
+      "type": "range",
+      "id": "altura_letreiro",
+      "label": "Altura da seção",
+      "min": 40,
+      "max": 140,
+      "step": 1,
+      "unit": "px",
+      "default": 110
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Tamanho do ícone ou imagem",
+      "min": 20,
+      "max": 130,
+      "step": 2,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_icon",
+      "label": "Posição do ícone (a direita [ativar])",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Cor de fundo do letreiro",
+      "default": "#DD1F36"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do texto",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Cor do ícone",
+      "default": "#fff"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Tamanho da fonte",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Espessura da fonte",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Espaçamento entre itens (px)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40,
+      "info": "Espaçamento entre o texto e o ícone."
+    },
+    {
+      "type": "range",
+      "id": "item_spacing_bloco",
+      "label": "Espaçamento entre mini blocos (px)",
+      "min": 10,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "default": 40,
+      "info": "Espaçamento entre os blocos de texto/ícone."
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Velocidade da animação",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 15,
+      "info": "Tempo para uma rolagem completa (em segundos). Menor valor = mais rápido."
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse",
+      "label": "Animação reversa (da direita para a esquerda)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pausar animação ao passar o mouse",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_item",
+      "name": "Item do Letreiro",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "item_text",
+          "label": "Texto do item",
+          "default": "<p>Texto padrão com formatação</p>"
+        },
+        {
+          "type": "select",
+          "id": "item_icon",
+          "label": "Ícone do item",
+          "options": [
+            { "value": "none", "label": "Nenhum" },
+            { "value": "favorite", "label": "Coração (preenchido)" },
+            { "value": "shopping_cart", "label": "Carrinho de compras" },
+            { "value": "check", "label": "Check (confirmação)" },
+            { "value": "star", "label": "Estrela (preenchido)" },
+            { "value": "custom_svg", "label": "SVG Personalizado (código)" },
+            { "value": "custom_image", "label": "Imagem Personalizada (URL)" }
+          ],
+          "default": "favorite"
+        },
+        {
+          "type": "html",
+          "id": "custom_svg_code",
+          "label": "Código SVG Personalizado",
+          "info": "Insira o código SVG completo aqui. Certifique-se de que o SVG tenha viewBox e não contenha preenchimento (fill) ou cor (stroke) fixos, para que as cores do tema funcionem.",
+          "default": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/></svg>"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image_url",
+          "label": "Imagem Personalizada",
+          "info": "Faça upload de uma imagem (PNG, JPG, GIF) para usar como ícone."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jejoom Letreiro 1",
+      "category": "Marketing",
+      "settings": {
+        "bg_color": "#DD1F36",
+        "font_weight": "600"
+      },
+      "blocks": [
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "item_text": "<p>OFERTAS ESPECIAIS</p>",
+            "item_icon": "favorite"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,85 @@
+{{ 'custormer.css' | asset_url | stylesheet_tag }}
+<div id="login-popup">
+    <div class="bls__tab-wrapper">
+        <div id="tab_login" class="bls-login bls-login-popup" data-title-default="Entrar" data-login-hidden="Entrar" aria-hidden="false">
+            <form accept-charset="UTF-8" action="{{ routes.account_login_url }}" method="post" class="auth-form auth-form-2">
+                <input name="form_type" type="hidden" value="customer_login" />
+                <input name="utf8" type="hidden" value="✓" />
+                <div class="form-field form-group mb-15 d-flex flex-column">
+                    <input id="customer_email" class="form-input form-input-placeholder" type="email" value="" name="customer[email]" required placeholder="E-mail">
+                </div>
+                <div class="form-field form-group mb-15 d-flex flex-column">
+                    <input id="customer_password" class="form-input form-input-placeholder" type="password" value="" required placeholder="Senha" name="customer[password]">
+                </div>
+                <a class="link-forgot" href="" data-login-show="Recuperar senha">
+                    <span class="text">Esqueceu sua senha?</span>
+                </a>
+                <div class="form-actions auth-actions mt-30 d-flex flex-column text-center">
+                    <button type="submit" class="button button-login btn btn-primary" value="Entrar">Entrar</button>
+                    <a class="button button-account btn btn-secondary mt-20" data-login-show="Criar conta">Criar conta</a>
+                </div>
+            </form>
+        </div>
+
+        <div id="tab_register" class="bls-register bls-login-popup" data-login-hidden="Criar conta" aria-hidden="true">
+            {% form 'create_customer' %}
+                {{ form.errors | default_errors }}
+
+                <div class="first-name form-group mb-15 d-flex flex-column">
+                    <input type="text" placeholder="Nome" name="customer[first_name]">
+                </div>
+
+                <div class="last-name form-group mb-15 d-flex flex-column">
+                    <input type="text" placeholder="Sobrenome" name="customer[last_name]">
+                </div>
+
+                <div class="email form-group mb-15 d-flex flex-column">
+                    <input type="email" placeholder="E-mail" name="customer[email]">
+                </div>
+
+                <div class="password form-group mb-15 d-flex flex-column">
+                    <input type="password" placeholder="Senha" name="customer[password]">
+                </div>
+                <p class="lable-policy pt-10">
+                    Ao criar uma conta, você concorda com os Termos de Serviço e Política de Privacidade da loja.
+                </p>
+                <div class="submit mt-30 d-flex flex-column text-center">
+                    <a class="button button-login btn btn-primary" data-login-show="Entrar">Entrar</a>
+                    <button class="button btn btn-secondary mt-20" type="submit" value="Criar conta">Criar conta</button>
+                </div>
+            {% endform %}
+        </div>
+
+        <div id="forgot-password" data-login-hidden="Recuperar senha" aria-hidden="true" class="bls-forgot-password bls-login-popup">
+            {%- form 'recover_customer_password' -%}
+                
+                {%- if form.errors -%}
+                {%- assign message = form.errors | default_errors | strip_html -%}
+                    <p class="message">
+                        {{ message }}
+                    </p>
+                {%- endif -%}
+                <div class="email form-group mb-15 d-flex flex-column">
+                    <p class="text-center mb-30 lable-forgot">Informe seu e-mail abaixo e enviaremos um link para redefinir sua senha.</p>
+                    <input
+                        type="email"
+                        value=""
+                        name="email"
+                        id="RecoverEmail"
+                        autocomplete="email"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        placeholder="E-mail"
+                        aria-required="true"
+                        aria-invalid="true"
+                        required
+                    >
+                </div>
+                <div class="form-actions mt-30 d-flex flex-column text-center">
+                    <button type="submit" class="button btn btn-primary" value="Enviar">Enviar</button>
+                    <a class="button button-login btn btn-secondary mt-20" data-login-show="Entrar">Entrar</a>
+                </div>
+            {%- endform -%}
+        </div>
+    </div>
+</div>

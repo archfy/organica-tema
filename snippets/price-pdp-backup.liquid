@@ -1,0 +1,214 @@
+<style>
+  .price__discount-badge {
+    background-color: #ff0000;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 13px;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1;
+    position: relative;
+    margin-left: 5px;
+    bottom: 5px;
+  }
+</style>
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+  assign discount_percentage = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round
+-%}
+
+<div
+  class="
+    bls__price
+    {%- if available == false %} price--sold-out {% endif -%}
+    {%- if compare_at_price > price %} price--on-sale {% endif -%}
+    {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+  "
+  data-price-wrapper
+>
+  <div class="bls__product-price flex flex-wrap align-items-center mt-3">
+    <div class="price__regular">
+      <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="price{%- if compare_at_price > price %} special-price {% endif -%}" data-product-price>
+       {{ money_price }}
+      </span>
+    </div>
+    {%- if compare_at_price > price %}
+      {%- unless product.price_varies == false and product.compare_at_price_varies %}
+        <div class="price__sale grey-color" data-sale-price-wrapper>
+            <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+            <span>
+              <s class="price-item compare-price" data-compare-price>
+                {% if settings.currency_code_enabled %}
+                  {{ compare_at_price | money_with_currency }}
+                {% else %}
+                  {{ compare_at_price | money }}
+                {% endif %}
+              </s>
+            </span>
+            <span class="price__discount-badge" data-discount-badge>
+              {{ discount_percentage }}% OFF
+            </span>
+        </div>
+      {%- endunless -%}
+    {%- endif -%}
+    {% if product.selected_or_first_available_variant.unit_price_measurement != null %}
+      <small class="unit-price caption">
+        <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+        <span class="price-item price-item--last">
+          <span class="number">{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+          <span aria-hidden="true">/</span>
+          <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+          <span class="unit">
+            {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+              {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+            {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+          </span>
+        </span>
+      </small>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function() {
+  console.log('🔥 DISCOUNT BADGE SCRIPT CARREGADO!');
+  
+  // Armazena dados do produto
+  const productData = {{ product.variants | json }};
+  
+  // Função para formatar preço
+  function formatMoney(cents) {
+    const price = (cents / 100).toFixed(2);
+    return 'R$ ' + price.replace('.', ',');
+  }
+  
+  // Função principal de atualização
+  function updateDiscountBadge(variantId) {
+    console.log('🎯 Atualizando badge para variant:', variantId);
+    
+    const discountBadge = document.querySelector('[data-discount-badge]');
+    const saleWrapper = document.querySelector('[data-sale-price-wrapper]');
+    
+    if (!discountBadge) {
+      console.warn('⚠️ Badge não encontrado!');
+      return;
+    }
+    
+    // Encontra a variante
+    const variant = productData.find(v => v.id === parseInt(variantId));
+    
+    if (!variant) {
+      console.warn('⚠️ Variante não encontrada:', variantId);
+      return;
+    }
+    
+    console.log('📊 Variante encontrada:', variant);
+    console.log('💰 Preço:', variant.price, 'Compare:', variant.compare_at_price);
+    
+    const price = variant.price;
+    const compareAtPrice = variant.compare_at_price;
+    
+    // Se não tem desconto, esconde
+    if (!compareAtPrice || compareAtPrice <= price) {
+      console.log('❌ Sem desconto - escondendo badge');
+      if (saleWrapper) saleWrapper.style.display = 'none';
+      return;
+    }
+    
+    // Calcula desconto
+    const discount = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+    console.log('✅ Desconto calculado:', discount + '%');
+    
+    // Atualiza badge
+    discountBadge.textContent = discount + '% OFF';
+    
+    // Mostra wrapper
+    if (saleWrapper) saleWrapper.style.display = '';
+    
+    console.log('✨ Badge atualizado com sucesso!');
+  }
+  
+  // MÚLTIPLOS LISTENERS para pegar QUALQUER mudança
+  
+  // 1. MutationObserver no preço (detecta qualquer mudança no DOM)
+  const priceElement = document.querySelector('[data-product-price]');
+  if (priceElement) {
+    const observer = new MutationObserver(function(mutations) {
+      console.log('🔄 Preço mudou via MutationObserver!');
+      // Pega o variant ID do input hidden ou select
+      const variantInput = document.querySelector('input[name="id"]') || 
+                          document.querySelector('select[name="id"]');
+      if (variantInput) {
+        updateDiscountBadge(variantInput.value);
+      }
+    });
+    
+    observer.observe(priceElement, { 
+      childList: true, 
+      characterData: true, 
+      subtree: true 
+    });
+    console.log('👁️ MutationObserver ativado no preço');
+  }
+  
+  // 2. Listener em selects de variante
+  document.addEventListener('change', function(e) {
+    if (e.target.name === 'id' || e.target.classList.contains('product-form__input')) {
+      console.log('🔄 Select mudou!');
+      updateDiscountBadge(e.target.value);
+    }
+  });
+  
+  // 3. Listener em botões/radio de variante
+  document.addEventListener('click', function(e) {
+    const variantButton = e.target.closest('[data-variant-id]');
+    if (variantButton) {
+      console.log('🔄 Botão de variante clicado!');
+      const variantId = variantButton.getAttribute('data-variant-id');
+      setTimeout(() => updateDiscountBadge(variantId), 100);
+    }
+  });
+  
+  // 4. Listener no form de produto
+  const productForm = document.querySelector('form[action*="/cart/add"]');
+  if (productForm) {
+    productForm.addEventListener('change', function(e) {
+      console.log('🔄 Form mudou!');
+      const variantInput = productForm.querySelector('input[name="id"]') || 
+                          productForm.querySelector('select[name="id"]');
+      if (variantInput) {
+        setTimeout(() => updateDiscountBadge(variantInput.value), 100);
+      }
+    });
+  }
+  
+  // 5. Evento customizado do Shopify
+  document.addEventListener('variant:change', function(e) {
+    console.log('🔄 Evento variant:change disparado!');
+    if (e.detail && e.detail.variant) {
+      updateDiscountBadge(e.detail.variant.id);
+    }
+  });
+  
+  console.log('✅ Todos os listeners instalados!');
+  console.log('📦 Variantes disponíveis:', productData.length);
+  
+})();
+</script>

@@ -1,0 +1,148 @@
+<style>
+  /* Adição para alinhar os itens de preço e a nova label */
+  .price__sale {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px; /* Espaçamento entre os elementos */
+  }
+
+  /* Estilo para a nova label de desconto */
+  .price__discount-badge {
+    background-color: #ff0000; /* Vermelho */
+    color: #FFFFFF; /* Branco */
+    padding: 5px 10px;
+    border-radius: 13px; /* Bordas arredondadas */
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1;
+    position: relative;
+    margin-left: 5px;
+    bottom: 1px;
+  }
+
+  @media (max-width: 576px) {
+    .special-price {
+      font-size: 13px;
+    }
+    .text-juros-grid {
+      font-size: 11px;
+    }
+  }
+</style>
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  assign money_price = price | money
+
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+
+  assign discount_percentage = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round
+
+  comment
+    ============================================
+    REGRAS DE PARCELAMENTO
+    - Abaixo de R$50 (5000 centavos): sem parcelamento
+    - De R$50,01 a R$100 (5001 a 10000): 2x
+    - Acima de R$100 (10001+): parcela mínima R$50
+    ============================================
+  endcomment
+
+  assign min_installment_cents = 5000
+  assign installment_count = 0
+
+  if price <= 5000
+    assign installment_count = 0
+  elsif price <= 10000
+    assign installment_count = 2
+  else
+    assign installment_count = price | divided_by: min_installment_cents
+    if installment_count > 10
+      assign installment_count = 10
+    endif
+    if installment_count < 2
+      assign installment_count = 2
+    endif
+  endif
+
+  if installment_count > 0
+    assign installment_value = price | divided_by: installment_count
+  endif
+-%}
+
+<div
+  class="
+    bls__price
+    {%- if available == false %} price--sold-out {% endif -%}
+    {%- if compare_at_price > price %} price--on-sale {% endif -%}
+    {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+  "
+>
+  <div style="display:block;" class="bls__product-price flex flex-wrap align-items-center mt-3">
+    {%- if compare_at_price > price %}
+      {%- unless product.price_varies == false and product.compare_at_price_varies %}
+        <div class="price__sale grey-color">
+          <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+          <span>
+            <s class="price-item compare-price">
+              {% if settings.currency_code_enabled %}
+                De {{ compare_at_price | money_with_currency }}
+              {% else %}
+                De {{ compare_at_price | money }}
+              {% endif %}
+            </s>
+          </span>
+          <span class="price__discount-badge">
+            {{ discount_percentage }}% OFF
+          </span>
+        </div>
+      {%- endunless -%}
+    {%- endif -%}
+
+    <div class="price__regular">
+      <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="price{%- if compare_at_price > price %} special-price {% endif -%}">
+        PAULO 1 Por {{ money_price }}
+      </span>
+
+      {%- if installment_count > 0 -%}
+        <span class="text-gray-600 text-[12px] text-juros-grid">
+          <span class="desk-none">{{ installment_count }}x de</span>
+          <span class="mobile-none">ou {{ installment_count }}x de</span>
+          <span class="value-parcela-pdp">{{ installment_value | money }}</span>
+        </span>
+      {%- endif -%}
+    </div>
+
+    {% if product.selected_or_first_available_variant.unit_price_measurement != null %}
+      <small class="unit-price caption">
+        <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+        <span class="price-item price-item--last">
+          <span class="number">{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+          <span aria-hidden="true">/</span>
+          <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+          <span class="unit">
+            {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+              {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+            {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+          </span>
+        </span>
+      </small>
+    {% endif %}
+  </div>
+</div>

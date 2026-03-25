@@ -1,0 +1,1034 @@
+{% comment %}
+  Seção Shopify: Bloco Produto Impacto - Refatorado por Sophia (V8 - Otimizada e Individualizada)
+  - Molde adaptável para exibir informações de impacto de um produto.
+  - Conteúdo 100% customizável via editor de tema, eliminando dependência de metacampos.
+  - Título principal, imagem central, e texto de impacto configuráveis diretamente.
+  - Suporte a múltiplas colunas de conteúdo dinâmicas (título, subtítulo, imagem) via blocos.
+  - Estilos de fontes, cores, espaçamentos e bordas controláveis.
+  - Classes CSS e IDs HTML identificadas com '-x4' para evitar conflitos.
+  - Todas as funcionalidades de vídeo removidas para simplificar o bloco.
+  - Erro de sintaxe Liquid na linha 48 corrigido.
+  - NOVAS FUNCIONALIDADES: Adição de uma segunda imagem opcional no cabeçalho e um campo de subtítulo abaixo do título principal.
+  - OTIMIZAÇÃO: Schema JSON revisado e otimizado para melhor performance de carregamento no editor de tema.
+  - AJUSTE CRÍTICO: Customizações de estilo para Título Principal e Subtítulo Principal agora são INDIVIDUAIS e FUNCIONAIS.
+  - CORREÇÃO: A especificidade CSS para o Título Principal foi aumentada para garantir que suas customizações sejam aplicadas corretamente.
+{% endcomment %}
+
+{%- liquid
+  assign section_id = section.id
+
+  assign background_colorx4 = section.settings.background_colorx4
+  assign pd_topx4 = section.settings.pd_topx4
+  assign pd_botx4 = section.settings.pd_botx4
+  assign pd_left_rightx4 = section.settings.pd_left_rightx4
+  assign brd_width_1x4 = section.settings.brd_width_1x4
+  assign brd_color_1x4 = section.settings.brd_color_1x4
+  assign bg_color_1x4 = section.settings.bg_color_1x4
+  assign brd_radius_1x4 = section.settings.brd_radius_1x4
+
+  assign show_imagem_titulox4 = section.settings.show_imagem_titulox4
+  assign header_imagex4 = section.settings.header_imagex4
+  assign header_image1_img_width_x4 = section.settings.header_image1_img_width_x4
+  assign header_image1_img_height_x4 = section.settings.header_image1_img_height_x4
+  assign header_image1_img_width_mobile_x4 = section.settings.header_image1_img_width_mobile_x4
+  assign header_image1_img_height_mobile_x4 = section.settings.header_image1_img_height_mobile_x4
+  assign show_secondary_header_image_impactov7 = section.settings.show_secondary_header_image_impactov7
+  assign secondary_header_image_impactov7 = section.settings.secondary_header_image_impactov7
+
+  assign show_titlex4 = section.settings.show_titlex4
+  assign main_title_contentx4 = section.settings.main_title_contentx4
+  assign title_font_sizex4 = section.settings.title_font_sizex4
+  assign title_font_sizemobilex4 = section.settings.title_font_sizemobilex4
+  assign title_font_weightx4 = section.settings.title_font_weightx4
+  assign title_letter_spacingx4 = section.settings.title_letter_spacingx4
+  assign title_line_heightx4 = section.settings.title_line_heightx4
+  assign hd_colorx4 = section.settings.hd_colorx4
+  assign title_margin_bottomx4 = section.settings.title_margin_bottomx4
+
+  assign subtitle_content_impactov7 = section.settings.subtitle_content_impactov7
+  assign subtitle_font_size_desktop_impactov7 = section.settings.subtitle_font_size_desktop_impactov7
+  assign subtitle_font_size_mobile_impactov7 = section.settings.subtitle_font_size_mobile_impactov7
+  assign subtitle_font_weight_impactov7 = section.settings.subtitle_font_weight_impactov7
+  assign subtitle_letter_spacing_desktop_impactov7 = section.settings.subtitle_letter_spacing_desktop_impactov7
+  assign subtitle_letter_spacing_mobile_impactov7 = section.settings.subtitle_letter_spacing_mobile_impactov7
+  assign subtitle_line_height_desktop_impactov7 = section.settings.subtitle_line_height_desktop_impactov7
+  assign subtitle_line_height_mobile_impactov7 = section.settings.subtitle_line_height_mobile_impactov7
+  assign subtitle_color_impactov7 = section.settings.subtitle_color_impactov7
+  assign subtitle_margin_bottom_impactov7 = section.settings.subtitle_margin_bottom_impactov7
+  assign subtitle_margin_top_impactov7 = section.settings.subtitle_margin_top_impactov7
+  assign subtitle_max_width_desktop_impactov7 = section.settings.subtitle_max_width_desktop_impactov7
+
+
+  
+
+  assign impact_text_contentx4 = section.settings.impact_text_contentx4
+  assign impact_text_contentx4_flutuante = section.settings.impact_text_contentx4_flutuante
+  assign impact_text_contentx4_flutuante_top_desktop = section.settings.impact_text_contentx4_flutuante_top_desktop
+  assign impact_text_contentx4_flutuante_left_desktop = section.settings.impact_text_contentx4_flutuante_left_desktop
+  assign impact_font_size_desktopx4 = section.settings.impact_font_size_desktopx4
+  assign impact_font_weightx4 = section.settings.impact_font_weightx4
+  assign impact_font_colorx4 = section.settings.impact_font_colorx4
+  assign impact_letter_spacing_desktopx4 = section.settings.impact_letter_spacing_desktopx4
+  assign impact_line_height_desktopx4 = section.settings.impact_line_height_desktopx4
+  assign impact_font_size_mobilex4 = section.settings.impact_font_size_mobilex4
+  assign impact_letter_spacing_mobilex4 = section.settings.impact_letter_spacing_mobilex4
+  assign impact_line_height_mobilex4 = section.settings.impact_line_height_mobilex4
+
+  assign show_central_mediax4 = section.settings.show_central_mediax4
+  assign central_imagex4 = section.settings.central_imagex4
+  assign img_width_x4 = section.settings.img_width_x4
+  assign img_height_x4 = section.settings.img_height_x4
+  assign img_width_mobile_x4 = section.settings.img_width_mobile_x4
+  assign img_height_mobile_x4 = section.settings.img_height_mobile_x4
+
+  assign show_buttonx4 = section.settings.show_buttonx4
+  assign btn_textx4 = section.settings.btn_textx4
+  assign btn_linkx4 = section.settings.btn_linkx4
+  assign btn_text_colorx4 = section.settings.btn_text_colorx4
+  assign btn_bg_colorx4 = section.settings.btn_bg_colorx4
+  assign btn_border_radiusx4 = section.settings.btn_border_radiusx4
+  assign btn_margin_topx4 = section.settings.btn_margin_topx4
+  assign btn_padding_topx4 = section.settings.btn_padding_topx4
+  assign btn_padding_bottomx4 = section.settings.btn_padding_bottomx4
+  assign btn_padding_left_rightx4 = section.settings.btn_padding_left_rightx4
+  assign btn_font_sizex4 = section.settings.btn_font_sizex4
+  assign btn_font_weightx4 = section.settings.btn_font_weightx4
+  assign btn_letter_spacingx4 = section.settings.btn_letter_spacingx4
+  assign btn_line_heightx4 = section.settings.btn_line_heightx4
+  assign button_alignmentx4 = section.settings.button_alignmentx4
+
+  assign enable_fade_in_animation = section.settings.enable_fade_in_animation
+  assign animation_delay = section.settings.animation_delay
+-%}
+
+{%- style -%}
+
+
+form .field, p:not(:only-of-type) {
+  margin-bottom: unset;
+}
+  
+  .pg-2x4-{{ section_id }} {
+    margin: 0.625em;
+    width: auto;
+    border-radius: 1.25em;
+    
+    font-family: inherit;
+    background-color: {{ background_colorx4 | default: '#fff4d5' }};
+    padding-top: {{ pd_topx4 }}px;
+    padding-bottom: {{ pd_botx4 }}px;
+    padding-left: {{ pd_left_rightx4 }}px;
+    padding-right: {{ pd_left_rightx4 }}px;
+    {% if enable_fade_in_animation %}
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    {% endif %}
+  }
+
+  .pg-2x4-{{ section_id }}.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .blk-2x4-{{ section_id }} {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1100px;
+    border: {{ brd_width_1x4 }}px solid {{ brd_color_1x4 | default: '#ff8a00' }};
+    background-color: {{ bg_color_1x4 | default: '#fff' }};
+    border-radius: {{ brd_radius_1x4 }}px;
+    padding: 30px;
+    overflow: hidden;
+  }
+
+  /* AJUSTADO: Estilos para Título Principal agora com maior especificidade para h2 */
+  .pg-2x4__ttl-{{ section_id }} h2 {
+    text-align: center;
+    font-size: {{ title_font_sizex4 }}px;
+    line-height: {{ title_line_heightx4 }};
+    letter-spacing: {{ title_letter_spacingx4 }}px;
+    font-weight: {{ title_font_weightx4 }};
+    color: {{ hd_colorx4 }};
+    margin-bottom: {{ title_margin_bottomx4 }}px;
+    /* Reset de margens padrão para h2 para evitar conflitos */
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .header-image-wrapper-x4-{{ section_id }} {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .header-image-x4-{{ section_id }} {
+    max-width: {{ header_image1_img_width_x4 }}%;
+    max-height: {{ header_image1_img_height_x4 }}px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  /* NOVO: Estilos para Segunda Imagem de Cabeçalho */
+  .secondary-header-image-wrapper-impactov7-{{ section_id }} {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .secondary-header-image-impactov7-{{ section_id }} {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* AJUSTADO: Estilos para Subtítulo Principal agora com customizações individuais */
+  .subtitle-content-impactov7-{{ section_id }} {
+    text-align: center;    
+    font-size: {{ subtitle_font_size_desktop_impactov7 }}px;
+    color: {{ subtitle_color_impactov7 | default: '#555555' }};
+    line-height: {{ subtitle_line_height_desktop_impactov7 }};
+    letter-spacing: {{ subtitle_letter_spacing_desktop_impactov7 }}px;
+    font-weight: {{ subtitle_font_weight_impactov7 }};
+    margin-bottom: {{ subtitle_margin_bottom_impactov7 }}px;
+    margin-top: {{ subtitle_margin_top_impactov7 }}px; /* Ajuste para encaixar melhor abaixo do título */
+  }
+  @media (min-width: 768px) {
+    .subtitle-content-impactov7-{{ section_id }} {
+      max-width: {{ subtitle_max_width_desktop_impactov7 }}px;
+      margin-left: auto;
+    margin-right: auto;
+    }
+
+    .produto-nomex4-{{ section_id }} {
+    margin-top: -50px;
+    {% if impact_text_contentx4_flutuante == true  %}
+    position: relative;
+    {% endif %}
+    top: {{ impact_text_contentx4_flutuante_top_desktop }}px;
+    left: {{ impact_text_contentx4_flutuante_left_desktop }}px;
+    
+  }
+  }
+
+  .produto-nomex4-{{ section_id }} {
+
+
+    text-align: center;
+    
+    padding-bottom: 0px;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: {{ impact_font_size_desktopx4 }}px;
+    font-weight: {{ impact_font_weightx4 }};
+    color: {{ impact_font_colorx4 }};
+    letter-spacing: {{ impact_letter_spacing_desktopx4 }}px;
+    line-height: {{ impact_line_height_desktopx4 }};
+   line-height: 0.8;
+
+  }
+
+  .central-media-wrapper-x4-{{ section_id }} {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .central-image-x4-{{ section_id }} {
+    max-width: {{ img_width_x4 }}%;
+    max-height: {{ img_height_x4 }}px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  /* Removidos estilos de video */
+
+  .blk-2x4__cols-{{ section_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .blk-2x4__col { /* Este usa uma classe genérica para aplicar o CSS custom property */
+    flex: 1 1 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: var(--col-border-radius);
+    border: var(--col-border-width) solid var(--col-border-color);
+    background-color: var(--col-bg-color);
+  }
+
+  .blk-2x4__col-ttl {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .blk-2x4__col-sub {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .blk-2x4__col-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 15px;
+  }
+
+  .btn-2-{{ section_id }} {
+    display: inline-block;
+    padding: {{ btn_padding_topx4 }}px {{ btn_padding_left_rightx4 }}px;
+    background-color: {{ btn_bg_colorx4 | default: '#000' }};
+    color: {{ btn_text_colorx4 | default: '#fff' }} !important;
+    text-decoration: none;
+    border-radius: {{ btn_border_radiusx4 }}px;
+    font-size: {{ btn_font_sizex4 }}px;
+    font-weight: {{ btn_font_weightx4 }};
+    letter-spacing: {{ btn_letter_spacingx4 }}px;
+    line-height: {{ btn_line_heightx4 }};
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+  .btn-2-{{ section_id }}:hover {
+    opacity: 0.9;
+  }
+  .button-wrapper-x4-{{ section_id }} {
+    text-align: {{ button_alignmentx4 }};
+    margin-top: {{ btn_margin_topx4 }}px;
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .produto-nomex4-{{ section_id }} {
+      font-size: {{ impact_font_size_mobilex4 }}px;
+      letter-spacing: {{ impact_letter_spacing_mobilex4 }}px;
+      line-height: {{ impact_line_height_mobilex4 }};
+      line-height: 0.85;
+    }
+    .header-image-x4-{{ section_id }} {
+    max-width: {{ header_image1_img_width_mobile_x4 }}%;
+    max-height: {{ header_image1_img_height_mobile_x4 }}px;  
+  }
+    /* AJUSTADO: Estilos Mobile para Título Principal agora com maior especificidade para h2 */
+    .pg-2x4__ttl-{{ section_id }} h2 {
+      font-size: {{ title_font_sizemobilex4 }}px;
+    }
+    /* AJUSTADO: Estilos Mobile para Subtítulo Principal agora com customizações individuais */
+    .subtitle-content-impactov7-{{ section_id }} {
+      font-size: {{ subtitle_font_size_mobile_impactov7 }}px;
+      letter-spacing: {{ subtitle_letter_spacing_mobile_impactov7 }}px;
+      line-height: {{ subtitle_line_height_mobile_impactov7 }};
+    }
+    .central-image-x4-{{ section_id }} {
+      max-width: {{ img_width_mobile_x4 }}%;
+      max-height: {{ img_height_mobile_x4 }}px;
+{% if section.settings.acima_100per == true %}
+      margin-left: -30px;
+      {% endif %}
+    }
+    /* Removidos estilos de video mobile */
+  }
+{%- endstyle -%}
+
+<div class="pg-2x4-{{ section_id }}" id="SectionImpact-{{ section_id }}">
+  <div class="blk-2x4-{{ section_id }}">
+
+    {% if show_imagem_titulox4 and header_imagex4 != blank %}
+      <div class="header-image-wrapper-x4-{{ section_id }}">
+        <img src="{{ header_imagex4 | image_url: width: 800 }}"
+             srcset="{{ header_imagex4 | image_url: width: 400 }} 400w,
+                     {{ header_imagex4 | image_url: width: 800 }} 800w,
+                     {{ header_imagex4 | image_url: width: 1200 }} 1200w"
+             sizes="auto"
+             alt="{{ header_imagex4.alt | default: 'Imagem de Cabeçalho' }}"
+             class="header-image-x4-{{ section_id }}"
+             loading="lazy">
+      </div>
+    {% endif %}
+
+    {% comment %} NOVO: Segunda Imagem de Cabeçalho - Adicionada por Sophia a Artista Quântica {% endcomment %}
+    {% if show_secondary_header_image_impactov7 and secondary_header_image_impactov7 != blank %}
+      <div class="secondary-header-image-wrapper-impactov7-{{ section_id }}">
+        <img src="{{ secondary_header_image_impactov7 | image_url: width: 800 }}"
+             srcset="{{ secondary_header_image_impactov7 | image_url: width: 400 }} 400w,
+                     {{ secondary_header_image_impactov7 | image_url: width: 800 }} 800w,
+                     {{ secondary_header_image_impactov7 | image_url: width: 1200 }} 1200w"
+             sizes="auto"
+             alt="{{ secondary_header_image_impactov7.alt | default: 'Segunda Imagem de Cabeçalho' }}"
+             class="secondary-header-image-impactov7-{{ section_id }}"
+             loading="lazy">
+      </div>
+    {% endif %}
+
+    {% if show_titlex4 and main_title_contentx4 != blank %}
+      <div class="pg-2x4__ttl-{{ section_id }}">
+        {{ main_title_contentx4 }}
+      </div>
+    {% endif %}
+
+    {% comment %} NOVO: Subtítulo Principal - Adicionado por Sophia a Artista Quântica (agora com estilos individualizados) {% endcomment %}
+    {% if subtitle_content_impactov7 != blank %}
+      <div class="subtitle-content-impactov7-{{ section_id }}">
+        {{ subtitle_content_impactov7 }}
+      </div>
+    {% endif %}
+
+    {% comment %} Mídia Central agora suporta apenas imagem {% endcomment %}
+    {% if show_central_mediax4 and central_imagex4 != blank %}
+      <div class="central-media-wrapper-x4-{{ section_id }}">
+        <img src="{{ central_imagex4 | image_url: width: 800 }}"
+             srcset="{{ central_imagex4 | image_url: width: 400 }} 400w,
+                     {{ central_imagex4 | image_url: width: 800 }} 800w,
+                     {{ central_imagex4 | image_url: width: 1200 }} 1200w"
+             sizes="(max-width: 767px) {{ img_width_mobile_x4 }}vw, {{ img_width_x4 }}vw"
+             alt="{{ central_imagex4.alt | default: 'Imagem Central' }}"
+             class="central-image-x4-{{ section_id }}"
+             loading="lazy">
+
+        {% if impact_text_contentx4 != blank %}
+            <div class="produto-nomex4-{{ section_id }}">
+            {{ impact_text_contentx4 }}
+            </div>
+        {% endif %}     
+      </div>
+    {% endif %}
+
+    {% unless section.blocks.size == 0 %}
+      <div class="blk-2x4__cols-{{ section_id }}">
+        {% for block in section.blocks %}
+          <div class="blk-2x4__col"
+               style="--col-border-radius: {{ block.settings.column_border_radius }}px;
+                      --col-border-width: {{ block.settings.column_border_width }}px;
+                      --col-border-color: {{ block.settings.column_border_color }};
+                      --col-bg-color: {{ block.settings.column_bg_color }};">
+            {% if block.settings.column_image != blank %}
+              <img src="{{ block.settings.column_image | image_url: width: 300 }}"
+                   alt="{{ block.settings.column_image.alt | default: 'Imagem da Coluna' }}"
+                   class="blk-2x4__col-img"
+                   loading="lazy">
+            {% endif %}
+            {% if block.settings.column_title != blank %}
+              <div class="blk-2x4__col-ttl">{{ block.settings.column_title }}</div>
+            {% endif %}
+            {% if block.settings.column_description != blank %}
+              <div class="blk-2x4__col-sub">{{ block.settings.column_description }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endunless %}
+
+    {% if show_buttonx4 and btn_textx4 != blank %}
+      <div class="button-wrapper-x4-{{ section_id }}">
+        <a href="{{ btn_linkx4 }}" class="btn-2-{{ section_id }}">
+          {{ btn_textx4 }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if enable_fade_in_animation %}
+<script>
+  // Script para a animação de fade-in
+  document.addEventListener('DOMContentLoaded', function() {
+    var section = document.getElementById('SectionImpact-{{ section_id }}');
+    if (section) {
+      var observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // 10% da seção visível
+      };
+
+      var observer = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(function() {
+              entry.target.classList.add('is-visible');
+            }, {{ animation_delay }}); // Aplica o delay configurado
+            observer.unobserve(entry.target); // Para de observar após a animação
+          }
+        });
+      }, observerOptions);
+
+      observer.observe(section);
+    }
+  });
+</script>
+{% endif %}
+
+
+
+{% schema %}
+{
+  "name": "Quitosana Impacto",
+  "tag": "section",
+  "class": "shopify-section-product-impact",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais do Bloco"
+    },
+    {
+      "type": "color",
+      "id": "background_colorx4",
+      "label": "Cor de Fundo da Seção Externa",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "range",
+      "id": "pd_topx4",
+      "label": "Espaçamento Interno Superior (Seção)",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 60
+    },
+    {
+      "type": "range",
+      "id": "pd_botx4",
+      "label": "Espaçamento Interno Inferior (Seção)",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 60
+    },
+    {
+      "type": "range",
+      "id": "pd_left_rightx4",
+      "label": "Espaçamento Interno Lateral (Seção)",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "brd_width_1x4",
+      "label": "Espessura da Borda do Bloco Interno",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 2
+    },
+    {
+      "type": "color",
+      "id": "brd_color_1x4",
+      "label": "Cor da Borda do Bloco Interno",
+      "default": "#ff8a00"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_1x4",
+      "label": "Cor de Fundo do Bloco Interno",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "brd_radius_1x4",
+      "label": "Raio da Borda do Bloco Interno",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Configurações de Imagens de Cabeçalho"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_imagem_titulox4",
+      "label": "Mostrar Imagem de Cabeçalho 1",
+      "default": true,
+      "info": "Exibe a primeira imagem opcional no topo do bloco."
+    },
+    {
+      "type": "image_picker",
+      "id": "header_imagex4",
+      "label": "Imagem de Cabeçalho 1",
+      "info": "Faça upload da primeira imagem para o cabeçalho."
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_width_x4",
+      "label": "Largura da Imagem 1 (Desktop)",
+      "min": 50, "max": 100, "step": 1, "unit": "%", "default": 80,
+      "info": "Largura da imagem dentro do bloco (desktop)."
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_height_x4",
+      "label": "Altura Máx. da Imagem 1 (Desktop)",
+      "min": 100, "max": 1000, "step": 10, "unit": "px", "default": 500,
+      "info": "Altura máxima da imagem (desktop)."
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_width_mobile_x4",
+      "label": "Largura da Imagem 1 (Mobile)",
+      "min": 50, "max": 100, "step": 1, "unit": "%", "default": 90,
+      "info": "Largura da imagem dentro do bloco (mobile)."
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_height_mobile_x4",
+      "label": "Altura Máx. da Imagem 1 (Mobile)",
+      "min": 50, "max": 800, "step": 10, "unit": "px", "default": 300,
+      "info": "Altura máxima da imagem (mobile)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_header_image_impactov7",
+      "label": "Mostrar Imagem de Cabeçalho 2",
+      "default": false,
+      "info": "Exibe uma segunda imagem opcional no topo do bloco, abaixo da primeira."
+    },
+    {
+      "type": "image_picker",
+      "id": "secondary_header_image_impactov7",
+      "label": "Imagem de Cabeçalho 2",
+      "info": "Faça upload da segunda imagem para o cabeçalho."
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Título Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_titlex4",
+      "label": "Mostrar Título Principal",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "main_title_contentx4",
+      "label": "Conteúdo do Título Principal",
+      "default": "<h2>Título de Destaque</h2>",
+      "info": "O texto principal do título do bloco."
+    },
+    {
+      "type": "range",
+      "id": "title_font_sizex4",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 20, "max": 80, "step": 1, "unit": "px", "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_font_sizemobilex4",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 16, "max": 60, "step": 1, "unit": "px", "default": 28
+    },
+    {
+      "type": "range",
+      "id": "title_font_weightx4",
+      "label": "Peso da Fonte",
+      "min": 100, "max": 900, "step": 100, "default": 700
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacingx4",
+      "label": "Espaçamento entre letras (Desktop)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0,
+      "info": "Use valores inteiros. Ex: 0 para padrão."
+    },
+    {
+      "type": "range",
+      "id": "title_line_heightx4",
+      "label": "Altura da Linha (Desktop)",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 1,
+      "info": "Valores representam 0.8 a 2.0 (ex: 12 para 1.2)."
+    },
+    {
+      "type": "color",
+      "id": "hd_colorx4",
+      "label": "Cor do Título",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottomx4",
+      "label": "Margem Inferior do Título",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Subtítulo Principal"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle_content_impactov7",
+      "label": "Conteúdo do Subtítulo Principal",
+      "default": "<p>Subtítulo opcional abaixo do título principal.</p>",
+      "info": "Um texto secundário que aparece abaixo do título principal. Suas customizações são independentes."
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size_desktop_impactov7",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 14, "max": 40, "step": 1, "unit": "px", "default": 18
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size_mobile_impactov7",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 12, "max": 30, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_weight_impactov7",
+      "label": "Peso da Fonte",
+      "min": 100, "max": 900, "step": 100, "default": 400
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacing_desktop_impactov7",
+      "label": "Espaçamento entre letras (Desktop)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacing_mobile_impactov7",
+      "label": "Espaçamento entre letras (Mobile)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subtitle_line_height_desktop_impactov7",
+      "label": "Altura da Linha (Desktop)",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 1,
+      "info": "Valores representam 1.0 a 2.0 (ex: 15 para 1.5)."
+    },
+    {
+      "type": "range",
+      "id": "subtitle_line_height_mobile_impactov7",
+      "label": "Altura da Linha (Mobile)",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 1,
+      "info": "Valores representam 1.0 a 2.0 (ex: 14 para 1.4)."
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color_impactov7",
+      "label": "Cor do Subtítulo",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_max_width_desktop_impactov7",
+      "label": "Máximo para a Largura (Desktop)",
+      "min": 100, "max": 1000, "step": 100, "unit": "px", "default": 400
+     
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_top_impactov7",
+      "label": "Margem Superior do Subtítulo",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 30
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_bottom_impactov7",
+      "label": "Margem Inferior do Subtítulo",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Texto de Impacto"
+    },
+    {
+      "type": "richtext",
+      "id": "impact_text_contentx4",
+      "label": "Conteúdo do Texto de Impacto",
+      "default": "<p>Um texto que cria um impacto imediato, destacando um benefício ou característica principal.</p>",
+      "info": "Este texto aparece abaixo do título principal e antes da imagem central."
+    },
+    {
+      "type": "range",
+      "id": "impact_font_size_desktopx4",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 14, "max": 110, "step": 1, "unit": "px", "default": 110
+    },
+    {
+      "type": "checkbox",
+      "id": "impact_text_contentx4_flutuante",
+      "label": "Ativar Controle Flutuante (Não mexer)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "impact_text_contentx4_flutuante_top_desktop",
+      "label": "Controle flutuante (Desktop Não mexer)",
+      "min": 10, "max": 1000, "step": 10, "default": 10
+    },
+    {
+      "type": "range",
+      "id": "impact_text_contentx4_flutuante_left_desktop",
+      "label": "Controle flutuante (Desktop Não mexer)",
+      "min": 0, "max": 900, "step": 50, "default": 0
+    },
+    {
+      "type": "range",
+      "id": "impact_font_size_mobilex4",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 12, "max": 100, "step": 1, "unit": "px", "default": 18
+    },
+    {
+      "type": "range",
+      "id": "impact_font_weightx4",
+      "label": "Peso da Fonte",
+      "min": 100, "max": 900, "step": 100, "default": 400
+    },
+    {
+      "type": "color",
+      "id": "impact_font_colorx4",
+      "label": "Cor da Fonte",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "impact_letter_spacing_desktopx4",
+      "label": "Espaçamento entre letras (Desktop)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "impact_letter_spacing_mobilex4",
+      "label": "Espaçamento entre letras (Mobile)",
+      "min": -5, "max": 10, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "impact_line_height_desktopx4",
+      "label": "(Desconsiderar) Função desativada para esse bloco",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 12,
+      "info": "Valores representam 1.0 a 2.0 (ex: 12 para 1.2)."
+    },
+    {
+      "type": "range",
+      "id": "impact_line_height_mobilex4",
+      "label": "(Desconsiderar) Função desativada para esse bloco",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 11,
+      "info": "Valores representam 1.0 a 2.0 (ex: 11 para 1.1)."
+    },
+    {
+      "type": "header",
+      "content": "Imagem Central"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_central_mediax4",
+      "label": "Mostrar Imagem Central",
+      "default": true,
+      "info": "Exibe uma imagem no centro do bloco."
+    },
+    {
+      "type": "image_picker",
+      "id": "central_imagex4",
+      "label": "Imagem Central",
+      "info": "Faça upload da imagem principal para o centro do bloco."
+    },
+    {
+      "type": "range",
+      "id": "img_width_x4",
+      "label": "Largura da Imagem Central (Desktop)",
+      "min": 50, "max": 100, "step": 1, "unit": "%", "default": 80,
+      "info": "Largura da imagem dentro do bloco (desktop)."
+    },
+    {
+      "type": "range",
+      "id": "img_height_x4",
+      "label": "Altura Máx. da Imagem Central (Desktop)",
+      "min": 100, "max": 1000, "step": 10, "unit": "px", "default": 500,
+      "info": "Altura máxima da imagem (desktop)."
+    },
+    {
+      "type": "checkbox",
+      "id": "acima_100per",
+      "label": "Função largura > 100% (mobile)",
+      "default": true,
+      "info": "Ativa função de reposicionamento para larguras acima de 100% (mobile)."
+    }, 
+    {
+      "type": "range",
+      "id": "img_width_mobile_x4",
+      "label": "Largura da Imagem Central (Mobile)",
+      "min": 50, "max": 150, "step": 1, "unit": "%", "default": 90,
+      "info": "Largura da imagem dentro do bloco (mobile)."
+    },
+    {
+      "type": "range",
+      "id": "img_height_mobile_x4",
+      "label": "Altura Máx. da Imagem Central (Mobile)",
+      "min": 50, "max": 800, "step": 10, "unit": "px", "default": 300,
+      "info": "Altura máxima da imagem (mobile)."
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buttonx4",
+      "label": "Mostrar Botão",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btn_textx4",
+      "label": "Texto do Botão",
+      "default": "Comprar Agora!"
+    },
+    {
+      "type": "url",
+      "id": "btn_linkx4",
+      "label": "Link do Botão",
+      "info": "URL para onde o botão irá direcionar."
+    },
+    {
+      "type": "color",
+      "id": "btn_text_colorx4",
+      "label": "Cor do Texto do Botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_colorx4",
+      "label": "Cor de Fundo do Botão",
+      "default": "#ff8a00"
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radiusx4",
+      "label": "Raio da Borda do Botão",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 5
+    },
+    {
+      "type": "range",
+      "id": "btn_margin_topx4",
+      "label": "Margem Superior do Botão",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 30
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_topx4",
+      "label": "Preenchimento Superior/Inferior do Botão",
+      "min": 5, "max": 25, "step": 1, "unit": "px", "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_left_rightx4",
+      "label": "Preenchimento Lateral do Botão",
+      "min": 10, "max": 50, "step": 1, "unit": "px", "default": 25
+    },
+    {
+      "type": "range",
+      "id": "btn_font_sizex4",
+      "label": "Tamanho da Fonte do Botão",
+      "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "btn_font_weightx4",
+      "label": "Peso da Fonte do Botão",
+      "min": 100, "max": 900, "step": 100, "default": 700
+    },
+    {
+      "type": "range",
+      "id": "btn_letter_spacingx4",
+      "label": "Espaçamento entre letras do Botão",
+      "min": -5, "max": 5, "step": 1, "unit": "px", "default": 0,
+      "info": "Use valores inteiros. Ex: 0 para padrão."
+    },
+    {
+      "type": "range",
+      "id": "btn_line_heightx4",
+      "label": "Altura da linha do Botão",
+      "min": 0, "max": 20, "step": 1, "unit": "em", "default": 1,
+      "info": "Valores representam 1.0 a 2.0 (ex: 12 para 1.2)."
+    },
+    {
+      "type": "select",
+      "id": "button_alignmentx4",
+      "label": "Alinhamento do Botão",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Configurações de Animação"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fade_in_animation",
+      "label": "Habilitar Conjunto de Animações de Emoções",
+      "default": false,
+      "info": "O bloco aparecerá de acordo com a emoção selecionada ao entrar na tela."
+    },
+    {
+      "type": "range",
+      "id": "animation_delay",
+      "label": "Atraso da Animação (ms)",
+      "min": 0, "max": 2000, "step": 100, "unit": "ms", "default": 300,
+      "info": "Define um atraso antes da animação começar."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Coluna de Conteúdo",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "column_image",
+          "label": "Imagem da Coluna"
+        },
+        {
+          "type": "richtext",
+          "id": "column_title",
+          "label": "Título da Coluna",
+          "default": "<h4>Benefício Principal</h4>"
+        },
+        {
+          "type": "richtext",
+          "id": "column_description",
+          "label": "Descrição da Coluna",
+          "default": "<p>Detalhamento dos benefícios e características em texto.</p>"
+        },
+        {
+          "type": "color",
+          "id": "column_bg_color",
+          "label": "Cor de Fundo da Coluna",
+          "default": "#fefefe"
+        },
+        {
+          "type": "range",
+          "id": "column_border_width",
+          "label": "Espessura da Borda",
+          "min": 0, "max": 5, "step": 1, "unit": "px", "default": 0
+        },
+        {
+          "type": "color",
+          "id": "column_border_color",
+          "label": "Cor da Borda",
+          "default": "#e0e0e0"
+        },
+        {
+          "type": "range",
+          "id": "column_border_radius",
+          "label": "Raio da Borda",
+          "min": 0, "max": 20, "step": 1, "unit": "px", "default": 8
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quitosana Impacto",
+      "category": "Informações do Produto",
+      "blocks": [
+        { "type": "column", "settings": { "column_title": "<h4>Qualidade Superior</h4>", "column_description": "<p>Nossos produtos são feitos com os melhores ingredientes.</p>" } },
+        { "type": "column", "settings": { "column_title": "<h4>Resultados Comprovados</h4>", "column_description": "<p>Clientes satisfeitos relatam melhorias significativas.</p>" } },
+        { "type": "column", "settings": { "column_title": "<h4>Entrega Rápida</h4>", "column_description": "<p>Receba seu pedido com agilidade e segurança.</p>" } },
+        { "type": "column", "settings": { "column_title": "<h4>Suporte Dedicado</h4>", "column_description": "<p>Estamos sempre prontos para ajudá-lo com suas dúvidas.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

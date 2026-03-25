@@ -1,0 +1,55 @@
+{%- liquid
+assign product         = product_variant.product
+assign form_notify_id  = 'FormStockNotify'
+ -%}
+
+<div id="bls-stock-notify" data-stock-title="Produto sem estoque{% comment %}{{ 'products.product.stock_notify_title_popup' | t }}{% endcomment %}">
+  <div class="bls_popup-stock-notify p-3">
+    {%- form 'contact', id: form_notify_id, class: 'stock-notify-form' -%}
+      <p class="bls-stock-notify-text">
+        Envie seu e-mail e vamos te avisar quando o produto voltar 😉{% comment %}{{ 'products.product.stock_notify_text_popup' | t }}{% endcomment %}
+      </p>
+      <div class="field">
+        <input
+          type="email"
+          name="contact[email]"
+          class="field__input w-full col-12 col-lg-6"
+          value="{{ form.email }}"
+          aria-required="true"
+          autocomplete="email"
+          spellcheck="false"
+          autocapitalize="off"
+          value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+          {% if form.errors contains 'email' %}
+          aria-invalid="true"
+          aria-describedby="ContactForm-email-error"
+          {% endif %}
+          placeholder="Seu e-mail…{% comment %}{{ 'templates.contact.form.email' | t }}{% endcomment %}"
+          required>
+      </div>
+      <div class="contact__button">
+        <button type="submit" class="w-full">
+          Enviar{% comment %}{{ 'templates.contact.form.send' | t }}{% endcomment %}
+        </button>
+      </div>
+      <p class="d-none">
+        <textarea
+          rows="20"
+          id="{{ form_notify_id }}-product-info"
+          name="contact[product]"
+          required="required">
+          {{ product.title }}
+          {% if product_variant.title != blank %}( {{ product_variant.title }} ){% endif %}
+          - {{ request.origin }}{{ product_variant.url }}
+        </textarea>
+      </p>
+      <p class="d-none">
+        <textarea
+          rows="9"
+          id="{{ form_notify_id }}-message-notify"
+          name="contact[body]"
+          required="required">Obrigatório{% comment %}{{ 'products.product.stock_notify_message' | t }}{% endcomment %}</textarea>
+      </p>
+    {%- endform -%}
+  </div>
+</div>

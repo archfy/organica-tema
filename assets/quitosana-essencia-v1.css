@@ -1,0 +1,101 @@
+/* assets/section-essencia-sinergia.css */
+
+/* ... (código existente acima permanece o mesmo) ... */
+
+/* NOVO/Ajustado: Container interno para gerenciar a imagem e o texto dentro de CADA bloco */
+.essencia-sinergia__block-inner-content-AQ {
+  display: flex;
+  flex-direction: column; /* Padrão: imagem e texto empilhados */
+  height: 100%; /* Garante que o flexbox interno ocupe todo o espaço do bloco */
+  /* align-items é definido inline no Liquid conforme a configuração block_content_align_desktop */
+}
+
+/* Wrapper para a imagem do bloco */
+.essencia-sinergia__block-image-wrapper-AQ {
+  width: 100%; /* Ocupa a largura total para alinhamento */
+  margin-bottom: 15px; /* Espaçamento entre imagem e texto/container quando não é inline */
+  flex-shrink: 0; /* Impede que a imagem encolha se houver pouco espaço */
+}
+.essencia-sinergia__block-image-wrapper-AQ img {
+  display: block;
+  margin: 0 auto; /* Centraliza a imagem por padrão */
+  max-width: 100%;
+  height: auto;
+  /* A largura exata é controlada via inline style no HTML */
+}
+
+/* Alinhamento horizontal da imagem dentro de seu wrapper */
+/* Estes estilos só se aplicarão quando block_image_position for 'above_text' ou 'below_text' */
+.essencia-sinergia__block-image--left { text-align: left; }
+.essencia-sinergia__block-image--left img { margin-left: 0; margin-right: auto; }
+
+.essencia-sinergia__block-image--center { text-align: center; }
+.essencia-sinergia__block-image--center img { margin-left: auto; margin-right: auto; }
+
+.essencia-sinergia__block-image--right { text-align: right; }
+.essencia-sinergia__block-image--right img { margin-left: auto; margin-right: 0; }
+
+/* Wrapper para o texto e a imagem inline, permitindo layout lado a lado */
+.essencia-sinergia__block-text-and-inline-image-wrapper-AQ {
+  display: flex;
+  flex-direction: column; /* Padrão: texto e imagem se empilham */
+  width: 100%;
+  flex: 1; /* Permite que este wrapper preencha o espaço disponível */
+  justify-content: center; /* Centraliza verticalmente o texto e imagem inline se o flex-direction for row */
+}
+
+/* Conteúdo de texto puro */
+.essencia-sinergia__block-text-content-AQ {
+  width: 100%;
+}
+
+/* Estilos para quando a imagem está "inline" com o texto (esquerda/direita) */
+.essencia-sinergia__block-inner-content--inline .essencia-sinergia__block-text-and-inline-image-wrapper-AQ {
+  flex-direction: row; /* Coloca imagem e texto lado a lado */
+  align-items: center; /* Alinha verticalmente imagem e texto */
+  gap: 20px; /* Espaçamento entre imagem e texto */
+}
+
+/* Ordem da imagem quando à direita no layout inline */
+/* Usamos a classe no wrapper interno para evitar conflitos */
+.essencia-sinergia__block-inner-content-AQ[data-image-position-desktop="inline_text_right"] .essencia-sinergia__block-text-and-inline-image-wrapper-AQ {
+  flex-direction: row-reverse; /* Inverte a ordem para imagem à direita */
+}
+
+.essencia-sinergia__block-inner-content--inline .essencia-sinergia__block-image-wrapper-AQ {
+   margin-bottom: 0; /* Remove a margem extra quando inline */
+}
+
+/* ... (código existente abaixo permanece o mesmo) ... */
+
+@media (min-width: 768px) {
+  .essencia-sinergia__composition-block-AQ {
+    flex: 0 0 calc(50% - 10px); /* Para dois blocos por linha em desktop (50% da largura do grid menos metade do gap) */
+  }
+  .essencia-sinergia__composition-block-AQ[data-layout="full-width"] {
+    flex: 0 0 100%; /* Bloco de largura total */
+    max-width: 100%;
+  }
+  /* Ajuste para o layout "Largura Total (centralizado, conteúdo limitado)" */
+  .essencia-sinergia__composition-block-AQ[data-layout="full-width-center"] {
+    flex: 0 0 100%; /* Ocupa a largura total na linha */
+    max-width: 800px; /* Limita a largura do conteúdo, centralizando */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Ajustes para a imagem inline no desktop, aplicada ao novo wrapper interno */
+  .essencia-sinergia__block-inner-content--inline .essencia-sinergia__block-text-and-inline-image-wrapper-AQ {
+    flex-direction: row; /* Imagem e texto lado a lado */
+    align-items: center; /* Alinha verticalmente imagem e texto */
+    gap: 20px;
+  }
+  .essencia-sinergia__block-inner-content--inline .essencia-sinergia__block-image-wrapper-AQ {
+     margin-bottom: 0; /* Remove a margem inferior para quando inline */
+  }
+
+  /* Aplica a ordem reversa para a imagem inline à direita no desktop */
+  .essencia-sinergia__block-inner-content-AQ[data-image-position-desktop="inline_text_right"] .essencia-sinergia__block-text-and-inline-image-wrapper-AQ {
+    flex-direction: row-reverse;
+  }
+}
