@@ -51,10 +51,11 @@
 -%}
 <div class="bls__header_minicart">
   <cart-notification>
-    <div id="bls-header_minicart-a" class="header_minicart" onclick="VZFloat.abrirCarrinho()">
+    <div id="bls-header_minicart-a" class="header_minicart">
       <a
         id="cart-icon-bubble"
         href="{{ routes.cart_url }}"
+        onclick="event.preventDefault(); if(typeof VZ !== 'undefined' && typeof VZ.abrirCarrinho === 'function'){ VZ.abrirCarrinho(); }"
         class="{% if template != 'cart' %}bls-minicart-action{% endif %} bls_tooltip"
       >
         <svg width="21" height="17" viewBox="0 0 21 17" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
