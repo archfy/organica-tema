@@ -1,0 +1,1122 @@
+{%- comment -%}
+  Nave Aurora 3: Bloco "Video Influencer Autônomo" - Versão 'Perfeita'
+  Conceito: Catalisador de Conversão do Influenciador
+  Foco: Imersão, Performance, Usabilidade Inteligente e Otimização Proativa.
+  Otimizado por Sophia (base) com base em compreensão total e nível proativo.
+{%- endcomment -%}
+
+{%- style -%}
+  /* RESET & BASE - Fundamentais para performance e consistência */
+  .pg-2x81, .blk-2x81, .blk-2__hdrx81, .blk-2__ttlx81, .blk-2__subx81,
+  .blk-2__colsx81, .blk-2__colx81, .blk-2__col-cntx81, .blk-2__col-contentx81,
+  .blk-2__col-ttlx81, .blk-2__col-subx81, .blk-2__col-imgx81, .blk-2__col-imgx81 img,
+  .btn-2-wrapx81, .btn-2x81, .video-containerx81, .video-containerx81 video,
+  .img-2x81, .img-2x81 img, .bannerx81 {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pg-2x81 {
+    font-family: inherit;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Bloco principal - Adaptação dinâmica e foco na experiência */
+  .blk-2x81 {
+    background-color: {{ section.settings.background_colorx81 | default: '#fff4d5' }};
+    margin: 0.625em;
+    width: auto;
+    border-radius: 1.25em;
+    padding-top: 0 !important;
+    overflow: hidden;
+    position: relative; /* Para garantir que elementos internos se posicionem corretamente */
+  }
+
+  .blk-2__hdrx81 {
+    text-align: center;
+    padding-top: 1.875em;
+  }
+
+  .blk-2__ttlx81 {
+    font-size: {{ section.settings.title_font_sizex81_mobile | default: 20 }}px;
+    font-weight: {{ section.settings.title_font_weightx81 | default: '700' }};
+    letter-spacing: {{ section.settings.title_letter_spacingx81 | default: 0 }}px;
+    line-height: {{ section.settings.title_line_heightx81 | default: 1.2 }};
+    color: {{ section.settings.hd_colorx81 | default: '#333333' }};
+    padding: 0 1.875em;
+    padding-bottom: {{ section.settings.title_padding_bottomx81 | default: 15 }}px;
+  }
+
+  .blk-2__subx81 { /* Mantido para compatibilidade, embora não usado diretamente neste bloco */
+    color: {{ section.settings.subhd_color | default: '#000' }};
+    max-width: 50em;
+    margin: 0 auto;
+    font-size: 1em;
+    line-height: 1.5;
+    padding: 0;
+    text-align: center;
+  }
+
+  .blk-2__colsx81 {
+    padding: 1.875em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 1.25em;
+  }
+
+  .blk-2__colx81 {
+    margin-top: 1.875em;
+    flex: 1 1 calc(50% - 1.25em);
+    max-width: calc(50% - 1.25em);
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  /* Estilos para os pares de blocos - Visuais distintivos e claros */
+  .blk-2__colx81:nth-child(2n + 1),
+  .blk-2__colx81:nth-child(2n) {
+    border: {{ section.settings.brd_width_1x81 | default: 1 }}px solid {{ section.settings.brd_color_1x81 | default: '#d0021b' }};
+    border-radius: {{ section.settings.brd_radius_1x81 | default: 12 }}px;
+    background-color: {{ section.settings.bg_color_1x81 | default: '#fff4d5' }};
+  }
+
+  .blk-2__ttlx81-sub{ /* Subtítulo principal mobile */   
+      font-weight:{{ section.settings.main_stitleweightx81 }};
+      color:{{ section.settings.main_subtitle_color }};
+      letter-spacing: {{ section.settings.subtitle_letter_spacingx81 }}px;
+      line-height: {{ section.settings.subtitle_line_heightx81 }};
+      padding: 0 1.875em; 
+    }
+
+  /* Reaplicado para o segundo par se houver mais de 2 colunas, para consistência */
+  .blk-2__colx81:nth-child(3),
+  .blk-2__colx81:nth-child(4) {
+    border: {{ section.settings.brd_width_2x81 | default: 1 }}px solid {{ section.settings.brd_color_2x81 | default: '#1890ff' }};
+    border-radius: {{ section.settings.brd_radius_2x81 | default: 12 }}px;
+    background-color: {{ section.settings.bg_color_2x81 | default: '#e6f7ff' }};
+  }
+
+  .blk-2__col-cntx81 {
+    padding: 1.875em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    align-items: flex-start;
+  }
+
+  .blk-2__col-contentx81 {
+    width: 100%;
+  }
+
+  .blk-2__col-ttlx81 {
+    color: {{ section.settings.col_hd_colorx81 | default: '#59000b' }};
+    font-size: {{ section.settings.col_hd_sizex81 | default: 16 }}px;
+    font-weight: {{ section.settings.col_hd_weightx81 | default: '400' }};
+    letter-spacing: {{ section.settings.col_hd_spacex81 | default: 0 }}px;
+    margin: 0 0.3125em 0 0;
+  }
+
+  .blk-2__col-subx81 {
+    color: {{ section.settings.col_sub_colorx81 | default: '#d0021b' }} !important;
+    font-size: {{ section.settings.col_sub_sizex81 | default: 22 }}px !important;
+    font-weight: {{ section.settings.col_sub_weightx81 | default: '400' }};
+    line-height: {{ section.settings.col_sub_lhx81 | default: 1.1 }} !important;
+    margin: 0.625em 0.3125em 0 0;
+  }
+
+  .blk-2__col-imgx81 {
+    flex: 0 0 160px; /* Mantém largura fixa para imagem da coluna */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ section.settings.bg_color | default: 'transparent' }}; /* Ajuste para bg_color das colunas */
+    border-radius: 0.75em;
+    overflow: hidden;
+    margin-top: 1.25em;
+  }
+
+  .blk-2__col-imgx81 img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .pg-2x81 { /* Mantido para compatibilidade, embora não usado diretamente neste bloco */
+    padding-top: 2.5em;
+    text-align: center;
+  }
+
+  .pg-2x81 img { /* Mantido para compatibilidade, embora não usado diretamente neste bloco */
+    display: inline-block;
+    height: auto;
+    width: 40%;
+    max-width: 100%;
+  }
+
+  /* Botão - Comportamento e estilo para incentivar a ação */
+  .btn-2-wrapx81 {
+    text-align: center;
+    width: 100%;
+    padding-bottom: 2.5em; /* Garante espaçamento inferior */
+  }
+
+  .btn-2x81 {
+    display: inline-block;
+    padding: 1.125em 6.25em;
+    background-color: {{ section.settings.btn_bgx81 | default: '#FF5A5F' }};
+    color: {{ section.settings.btn_txt_clrx81 | default: '#FFFFFF' }} !important;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: {{ section.settings.btn_radiusx81 | default: 50 }}px;
+    transition: all 0.3s ease;
+    margin-top: 0.625em;
+    box-shadow: 0 0.25em 0.375em rgba(0,0,0,0.1);
+    white-space: nowrap; /* Evita que o texto do botão quebre */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-2x81:hover {
+    transform: translateY(-0.125em);
+    box-shadow: 0 0.375em 0.75em rgba(0,0,0,0.15);
+  }
+
+  /* Layout para desktop */
+  @media screen and (min-width: 48em) {
+    .blk-2__hdrx81 {
+    padding-top: 60px;
+  }
+    .blk-2__colx81 {
+      margin-top: 1.875em;
+      flex: 0 0 calc(50% - 1.25em);
+      max-width: calc(50% - 1.25em);
+    }
+    .blk-2__col-cntx81 {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .blk-2__col-contentx81 {
+      flex: 0 0 66.666667%;
+      max-width: 66.666667%;
+      padding-right: 0.9375em;
+    }
+    .blk-2__col-imgx81 {
+      flex: 0 0 33.333333%;
+      max-width: 33.333333%;
+      padding-left: 0.9375em;
+      margin-top: 0;
+    }
+    .blk-2__ttlx81{ /* Título principal */
+      font-weight:{{ section.settings.main_titleweightx81 }};     
+      font-size:{{ section.settings.title_font_sizex81 }}px; /* Usa a configuração específica do título */
+      color:{{ section.settings.hd_colorx81 }}; /* Usa a cor específica do título */
+    }
+
+    .blk-2__ttlx81-sub{ /* Subtítulo principal */
+      font-size:{{ section.settings.main_subtitle_size_desktop }}px; /* Usa a nova configuração para subtítulo desktop */    
+    }
+  }
+
+  /* Layout para mobile */
+  @media screen and (max-width: 47.9375em) {
+    .blk-2__colx81 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-bottom: 0.625em;
+      flex-direction: column;
+    }
+    .blk-2__colx81:last-child {
+      margin-bottom: 0;
+    }
+    .blk-2__col-contentx81,
+    .blk-2__col-imgx81 {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+    }
+    .blk-2__col-imgx81 {
+      margin-top: 1.25em;
+      order: 2; /* Garante que a imagem fica abaixo do texto em mobile */
+    }
+    .img-2x81 {
+      padding-top: 0;
+      padding: 0 1.875em; /* Garante padding no mobile para a imagem de topo */
+    }
+    .img-2x81 img {
+      width: 100%;
+    }
+    .btn-2x81 {
+      padding: 0.9375em 3.75em;
+      width: 90%;
+      max-width: 18.75em;
+      margin-bottom: 0; /* Removido para ser controlado pelo wrapx81 */
+    }
+
+    .blk-2__ttlx81-sub{ /* Subtítulo principal mobile */
+      font-size:{{ section.settings.main_subtitle_size_mobile }}px;
+    }
+    .blk-2__ttlx81{ /* Título principal mobile */
+      font-size:{{ section.settings.title_font_size_mobile }}px; /* Usa a nova configuração para título mobile */
+    }
+  }
+
+  /* Estilos para o container do vídeo - Imersão e Controle Visual */
+  .video-containerx81 {
+    background-color:{{ section.settings.background_colorx81 | default: '#fff4d5' }}!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.25em auto;
+    max-width: 100%;
+    border-radius: {{ section.settings.video_brd_radius | default: 12 }}px;
+    overflow: hidden;
+    min-height: 200px; /* Garante visibilidade inicial */
+    background-color: #f0f0f0; /* Fundo temporário para indicar área do vídeo */
+    position: relative; /* Necessário para o poster overlay */
+  }
+
+  .video-containerx81 video {
+    width: {{ section.settings.video_width | default: 350 }}px;
+    height: {{ section.settings.video_height | default: 620 }}px;
+    object-fit: {{ section.settings.video_object_fit | default: 'cover' }};
+    max-width: 100%;
+    border-radius: inherit;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Ajuste para mobile - Vídeo fluido */
+  @media screen and (max-width: 46.875em) {
+    .video-containerx81 video {
+      width: 85%;
+      height: auto; /* Mantém proporção em mobile */
+      max-height: 80vh; /* Limita a altura para não cobrir a tela inteira em vertical */
+    }
+  }
+
+  .video-containerx81:not(.custom-height){
+    padding-bottom:unset;
+  }
+
+  /* Poster Overlay - Melhoria Visual e de Performance para Vídeo */
+  .video-poster-overlayx81 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1; /* Acima do vídeo */
+    background-color: rgba(0,0,0,0.3); /* Escurece um pouco o poster */
+  }
+
+  .video-poster-overlayx81::after {
+    content: '▶'; /* Ícone de play simples */
+    font-size: 4em;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  }
+
+  .video-containerx81.is-playing .video-poster-overlayx81 {
+    display: none; /* Esconde o overlay quando o vídeo está tocando */
+  }
+
+  .bannerx81 {
+    display: block;
+    margin: 3.75em auto 0 auto!important;
+    max-width: 100%;
+    height: auto;
+  }
+  @media screen and (min-width: 46.877em) {
+    .bannerx81 {
+      width: 40%;
+    }
+  }
+{%- endstyle -%}
+
+<div class="blk-2x81" id="video-influencer-autonomo-{{ section.id }}">
+  {% comment %}
+    Conteúdo otimizado para Carregamento e Impacto Visual.
+  {% endcomment %}
+
+  {% if section.settings.show_imagem_titulox81 and section.settings.banner_image != blank %}
+    <div class="img-2x81">
+      <img class="bannerx81 lazyload"
+           src="{{ section.settings.banner_image | image_url: width: 800 }}"
+           srcset="{{ section.settings.banner_image | image_url: width: 400 }} 400w,
+                   {{ section.settings.banner_image | image_url: width: 600 }} 600w,
+                   {{ section.settings.banner_image | image_url: width: 800 }} 800w,
+                   {{ section.settings.banner_image | image_url: width: 1000 }} 1000w,
+                   {{ section.settings.banner_image | image_url: width: 1200 }} 1200w"
+           sizes="(max-width: 767px) 100vw, (max-width: 1024px) 80vw, 1000px"
+           alt="{{ section.settings.main_title_text | default: 'Banner do Bloco' | strip_html }}"
+           {% if forloop.first and section.settings.banner_image != blank %}loading="eager"{% else %}loading="lazy"{% endif %} 
+           draggable="false">
+    </div>
+  {% endif %}
+
+  {% if section.settings.show_titlex81 and section.settings.main_title_text != blank %}
+    <div class="blk-2__hdrx81">
+      <h2 class="blk-2__ttlx81">
+        {{ section.settings.main_title_text }}
+      </h2>
+      <p class="blk-2__ttlx81-sub">{{ section.settings.main_subtitle_text }}</p>
+    </div>
+  {% endif %}
+
+  {% comment %}
+    LÓGICA DO VÍDEO - Imersão e Fallback Inteligente
+    Verificamos a existência do vídeo E se a opção de mostrar vídeo está ativada.
+  {% endcomment %}
+  {% assign video_source_url = section.settings.influencer_video %}
+  {% assign video_poster_url = section.settings.video_poster | default: video_source_url | video_thumbnail_url %}  
+  
+  {% if section.settings.show_videox81 and video_source_url != blank %}
+    <div class="video-containerx81" id="video-container-{{ section.id }}">
+      <video
+        width="{{ section.settings.video_width | default: 350 }}"
+        height="{{ section.settings.video_height | default: 620 }}"
+        controls
+        {% if section.settings.video_loop %}loop{% endif %}
+        {% if section.settings.video_muted %}muted{% endif %}
+        {% if section.settings.video_autoplay %}autoplay{% endif %}
+        playsinline
+        disablepictureinpicture
+        preload="{{ section.settings.video_preload_type | default: 'none' }}"
+        {% if video_poster_url %}poster="{{ video_poster_url }}"{% endif %} 
+      >
+        <source src="{{ video_source_url }}" type="video/mp4">
+        <p>Seu navegador não suporta o elemento de vídeo. Por favor, atualize-o para uma versão mais recente.</p>
+      </video>
+      
+      {% if section.settings.video_poster != blank and section.settings.video_autoplay == false %}
+        <div class="video-poster-overlayx81" style="background-image: url('{{ video_poster_url }}');"></div>
+      {% endif %}
+    </div>
+  {% else %}
+    {% comment %} Mensagem de fallback clara e proativa se o vídeo não estiver configurado {% endcomment %}
+    {% if section.settings.show_videox81 %}
+      <div class="video-containerx81" style="background-color: #b7006d!important; color: #fff; min-height: unset!important; padding: 30px; max-width: 87%!important; text-align: center; border: 1px solid #b7006d!important;">
+        <p> Confira as exclusividades que você poderá ter acesso:</p>
+        {% unless video_source_url %}
+          <p> Confira as exclusividades que você poderá ter acesso:</p>
+        {% endunless %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if section.settings.show_composicaox81 %}
+    <div class="blk-2__colsx81">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'column' %}
+            <div class="blk-2__colx81">
+              <div class="blk-2__col-cntx81">
+                <div class="blk-2__col-contentx81">
+                  {% if block.settings.column_title != blank %}
+                    <h3 class="blk-2__col-ttlx81">{{ block.settings.column_title }}</h3>
+                  {% endif %}
+                  {% if block.settings.column_subtitle != blank %}
+                    <p class="blk-2__col-subx81">{{ block.settings.column_subtitle }}</p>
+                  {% endif %}
+                </div>
+                {% if block.settings.column_image != blank %}
+                  <div class="blk-2__col-imgx81">
+                    <img src="{{ block.settings.column_image | image_url: width: 160 }}"
+                         alt="{{ block.settings.column_title | default: 'Imagem da Coluna' | strip_html }}" loading="lazy">
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if section.settings.btn_lblx81 != blank %}
+    <div class="btn-2-wrapx81">
+      <a href="{{ section.settings.btn_linkx81 | default: section.settings.ancorax81 }}"
+         class="btn-2x81"
+         {% if section.settings.ancorax81 and section.settings.btn_linkx81 == blank %}
+           data-scroll-to="{{ section.settings.ancorax81 }}"
+         {% endif %}
+         id="btn-compra-2-{{ section.id }}"> 
+        {{ section.settings.btn_lblx81 }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  // Otimização do Event Listener para não duplicar e ser mais genérico e performático
+  // Usa um ID único para a seção para evitar conflitos se o bloco for usado múltiplas vezes
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentSectionId = '{{ section.id }}';
+    const scrollButton = document.getElementById('btn-compra-2-' + currentSectionId);
+    
+    if (scrollButton && scrollButton.dataset.scrollTo) {
+      scrollButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.dataset.scrollTo;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100, // Ajuste para o cabeçalho fixo ou offset desejado
+            behavior: 'smooth'
+          });
+        }
+      });
+    }
+
+    // Lógica para o Poster Overlay do Vídeo (se não for autoplay)
+    const videoContainer = document.getElementById('video-container-' + currentSectionId);
+    if (videoContainer) {
+      const videoElement = videoContainer.querySelector('video');
+      const posterOverlay = videoContainer.querySelector('.video-poster-overlayx81');
+
+      if (videoElement && posterOverlay) {
+        posterOverlay.addEventListener('click', function() {
+          if (videoElement.paused) {
+            videoElement.play();
+            videoContainer.classList.add('is-playing');
+          } else {
+            videoElement.pause();
+            videoContainer.classList.remove('is-playing');
+          }
+        });
+
+        videoElement.addEventListener('play', function() {
+          videoContainer.classList.add('is-playing');
+        });
+
+        videoElement.addEventListener('pause', function() {
+          videoContainer.classList.remove('is-playing');
+        });
+
+        // Se o vídeo for autoplay, remover o overlay imediatamente
+        if (videoElement.autoplay) {
+          videoContainer.classList.add('is-playing');
+        }
+      }
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Fit-Shake Bloco Perfeito",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Visibilidade do Conteúdo"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_imagem_titulox81",
+      "label": "Mostrar imagem de topo",
+      "default": true,
+      "info": "Exibe a imagem que contextualiza o bloco."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_titlex81",
+      "label": "Mostrar título principal",
+      "default": true,
+      "info": "Exibe o título que serve como gancho inicial."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_videox81",
+      "label": "Mostrar vídeo do influenciador",
+      "default": true,
+      "info": "Exibe o conteúdo visual dinâmico."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_composicaox81",
+      "label": "Mostrar seção de colunas",
+      "default": true,
+      "info": "Exibe informações complementares em colunas."
+    },
+    {
+      "type": "header",
+      "content": "Conteúdo Principal"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Imagem de Topo",
+      "info": "A imagem principal que aparece no topo do bloco."
+    },
+    {
+      "type": "text",
+      "id": "main_title_text",
+      "label": "Texto do Título Principal",
+      "default": "<h2>Destaque o seu Influenciador com Maestria!</h2>",
+      "info": "O título grande que captura a atenção."
+    },
+    {
+      "type": "header",
+      "content": "Estilos do Título Principal"
+    },
+    {
+      "type": "color",
+      "id": "hd_colorx81",
+      "label": "Cor do título principal",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "title_font_sizex81",
+      "min": 14,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho da fonte do título",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_font_sizex81_mobile",
+      "min": 12,
+      "max": 55,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho da fonte do título (Mobile)",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "title_font_weightx81",
+      "label": "Peso da fonte do título",
+      "options": [
+        {"value": "300", "label": "Light"},
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"},
+        {"value": "700", "label": "Bold"},
+        {"value": "900", "label": "Black"}
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacingx81",
+      "min": -2,
+      "max": 10,
+      "step": 0.2,
+      "unit": "px",
+      "label": "Espaçamento entre letras do título",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_line_heightx81",
+      "min": 0.8,
+      "max": 3.0,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Altura da linha do título",
+      "default": 1.2
+    },    
+    {
+      "type": "range",
+      "id": "title_padding_bottomx81",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Espaçamento entre título e subtítulo",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Estilos do SubTítulo"
+    },    
+    {
+      "type": "text",
+      "id": "main_subtitle_text",
+      "label": "Texto do Subtítulo Principal",
+      "default": "Descrição que captura a atenção.",
+      "info": "Texto que complementa o título principal e descreve o conteúdo do influenciador."
+    },
+    {
+      "type": "color",
+      "id": "main_subtitle_color",
+      "label": "Cor do subtítulo",
+      "default": "#333333"
+    },
+    {     
+      "type": "range",
+      "id": "main_subtitle_size_desktop",
+      "label": "Tamanho Subtítulo Desktop",
+       "min": 12,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 36
+    },
+    
+    {     
+      "type": "range",
+       "id": "main_subtitle_size_mobile",
+      "label": "Tamanho Subtítulo Mobile",
+       "min": 10,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+     {
+      "type": "select",
+      "id": "main_stitleweightx81",
+      "label": "Peso da fonte do subtítulo",
+      "options": [
+        {"value": "300", "label": "Light"},
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"},
+        {"value": "700", "label": "Bold"},
+        {"value": "900", "label": "Black"}
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacingx81",
+      "min": -2,
+      "max": 10,
+      "step": 0.2,
+      "unit": "px",
+      "label": "Espaçamento entre letras do título",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subtitle_line_heightx81",
+      "min": 0.8,
+      "max": 3.0,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Altura da linha do título",
+      "default": 1.2
+    },
+    {
+      "type": "text",
+      "id": "influencer_video",
+      "label": "Link Direto do Vídeo (.mp4, .webm, .ogg)",
+      "info": "Cole o link direto do arquivo de vídeo."
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Capa (Poster) do Vídeo",
+      "info": "Imagem exibida antes do vídeo carregar."
+    },
+    {
+      "type": "header",
+      "content": "Vídeo (Controle de Experiência)"
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "min": 200,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "label": "Largura do Vídeo (Desktop)",
+      "default": 350,
+      "info": "Largura do player de vídeo em pixels para telas maiores."
+    },
+    {
+      "type": "range",
+      "id": "video_height",
+      "min": 300,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Altura do Vídeo (Desktop)",
+      "default": 620,
+      "info": "Altura do player de vídeo em pixels para telas maiores."
+    },
+    {
+      "type": "select",
+      "id": "video_object_fit",
+      "label": "Ajuste do Vídeo ao Player",
+      "options": [
+        { "value": "fill", "label": "Preencher (pode distorcer)" },
+        { "value": "contain", "label": "Conter (mantém proporção)" },
+        { "value": "cover", "label": "Cobrir (corta para preencher)" },
+        { "value": "none", "label": "Nenhum (tamanho original)" },
+        { "value": "scale-down", "label": "Reduzir (menor de 'none' ou 'contain')" }
+      ],
+      "default": "cover",
+      "info": "Como o vídeo deve se ajustar ao espaço do player."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay (Reprodução Automática)",
+      "default": true,
+      "info": "O vídeo será reproduzido automaticamente."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop (Repetir Vídeo)",
+      "default": true,
+      "info": "O vídeo irá repetir automaticamente ao terminar."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mudo por Padrão",
+      "default": true,
+      "info": "O vídeo será reproduzido sem áudio por padrão."
+    },
+    {
+      "type": "select",
+      "id": "video_preload_type",
+      "label": "Pré-carregamento do Vídeo",
+      "options": [
+        { "value": "auto", "label": "Auto" },
+        { "value": "metadata", "label": "Metadados" },
+        { "value": "none", "label": "Nenhum" }
+      ],
+      "default": "none",
+      "info": "Define como o navegador deve pré-carregar o vídeo."
+    },
+    {
+      "type": "range",
+      "id": "video_brd_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Arredondamento das Bordas do Vídeo",
+      "default": 12,
+      "info": "Aplica um visual suave nas bordas do player de vídeo."
+    },
+    {
+      "type": "header",
+      "content": "Configurações Gerais do Bloco"
+    },
+    {
+      "type": "color",
+      "id": "background_colorx81",
+      "label": "Cor de Fundo do Bloco",
+      "default": "#fff4d5",
+      "info": "Define o tom geral do bloco."
+    },
+    
+    {
+      "type": "header",
+      "content": "Colunas de Conteúdo"
+    },
+    {
+      "type": "paragraph",
+      "content": "Configure as propriedades visuais para os pares de colunas."
+    },
+    {
+      "type": "header",
+      "content": "Primeiro Par de Colunas (Grupo 1)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_1x81",
+      "label": "Cor de fundo",
+      "default": "#fff4d5"
+    },
+    {
+      "type": "color",
+      "id": "brd_color_1x81",
+      "label": "Cor da borda",
+      "default": "#d0021b"
+    },
+    {
+      "type": "range",
+      "id": "brd_width_1x81",
+      "label": "Espessura da borda (px)",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "brd_radius_1x81",
+      "label": "Arredondamento (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Segundo Par de Colunas (Grupo 2)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_2x81",
+      "label": "Cor de fundo",
+      "default": "#e6f7ff"
+    },
+    {
+      "type": "color",
+      "id": "brd_color_2x81",
+      "label": "Cor da borda",
+      "default": "#1890ff"
+    },
+    {
+      "type": "range",
+      "id": "brd_width_2x81",
+      "label": "Espessura da borda (px)",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "brd_radius_2x81",
+      "label": "Arredondamento (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Estilos dos Textos das Colunas"
+    },
+    {
+      "type": "color",
+      "id": "col_hd_colorx81",
+      "label": "Cor dos títulos das colunas",
+      "default": "#59000b"
+    },
+    {
+      "type": "range",
+      "id": "col_hd_sizex81",
+      "label": "Tamanho (px)",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "col_hd_weightx81",
+      "label": "Espessura",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "col_hd_spacex81",
+      "label": "Espaçamento entre letras (px)",
+      "min": -1,
+      "max": 5,
+      "step": 0.1,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "col_sub_colorx81",
+      "label": "Cor dos subtítulos das colunas",
+      "default": "#d0021b"
+    },
+    {
+      "type": "range",
+      "id": "col_sub_sizex81",
+      "label": "Tamanho (px)",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "col_sub_lhx81",
+      "label": "Altura da linha",
+      "min": 1.0,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "select",
+      "id": "col_sub_weightx81",
+      "label": "Espessura",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"}
+      ],
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão"
+    },
+    {
+      "type": "color",
+      "id": "btn_bgx81",
+      "label": "Cor de fundo do botão",
+      "default": "#FF5A5F",
+      "info": "Escolha uma cor que se destaque e harmonize."
+    },
+    {
+      "type": "color",
+      "id": "btn_txt_clrx81",
+      "label": "Cor do texto do botão",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "btn_radiusx81",
+      "label": "Arredondamento (px)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "info": "Define o quão arredondadas as bordas serão."
+    },
+    {
+      "type": "text",
+      "id": "btn_lblx81",
+      "label": "Texto do botão",
+      "default": "EU QUERO AGORA!" ,
+      "info": "Texto persuasivo que incentiva o clique."
+    },
+    {
+      "type": "url",
+      "id": "btn_linkx81",
+      "label": "Link do botão",
+      "info": "Se preenchido, o botão irá para este URL."
+    },
+    {
+      "type": "text",
+      "id": "ancorax81",
+      "label": "ID da Âncora para Rolagem",
+      "default": "#produtos",
+      "info": "Usado se o 'Link do botão' estiver vazio."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Coluna de Conteúdo",
+      "limit": 8, 
+      "settings": [
+        {
+          "type": "text",
+          "id": "column_title",
+          "label": "Título da Coluna",
+          "default": "Benefício Incrível!"
+        },
+        {
+          "type": "richtext",
+          "id": "column_subtitle",
+          "label": "Subtítulo da Coluna",
+          "default": "<p>Detalhe aqui de forma concisa e impactante o valor ou recurso principal desta coluna.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "column_image",
+          "label": "Ícone ou Imagem da Coluna",
+          "info": "Uma imagem pequena ou ícone que visualiza o conteúdo da coluna."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fit-Shake Bloco Perfeito",
+      "category": "Conteúdo",
+      "settings": {
+        "btn_lblx81": "EU QUERO AGORA!",
+        "hd_colorx81": "#333333",
+        "btn_bgx81": "#FF5A5F",
+        "btn_txt_clrx81": "#FFFFFF",
+        "show_titlex81": true,
+        "show_videox81": true,
+        "show_composicaox81": true,
+        "show_imagem_titulox81": true,
+        "background_colorx81": "#fff4d5",
+        "bg_color_1x81": "#fff4d5",
+        "brd_color_1x81": "#d0021b",
+        "brd_width_1x81": 1,
+        "brd_radius_1x81": 12,
+        "bg_color_2x81": "#e6f7ff",
+        "brd_color_2x81": "#1890ff",
+        "brd_width_2x81": 1,
+        "brd_radius_2x81": 12,
+        "col_hd_colorx81": "#59000b",
+        "col_sub_colorx81": "#d0021b",
+        "main_title_text": "<h2>Destaque o seu Influenciador com Maestria!</h2>",
+        "video_autoplay": true,
+        "video_loop": true,
+        "video_muted": true,
+        "video_preload_type": "none",
+        "video_width": 350,
+        "video_height": 620,
+        "video_object_fit": "cover",
+        "video_brd_radius": 12
+      },
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "column_title": "Visibilidade Aumentada!",
+            "column_subtitle": "<p>Seu produto será visto por milhares, impulsionado pela credibilidade do influenciador.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "column_title": "Conversão Otimizada!",
+            "column_subtitle": "<p>Cada detalhe pensado para transformar visitantes em clientes fiéis.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "column_title": "Fácil de Configurar!",
+            "column_subtitle": "<p>Edite tudo sem precisar de código, com total autonomia.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "column_title": "Performance Imbatível!",
+            "column_subtitle": "<p>Carregamento rápido e fluido em qualquer dispositivo, do desktop ao celular.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

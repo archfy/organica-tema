@@ -1,0 +1,819 @@
+{% comment %}
+  Seção Shopify: Laranja Moro Intro - Versão B1
+  - Bloco de duas colunas (50/50) com fundo colorido, conteúdo textual rico e SVGs dinâmicos.
+  - Coluna da direita agora contém um campo de rich text editável.
+  - Totalmente responsiva com layout empilhado em mobile e grid em desktop.
+  - Múltiplos ícones SVG customizáveis via blocos:
+    - `svg_item_full_width_b1`: Para 2 SVGs superiores que ocupam quase toda a largura, um sobre o outro.
+    - `svg_item_column_b1`: Para SVGs que se alinham em 4 colunas em desktop.
+  - Opções de personalização avançadas para cores, textos, e alinhamentos.
+  - Todas as classes CSS e IDs HTML são unicamente identificadas com a assinatura '-sophiaAQ-b1'.
+  - Todas as opções de SVG (código, upload, URL externa) estão disponíveis para ambos os tipos de SVG.
+  - Altura e largura customizáveis individualmente para CADA SVG, aplicada diretamente via style inline.
+  - INTEGRAÇÃO: Botão de customização mantido com todas as suas funcionalidades e posicionamento.
+{% endcomment %}
+
+{%- liquid
+  assign current_section_id = section.id
+  assign background_color = section.settings.background_color
+  assign border_color = section.settings.border_color
+  assign border_thickness = section.settings.border_thickness
+  assign border_radius = section.settings.border_radius
+  assign container_margin_left = section.settings.container_margin_left
+  assign container_margin_right = section.settings.container_margin_right
+  assign botao_bg_color = section.settings.botao_bg_color
+  assign botao_text_color = section.settings.botao_text_color
+  assign botao_link = section.settings.botao_link
+  assign botao_label = section.settings.botao_label
+  assign text_align = section.settings.text_align
+  assign content_vertical_align = section.settings.content_vertical_align
+  assign title_color = section.settings.title_color
+  assign subtitle_color = section.settings.subtitle_color
+  assign description_color = section.settings.description_color
+  assign reverse_columns = section.settings.reverse_columns
+  assign section_padding_top = section.settings.section_padding_top
+  assign section_padding_bottom = section.settings.section_padding_bottom
+  assign inner_padding = section.settings.inner_padding
+  assign button_padding_x = section.settings.button_padding_x
+  assign button_padding_y = section.settings.button_padding_y
+  assign button_margin_top = section.settings.button_margin_top
+  assign right_column_richtext = section.settings.right_column_richtext
+  assign right_column_richtext_color = section.settings.right_column_richtext_color
+  assign right_column_richtext_strong_color = section.settings.right_column_richtext_strong_color
+  assign right_column_richtext_size = section.settings.right_column_richtext_size
+  
+-%}
+
+{%- style -%}
+  /* ========== [INÍCIO] CSS da Seção Shopify: Laranja Moro Intro - Versão B1 ========== */
+  /* Todas as classes recebem a assinatura '-sophiaAQ-b1' */
+  .section-coenzima-q10-sophiaAQ-b1-{{ current_section_id }} {
+    padding-top: {{ section_padding_top | default: 40 }}px;
+    padding-bottom: {{ section_padding_bottom | default: 40 }}px;
+    /* Margens externas da seção (além do container principal) */
+    margin-left: {{ container_margin_left | default: 0 }}px;
+    margin-right: {{ container_margin_right | default: 0 }}px;
+  }
+
+  .x20custom-container-sophiaAQ-b1 {
+    background-color: {{ background_color }}; /* Cor de fundo aplicada */
+    border: {{ border_thickness }}px solid {{ border_color }}; /* Borda aplicada */
+    border-radius: {{ border_radius }}px; /* Raio da borda */
+    margin: 0 10px; /* Margem interna padrão, ajustável via settings para dar o "recuo" */
+    padding: {{ inner_padding }}px;
+    overflow: hidden;
+    display: flex;
+    align-items: {{ content_vertical_align }};
+    justify-content: center;
+  }
+
+  .x20grid-container-sophiaAQ-b1 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  /* Colunas fixas em 50/50 em desktop, empilhadas em mobile */
+  .col-50-sophiaAQ-b1 {
+    width: 100%;
+  }
+
+  .x20content-column-sophiaAQ-b1 {
+    display: flex;
+    flex-direction: column;
+    align-items: {{ text_align }};
+    justify-content: center;
+    text-align: {{ text_align }};
+  }
+
+  .x20section-title-sophiaAQ-b1 {
+    color: {{ title_color }};
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  .x20section-subtitle-sophiaAQ-b1 {
+    color: {{ subtitle_color }};
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .x20section-description-sophiaAQ-b1 {
+    color: {{ description_color }};
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Wrapper para os 2 SVGs de largura total */
+  .x20svgs-full-width-wrapper-sophiaAQ-b1 {
+    display: flex;
+    flex-direction: column; /* Sempre um sobre o outro */
+    align-items: center; /* Alinha SVGs com o texto */
+    gap: 20px; /* Espaço entre os 2 SVGs */
+    margin-bottom: 25px; /* Espaço antes do grupo de colunas */
+    width: 100%;
+  }
+
+  .x20svg-item-full-width-sophiaAQ-b1 {
+    display: flex;
+    justify-content: center; /* Alinha o SVG dentro de seu próprio container */
+    height: auto;
+    fill: currentColor;
+  }
+
+   @media (max-width: 768px) {
+.x20svg-item-full-width-sophiaAQ-b1 {
+    max-width: 300px;
+  }
+   }
+  
+  .x20svg-item-full-width-sophiaAQ-b1 img,
+  .x20svg-item-full-width-sophiaAQ-b1 svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Container para múltiplos SVGs em Colunas */
+  .x20svgs-column-wrapper-sophiaAQ-b1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Espaço entre os SVGs */
+    justify-content: {{ text_align }};
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .x20svg-item-column-sophiaAQ-b1 {
+    height: auto;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+  .x20svg-item-column-sophiaAQ-b1 img,
+  .x20svg-item-column-sophiaAQ-b1 svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Botão de ação */
+  .x20custom-button-sophiaAQ-b1 {
+    background-color: {{ botao_bg_color }};
+    color: {{ botao_text_color }};
+    border-radius: 50px;
+    padding: {{ button_padding_y }}px {{ button_padding_x }}px;
+    margin-top: {{ button_margin_top }}px;
+    width: auto;
+    min-width: 250px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+  margin-right: auto;
+  }
+
+  
+
+  /* Rich text da segunda coluna */
+  .x20richtext-column-sophiaAQ-b1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: {{ text_align }}; /* Alinha o rich text como o texto da primeira coluna */
+    text-align: {{ text_align }};
+    color: {{ right_column_richtext_color }};
+    height: 100%; /* Garante que o richtext preencha a altura disponível */
+    font-size: {{ right_column_richtext_size }}px;
+  }
+  .x20richtext-column-sophiaAQ-b1 strong {
+    color: {{ right_column_richtext_strong_color }};
+  }
+
+  /* Garante que imagens dentro do richtext não transbordem */
+  .x20richtext-column-sophiaAQ-b1 img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Remove espaço extra abaixo da imagem */
+  }
+
+  /* ========== Media Queries para Responsividade ========== */
+  @media (max-width: 767px) {
+    .section-coenzima-q10-sophiaAQ-b1-{{ current_section_id }} {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .x20custom-container-sophiaAQ-b1 {
+      padding: 30px 15px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    .x20section-title-sophiaAQ-b1 {
+      font-size: 1.8rem;
+    }
+    .x20section-subtitle-sophiaAQ-b1 {
+      font-size: 1.25rem;
+    }
+    .x20custom-button-sophiaAQ-b1 {
+      padding: 15px 30px;
+      min-width: unset;
+      width: 100%;
+    }
+    /* SVG de largura total em mobile - Largura controlada pelo setting svg_width_mobile via inline style */
+    .x20svg-item-column-sophiaAQ-b1 {
+      /* Padrão mobile para SVGs em coluna */
+      width: 80px; /* Mantém o padrão mobile para cada SVG individualmente */
+      height: auto;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .x20grid-container-sophiaAQ-b1 {
+      flex-direction: row;
+      gap: 3rem;
+    }
+    {% if reverse_columns %}
+      .x20grid-container-sophiaAQ-b1 {
+        flex-direction: row-reverse;
+      }
+    {% endif %}
+
+    /* Colunas 50/50 em desktop */
+    .col-50-sophiaAQ-b1 {
+      flex: 1; /* Faz as colunas ocuparem 50% cada */
+      width: 50%;
+    }
+    .x20custom-container-sophiaAQ-b1 {
+      padding: {{ inner_padding | default: 60 }}px;
+    }
+
+    /* Otimização ABSOLUTA para o Padrão de 4 Colunas de SVGs em Desktop */
+    .x20svgs-column-wrapper-sophiaAQ-b1 {
+      justify-content: {{ text_align }};
+    }
+
+    .x20svg-item-column-sophiaAQ-b1 {
+      /* Calcula a largura para que 4 itens caibam perfeitamente, considerando o gap */
+      flex-basis: calc((100% - (3 * 16px)) / 4); /* 3 gaps para 4 itens */
+      max-width: calc((100% - (3 * 16px)) / 4);
+      width: unset; /* Permite que flex-basis e inline style assumam */
+    }
+
+    /* Ajustes para os 2 SVGs de largura total em desktop */
+    .x20svgs-full-width-wrapper-sophiaAQ-b1 {
+      align-items: center; /* Mantém alinhamento com o texto */
+    }
+  }
+
+  /* ========== [FIM] CSS da Seção Shopify: Laranja Moro Intro - Versão B1 ========== */
+{%- endstyle -%}
+
+<section class="section-coenzima-q10-sophiaAQ-b1-{{ current_section_id }}" data-section-id="{{ current_section_id }}">
+  <div class="x20custom-container-sophiaAQ-b1">
+    <div class="x20grid-container-sophiaAQ-b1">
+      <div class="col-50-sophiaAQ-b1 x20content-column-sophiaAQ-b1">
+        {% if section.settings.title %}
+          <h2 class="x20section-title-sophiaAQ-b1">{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.subtitle %}
+          <h3 class="x20section-subtitle-sophiaAQ-b1">{{ section.settings.subtitle }}</h3>
+        {% endif %}
+        {% if section.settings.description %}
+          <div class="x20section-description-sophiaAQ-b1">{{ section.settings.description }}</div>
+        {% endif %}
+
+        {% comment %} Renderiza os blocos de SVG de largura total {% endcomment %}
+        {%- assign has_full_width_svgs = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'svg_item_full_width_b1' -%}
+            {%- assign has_full_width_svgs = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {% if has_full_width_svgs %}
+          <div class="x20svgs-full-width-wrapper-sophiaAQ-b1">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'svg_item_full_width_b1' %}
+                  {%- assign svg_item_width = block.settings.svg_width | default: 200 -%}
+                  {%- assign svg_item_width_mobile = block.settings.svg_width_mobile | default: 150 -%}
+                  {%- assign svg_item_height = block.settings.svg_height | default: 'auto' -%}
+                  {%- assign svg_item_height_mobile = block.settings.svg_height_mobile | default: 'auto' -%}
+                  <div class="x20svg-item-full-width-sophiaAQ-b1" style="
+                    {% if block.settings.svg_code != blank %}color: {{ block.settings.svg_color }};{% endif %}
+                    width: {{ svg_item_width }}px;
+                    height: auto;
+                    {% comment %} Adiciona media query inline para mobile {% endcomment %}
+                    --svg-width-mobile: {{ svg_item_width_mobile }}px;
+                    --svg-height-mobile: auto;
+                    ">
+                    {% comment %} Prioridade: URL Externa > Upload Shopify > Código SVG Direto {% endcomment %}
+                    {% if block.settings.svg_external_url != blank %}
+                      <img src="{{ block.settings.svg_external_url }}" alt="Ícone SVG Externo" loading="lazy" style="max-width: 100%; height: auto; width: inherit; height: inherit;">
+                    {% elsif block.settings.svg_image_url != blank %}
+                      <img src="{{ block.settings.svg_image_url | img_url: 'master' }}" alt="Ícone SVG" loading="lazy" style="max-width: 100%; height: auto; width: inherit; height: inherit;">
+                    {% elsif block.settings.svg_code != blank %}
+                      {{ block.settings.svg_code }}
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% comment %} Renderiza os blocos de SVG em colunas {% endcomment %}
+        {%- assign has_column_svgs = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'svg_item_column_b1' -%}
+            {%- assign has_column_svgs = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {% if has_column_svgs %}
+          <div class="x20svgs-column-wrapper-sophiaAQ-b1">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'svg_item_column_b1' %}
+                  {%- assign svg_item_width = block.settings.svg_width | default: 100 -%}
+                  {%- assign svg_item_height = block.settings.svg_height | default: 'auto' -%}
+                  {%- assign svg_item_width_mobile = block.settings.svg_width_mobile | default: 80 -%}
+                  {%- assign svg_item_height_mobile = block.settings.svg_height_mobile | default: 'auto' -%}
+                  <div class="x20svg-item-column-sophiaAQ-b1" style="
+                    {% if block.settings.svg_code != blank %}color: {{ block.settings.svg_color }};{% endif %}
+                    width: {{ svg_item_width }}px;
+                    height: {{ svg_item_height }};
+                    {% comment %} Adiciona media query inline para mobile {% endcomment %}
+                    --svg-width-mobile: {{ svg_item_width_mobile }}px;
+                    --svg-height-mobile: {{ svg_item_height_mobile }};
+                    ">
+                    {% comment %} Prioridade: URL Externa > Upload Shopify > Código SVG Direto {% endcomment %}
+                    {% if block.settings.svg_external_url != blank %}
+                      <img src="{{ block.settings.svg_external_url }}" alt="Ícone SVG Externo" loading="lazy" style="max-width: 100%; height: auto; width: inherit; height: inherit;">
+                    {% elsif block.settings.svg_image_url != blank %}
+                      <img src="{{ block.settings.svg_image_url | img_url: 'master' }}" alt="Ícone SVG" loading="lazy" style="max-width: 100%; height: auto; width: inherit; height: inherit;">
+                    {% elsif block.settings.svg_code != blank %}
+                      {{ block.settings.svg_code }}
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if botao_link != blank and botao_label != blank %}
+          <a href="{{ botao_link }}" class="x20custom-button-sophiaAQ-b1" id="botao-compra-sophiaAQ-b1">
+            {{ botao_label }}
+          </a>
+        {% endif %}
+      </div>
+      <div class="col-50-sophiaAQ-b1 x20richtext-column-sophiaAQ-b1">
+        {% if right_column_richtext != blank %}
+          {{ right_column_richtext }}
+        {% else %}
+          <div class="x20section-description-sophiaAQ-b1">
+            <p><strong>Conteúdo Personalizável:</strong> Use este espaço para adicionar informações detalhadas, listas, imagens ou qualquer outro conteúdo rico. Edite no customizador!</p>
+            <ul>
+              <li>Item de lista 1</li>
+              <li>Item de lista 2</li>
+              <li>Item de lista 3</li>
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quitosana Intro 1",
+  "tag": "section",
+  "class": "section-coenzima-q10-sophiaAQ-b1",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais da Seção"
+    },
+    {
+      "type": "select",
+      "id": "background_type",
+      "label": "Tipo de Fundo",
+      "options": [
+        { "value": "color", "label": "Cor de Fundo" }
+      ],
+      "default": "color",
+      "info": "O fundo da seção será uma cor sólida."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de Fundo do Container Principal",
+      "default": "#f0f0f0",
+      "info": "Esta cor será aplicada ao container interno que envolve o conteúdo."
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Cor da Borda do Container Principal",
+      "default": "#cccccc"
+    },
+    {
+      "type": "range",
+      "id": "border_thickness",
+      "label": "Espessura da Borda do Container Principal",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 1
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Raio da borda do Container Principal",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "container_margin_left",
+      "label": "Margem Esquerda Externa da Seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 0,
+      "info": "Define a margem externa à esquerda da seção principal."
+    },
+    {
+      "type": "range",
+      "id": "container_margin_right",
+      "label": "Margem Direita Externa da Seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 0,
+      "info": "Define a margem externa à direita da seção principal."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Espaçamento superior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Espaçamento inferior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "inner_padding",
+      "label": "Espaçamento interno do container",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 60,
+      "info": "Espaçamento entre a borda do container e seu conteúdo interno."
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align",
+      "label": "Alinhamento Vertical do Conteúdo",
+      "options": [
+        { "value": "flex-start", "label": "Topo" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Fundo" }
+      ],
+      "default": "center",
+      "info": "Alinha verticalmente o conteúdo dentro do container principal."
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Conteúdo (Esquerda)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Benefícios Incríveis para Sua Saúde!"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Cor do Título",
+      "default": "#222222"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Descubra o poder da Coenzima Q10."
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Cor do Subtítulo",
+      "default": "#444444"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descrição",
+      "default": "<p>Este espaço é perfeito para destacar os principais benefícios e características do seu produto de forma clara e impactante.</p>"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Cor da Descrição",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alinhamento do Texto da Coluna Esquerda",
+      "options": [
+        { "value": "flex-start", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Conteúdo (Direita)"
+    },
+    {
+      "type": "richtext",
+      "id": "right_column_richtext",
+      "label": "Conteúdo Rich Text da Coluna Direita",
+      "default": "<p>Este é o espaço para o <strong>conteúdo da coluna direita</strong>. Você pode adicionar <em>texto formatado</em>, <strong>listas</strong>, e até <a href=\"#\">links</a> aqui.</p><p>Use o editor rich text para personalizar à vontade, incluindo o alinhamento do texto.</p>"
+    },
+     {
+      "type": "range",
+      "id": "right_column_richtext_size",
+      "label": "Tam. Fonte do conteúdo da Coluna Direita",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "color",
+      "id": "right_column_richtext_color",
+      "label": "Cor do texto",
+      "default": "#000"
+    },
+    {
+      "type": "color",
+      "id": "right_column_richtext_strong_color",
+      "label": "Cor para o negrito",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão"
+    },
+    {
+      "type": "color",
+      "id": "botao_bg_color",
+      "label": "Cor de fundo do botão",
+      "default": "#367300"
+    },
+    {
+      "type": "color",
+      "id": "botao_text_color",
+      "label": "Cor do texto do botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "url",
+      "id": "botao_link",
+      "label": "Link ou âncora do botão",
+      "info": "Ex: /collections/all ou #id-da-secao"
+    },
+    {
+      "type": "text",
+      "id": "botao_label",
+      "label": "Texto do botão",
+      "default": "ESCOLHER SABOR"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "label": "Padding Horizontal do Botão",
+      "min": 10, "max": 300, "step": 5, "unit": "px", "default": 90
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "label": "Padding Vertical do Botão",
+      "min": 10, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_margin_top",
+      "label": "Margem Superior do Botão",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout Avançado"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_columns",
+      "label": "Inverter ordem das colunas (conteúdo da direita à esquerda)",
+      "default": false,
+      "info": "Em desktop, o conteúdo da direita será exibido à esquerda e o texto da esquerda à direita."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "svg_item_full_width_b1",
+      "name": "Ícone SVG (Largura Total)",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "url",
+          "id": "svg_external_url",
+          "label": "Link para SVG externo (URL)",
+          "info": "Insira uma URL direta para um arquivo SVG hospedado na web. Esta opção tem prioridade."
+        },
+        {
+          "type": "image_picker",
+          "id": "svg_image_url",
+          "label": "Ou Imagem SVG (Upload Shopify)",
+          "info": "Faça upload de um arquivo SVG para o Shopify. Esta opção é secundária."
+        },
+        {
+          "type": "liquid",
+          "id": "svg_code",
+          "label": "Ou Código SVG (Cole aqui)",
+          "info": "Cole o código SVG completo. Certifique-se de que não contenha 'fill' ou 'color' fixos para que a cor do tema possa ser aplicada via CSS. Esta é a última opção."
+        },
+        {
+          "type": "color",
+          "id": "svg_color",
+          "label": "Cor do Ícone SVG (Apenas para código)",
+          "default": "#000000",
+          "info": "Esta cor será aplicada apenas se o SVG for inserido via Código SVG."
+        },
+        {
+          "type": "range",
+          "id": "svg_width",
+          "label": "Largura do Ícone (Desktop)",
+          "min": 50, "max": 500, "step": 10, "unit": "px", "default": 250,
+          "info": "Define a largura do SVG em telas de desktop."
+        },
+        {
+          "type": "range",
+          "id": "svg_height",
+          "label": "Altura do Ícone (Desktop)",
+          "min": 50, "max": 400, "step": 10, "unit": "px", "default": 250,
+          "info": "Define a altura do SVG em telas de desktop. Use 'auto' para manter a proporção."
+        },
+        {
+          "type": "range",
+          "id": "svg_width_mobile",
+          "label": "Largura do Ícone (Mobile)",
+          "min": 20, "max": 200, "step": 5, "unit": "px", "default": 120,
+          "info": "Define a largura do SVG em telas de mobile."
+        },
+        {
+          "type": "range",
+          "id": "svg_height_mobile",
+          "label": "Altura do Ícone (Mobile)",
+          "min": 20, "max": 200, "step": 5, "unit": "px", "default": 120,
+          "info": "Define a altura do SVG em telas de mobile. Use 'auto' para manter a proporção."
+        }
+      ]
+    },
+    {
+      "type": "svg_item_column_b1",
+      "name": "Ícone SVG (Em Colunas)",
+      "settings": [
+        {
+          "type": "url",
+          "id": "svg_external_url",
+          "label": "Link para SVG externo (URL)",
+          "info": "Insira uma URL direta para um arquivo SVG hospedado na web. Esta opção tem prioridade."
+        },
+        {
+          "type": "image_picker",
+          "id": "svg_image_url",
+          "label": "Ou Imagem SVG (Upload Shopify)",
+          "info": "Faça upload de um arquivo SVG para o Shopify. Esta opção é secundária."
+        },
+        {
+          "type": "liquid",
+          "id": "svg_code",
+          "label": "Ou Código SVG (Cole aqui)",
+          "info": "Cole o código SVG completo. Certifique-se de que não contenha 'fill' ou 'color' fixos para que a cor do tema possa ser aplicada via CSS. Esta é a última opção."
+        },
+        {
+          "type": "color",
+          "id": "svg_color",
+          "label": "Cor do Ícone SVG",
+          "default": "#4CAF50",
+          "info": "Esta cor será aplicada apenas se o SVG for inserido via Código SVG. SVGs de URL externa ou Upload podem não respeitar esta cor."
+        },
+        {
+          "type": "range",
+          "id": "svg_width",
+          "label": "Largura do Ícone (Desktop)",
+          "min": 20, "max": 300, "step": 5, "unit": "px", "default": 100
+        },
+        {
+          "type": "range",
+          "id": "svg_height",
+          "label": "Altura do Ícone (Desktop)",
+          "min": 20, "max": 300, "step": 5, "unit": "px", "default": 100
+        },
+        {
+          "type": "range",
+          "id": "svg_width_mobile",
+          "label": "Largura do Ícone (Mobile)",
+          "min": 20, "max": 150, "step": 5, "unit": "px", "default": 80,
+          "info": "Define a largura do SVG em telas de mobile."
+        },
+        {
+          "type": "range",
+          "id": "svg_height_mobile",
+          "label": "Altura do Ícone (Mobile)",
+          "min": 20, "max": 150, "step": 5, "unit": "px", "default": 80,
+          "info": "Define a altura do SVG em telas de mobile. Use 'auto' para manter a proporção."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quitosana Intro 1",
+      "category": "Layout",
+      "blocks": [
+        {
+          "type": "svg_item_full_width_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='currentColor' d='M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z'/></svg>",
+            "svg_width": 250,
+            "svg_height": 250,
+            "svg_width_mobile": 120,
+            "svg_height_mobile": 120,
+            "svg_color": "#4CAF50"
+          }
+        },
+        {
+          "type": "svg_item_full_width_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='currentColor' d='M316.9 18.7c3.1-6.4 8.7-11.4 15.1-14.5s13.3-3.9 19.8-3.1h.1c6.6-.8 12.9 1.7 18.1 6.5L435.6 119c6.2 5.5 14.1 8.5 22.3 8.5H544c7.6 0 14.8 3.1 20.1 8.5s8.6 12.8 8 20.6c-.6 7.8-4.3 14.9-10.3 19.9L479.7 266c-5.9 4.9-8.9 12.1-7.9 19.3s4.6 14.1 11.2 18.9L559 387c6 4.6 9.6 11.2 9.9 18.4s-1.8 14.4-6.4 19.8c-4.6 5.4-10.9 8.7-17.8 9.3l-104.9 8.8c-7.2 .6-13.9 3.5-19.1 8.6L299.7 503c-5.2 5.2-11.8 8.4-18.7 9.1s-14 .7-20.7-1.1c-6.6-1.9-12.6-5.8-16.7-11.8L121.3 399c-4.1-6.1-6.3-13.4-6.2-20.9s2.4-14.7 6.8-20.1L127 280.5c4.4-5.4 6.6-12.4 5.9-19.5s-2.8-13.8-7.9-18.4L54.6 195.9c-5.1-4.7-8.3-10.8-8.9-17.6c-.7-6.8 1.4-13.6 5.8-18.8s10.3-8.8 16.9-9.5l104.9-8.8c7.1-.6 13.5-3.5 18.7-8.6L256 120.3c5.2-5.2 11.8-8.4 18.7-9.1s14-.7 20.7 1.1c6.6 1.9 12.6 5.8 16.7 11.8z'/></svg>",
+            "svg_width": 250,
+            "svg_height": 250,
+            "svg_width_mobile": 120,
+            "svg_height_mobile": 120,
+            "svg_color": "#4CAF50"
+          }
+        },
+        {
+          "type": "svg_item_column_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='currentColor' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_width_mobile": 80,
+            "svg_height_mobile": 80,
+            "svg_color": "#28A745"
+          }
+        },
+        {
+          "type": "svg_item_column_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='currentColor' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_width_mobile": 80,
+            "svg_height_mobile": 80,
+            "svg_color": "#28A745"
+          }
+        },
+        {
+          "type": "svg_item_column_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='currentColor' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_width_mobile": 80,
+            "svg_height_mobile": 80,
+            "svg_color": "#28A745"
+          }
+        },
+        {
+          "type": "svg_item_column_b1",
+          "settings": {
+            "svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='currentColor' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/></svg>",
+            "svg_width": 80,
+            "svg_height": 80,
+            "svg_width_mobile": 80,
+            "svg_height_mobile": 80,
+            "svg_color": "#28A745"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

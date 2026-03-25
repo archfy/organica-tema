@@ -1,0 +1,439 @@
+
+{% assign hidden_price = settings.hidden_price %}
+<style>
+  .pad-unset{padding:unset;}
+  @media (max-width: 576px) {.pad-unset{padding:1rem 5.5rem;}
+  .qnt-custom{display:none;}
+  .form-qnt-custom{display:none!important;}
+  .btn-sticky-btn{display: flex;height: 49px;padding: 13px 27px 13px 27px;align-items: center;}
+  .btn-sticky-svg{margin-left: auto;}
+  .btn-sticky-span{margin-left: 10px;margin-right: auto;}
+  .btn-sticky-whatsapp{
+    display: flex;
+    width: 46px;
+    height: 47px;
+    padding: 7px 6px 6px 6px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;border-radius: 30px;
+    background: #ffffff;
+    margin-right:11px;
+  }
+  .sticky-addcart-product-form{
+    max-width: 97%;
+  }
+  
+}
+@media (min-width: 958px) {
+  .sticky-svg-cart{display:none;margin-right:5px;}
+  }
+  .btn-sticky-span{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .btn-sticky-svg{
+   margin-right:5px!important;  
+  }
+  .btn-sticky-btn{
+    min-width: 265px!important;
+  }
+</style>
+<div
+  id="bls__sticky-addcart"
+  class="bls__sticky-addcart{% if st.sticky_mode == '1' %} only-show-desktop d-none d-lg-block{% endif %} gradient color-default-color-scheme z-4 fixed inset-x-0 bottom-0 py-15 box-shadow-top"
+>
+  <div class="sticky-addcart flex justify-content-center justify-content-between-lg align-items-center container">
+    <div class="sticky-addcart-product flex-nowrap d-none d-lg-flex align-items-center d-none d-lg-block">
+      {%- liquid
+        assign image = current_variant.featured_image | default: product.featured_image
+      -%}
+      <div class="sticky-addcart-img mr-15 width-80">
+        {%- render 'responsive-image' | image: image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+      </div>
+      <div class="sticky-addcart-infos">
+        {%- if settings.show_vendors -%}
+          <div class="bls__product-vendor fs-small mt-5 mb-5">
+            {{ product.vendor | link_to_vendor }}
+          </div>
+        {%- endif -%}
+        <div class="heading-color heading-weight">{{ product.title }}</div>
+        {% if hidden_price == false %}
+        <div class="price heading-weight fs-small mt-5">
+          {%- render 'price-sticky', product: product, use_variant: true, price_class: 'price--large' -%}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="sticky-addcart-product-form">
+      {%- if product.metafields.custom.external_affiliate == blank -%}
+        <product-form class="product-form flex flex-nowrap">
+          {%- assign product_form_id = 'sticky-addcart-form-' | append: section.id -%}
+          {%- form 'product',
+            product,
+            id: product_form_id,
+            class: 'form flex flex-nowrap',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+            {%- if product.variants.size > 1 -%}
+              <select name="id" class="sticky-addcart-opstion mr-10 mr-lg-20 btn-radius">
+                {% for variant in product.variants %}
+                  {% assign selected = false %}
+                  {% assign quantity = variant.inventory_quantity %}
+                  {%- if quantity < 1 and variant.available == false -%}
+                    {% continue %}
+                  {%- endif -%}
+                  {%- if variant.id == product.selected_or_first_available_variant.id -%}
+                    {% assign selected = true %}
+                  {%- endif -%}
+                  {% assign option = variant.title %}
+                  <option
+                    value="{{ variant.id }}"
+                    data-option="{{ option }}"
+                    {% if selected %}
+                      selected="true"
+                    {% endif %}
+                  >
+                    {{ variant.title }} -
+                    {% if settings.currency_code_enabled %}
+                      {{ variant.price | money_with_currency }}
+                    {% else %}
+                      {{ variant.price | money }}
+                    {% endif %}
+                  </option>
+                {% endfor %}
+              </select>
+            {%- else -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}"
+                disabled
+              >
+            {%- endif -%}
+            <div class="product-form__buttons flex flex-nowrap">
+              <div class="product-form__input product-form__quantity form-qnt-custom" {{ block.shopify_attributes }}>
+                <label class="form__label visually-hidden" for="Quantity-Sticky-{{ section.id }}">
+                  {{ 'products.product.quantity.label' | t }}
+                </label>
+                <quantity-input class="btn-radius quantity qnt-custom border bg-grey flex align-items-center text-center mr-10 mr-lg-20 px-8">
+                  <button
+                    class="btn-reset flex justify-content-center align-items-center quantity__button no-js-hidden width-35"
+                    name="minus"
+                    type="button"
+                  >
+                    <svg
+                      width="11"
+                      height="12"
+                      viewBox="0 0 11 2"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M11 0.5L11 1.5L-4.37114e-08 1.5L0 0.5L11 0.5Z" fill="#111111" />
+                    </svg>
+                  </button>
+                  <input
+                    class="quantity__input bg-unset border-none text-center width-50 appearance-none p-0-important product-sticky__input"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-Sticky-{{ section.id }}"
+                    min="1"
+                    value="1"
+                    form="{{ product_form_id }}"
+                  >
+                  <button
+                    class="btn-reset flex justify-content-center align-items-center quantity__button no-js-hidden width-35"
+                    name="plus"
+                    type="button"
+                  >
+                    <svg
+                      width="11"
+                      height="12"
+                      viewBox="0 0 11 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M5 11.5H6L6 6.5H11V5.5H6L6 0.5H5L5 5.5H0V6.5H5L5 11.5Z"
+                        fill="#111111" />
+                    </svg>
+                  </button>
+                </quantity-input>
+              </div>
+              <div class="btn-sticky-whatsapp" onclick="window.open('https://api.whatsapp.com/send?phone=%2B5511920664623&text=Denavita', '_blank')" style="cursor:pointer;">
+              <svg class="sticky-svg-cart" width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 34L2.924 25.2286C1.44031 22.7331 0.586207 19.8208 0.586207 16.7069C0.586207 7.48 8.06621 0 17.2931 0C26.52 0 34 7.48 34 16.7069C34 25.9338 26.52 33.4138 17.2931 33.4138C14.4858 33.4138 11.842 32.718 9.52 31.4951L0 34Z" fill="#2CB742"/>
+                <path d="M27.9522 22.2671C27.1808 20.8092 24.3359 19.1421 24.3359 19.1421C23.6922 18.7751 22.9155 18.7341 22.5485 19.3883C22.5485 19.3883 21.6241 20.4968 21.389 20.6562C20.3151 21.3837 19.3203 21.3556 18.3161 20.3514L15.9824 18.0177L13.6488 15.684C12.6446 14.6799 12.6164 13.6851 13.3439 12.6111C13.5034 12.3761 14.6119 11.4516 14.6119 11.4516C15.2661 11.0841 15.2251 10.3079 14.8581 9.66428C14.8581 9.66428 13.1909 6.81942 11.733 6.04797C11.1128 5.71969 10.3513 5.83459 9.85541 6.33052L8.82486 7.36107C5.55558 10.6303 7.16531 14.3211 10.4346 17.5904L13.4225 20.5783L16.4104 23.5662C19.6797 26.8355 23.3704 28.4452 26.6397 25.1759L27.6702 24.1453C28.1662 23.6482 28.2805 22.8868 27.9522 22.2671Z" fill="white"/>
+              </svg>
+            </div>
+              <button
+                type="submit"
+                name="add"
+                class="product-form__submit btn-sticky-btn pad-unset animation relative"
+                {% if product.selected_or_first_available_variant.available == false %}
+                  disabled
+                {% endif %}
+              >
+                <svg class="btn-sticky-svg" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_57338_54)">
+    <path d="M0.958496 0.958496H4.79183L7.36016 13.7906C7.4478 14.2318 7.68782 14.6281 8.03823 14.9102C8.38863 15.1923 8.82708 15.3421 9.27683 15.3335H18.5918C19.0416 15.3421 19.48 15.1923 19.8304 14.9102C20.1808 14.6281 20.4209 14.2318 20.5085 13.7906L22.0418 5.75016H5.75016M9.5835 20.1252C9.5835 20.6544 9.15443 21.0835 8.62516 21.0835C8.09589 21.0835 7.66683 20.6544 7.66683 20.1252C7.66683 19.5959 8.09589 19.1668 8.62516 19.1668C9.15443 19.1668 9.5835 19.5959 9.5835 20.1252ZM20.1252 20.1252C20.1252 20.6544 19.6961 21.0835 19.1668 21.0835C18.6376 21.0835 18.2085 20.6544 18.2085 20.1252C18.2085 19.5959 18.6376 19.1668 19.1668 19.1668C19.6961 19.1668 20.1252 19.5959 20.1252 20.1252Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_57338_54">
+      <rect width="23" height="23" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
+                <span class="btn-sticky-span">
+                  {%- if product.selected_or_first_available_variant.available -%}
+                   Adicionar ao carrinho {% comment %} {{ 'products.product.add_to_cart' | t }} {% endcomment %}
+                  {%- else -%}
+                   Esgotado {% comment %} {{ 'products.product.sold_out' | t }} {% endcomment %}
+                  {%- endif -%}
+                </span>
+                <span class="loader-icon"></span>
+              </button>
+            </div>
+          {%- endform -%}
+        </product-form>
+      {%- else -%}
+        <a
+          href="{{ product.metafields.custom.external_affiliate.value.external_link }}"
+          rel="nofollow"
+          target="_blank"
+          class="btn product-form__submit pad-unset animation relative"
+        >
+          {{- product.metafields.custom.external_affiliate.value.button_text -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  console.log('🔥 STICKY PRODUCT UPDATE SCRIPT V2 CARREGADO!');
+  
+  // Dados do produto
+  const productData = {{ product | json }};
+  const variants = {{ product.variants | json }};
+  
+  console.log('📦 Produto:', productData.title);
+  console.log('📊 Variantes:', variants.length);
+  
+  // Elementos do sticky
+  const stickySelect = document.querySelector('.sticky-addcart-opstion');
+  const stickyImage = document.querySelector('.sticky-addcart-img img');
+  const stickyPriceWrapper = document.querySelector('.sticky-addcart-infos .price');
+  
+  // Elementos da página principal (para sincronizar)
+  const mainSelect = document.querySelector('select[name="id"]:not(.sticky-addcart-opstion)');
+  
+  if (!stickySelect) {
+    console.warn('⚠️ Select do sticky não encontrado');
+    return;
+  }
+  
+  console.log('✅ Elementos encontrados:', {
+    stickySelect: !!stickySelect,
+    stickyImage: !!stickyImage,
+    stickyPriceWrapper: !!stickyPriceWrapper,
+    mainSelect: !!mainSelect
+  });
+  
+  // Função para formatar dinheiro
+  function formatMoney(cents) {
+    const currency = {{ settings.currency_code_enabled | json }};
+    const money = (cents / 100).toFixed(2).replace('.', ',');
+    
+    if (currency) {
+      return 'R$ ' + money;
+    }
+    return 'R$ ' + money;
+  }
+  
+  // Função para atualizar tudo quando variante muda
+  function updateStickyProduct(variantId) {
+    console.log('🔄 Atualizando sticky para variante:', variantId);
+    
+    // Encontra a variante
+    const variant = variants.find(v => v.id === parseInt(variantId));
+    
+    if (!variant) {
+      console.warn('⚠️ Variante não encontrada:', variantId);
+      return;
+    }
+    
+    console.log('✅ Variante encontrada:', variant.title);
+    console.log('💰 Preço:', variant.price, 'Compare:', variant.compare_at_price);
+    
+    // 1. ATUALIZA IMAGEM
+    if (stickyImage && variant.featured_image) {
+      console.log('🖼️ Atualizando imagem...');
+      const newImageSrc = variant.featured_image.src;
+      stickyImage.src = newImageSrc;
+      stickyImage.srcset = newImageSrc;
+      console.log('✅ Imagem atualizada!');
+    }
+    
+    // 2. ATUALIZA PREÇOS E LABEL
+    if (stickyPriceWrapper) {
+      console.log('💰 Atualizando preços...');
+      
+      const price = variant.price;
+      const compareAtPrice = variant.compare_at_price;
+      const hasDiscount = compareAtPrice && compareAtPrice > price;
+      
+      // Calcula desconto
+      let discountPercent = 0;
+      if (hasDiscount) {
+        discountPercent = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+        console.log('📊 DESCONTO CALCULADO:', discountPercent + '%');
+        console.log('📊 Compare:', compareAtPrice, 'Price:', price);
+        console.log('📊 Diferença:', compareAtPrice - price);
+        console.log('📊 Porcentagem:', ((compareAtPrice - price) / compareAtPrice) * 100);
+      }
+      
+      // Monta HTML dos preços COM ESTILO INLINE FORÇADO
+      let priceHTML = `
+        <div class="bls__price ${!variant.available ? 'price--sold-out' : ''} ${hasDiscount ? 'price--on-sale' : ''}">
+          <div class="bls__product-price flex flex-wrap align-items-center mt-3">
+            <div class="price__regular">
+              <span class="visually-hidden visually-hidden--inline">Preço normal</span>
+              <span class="price${hasDiscount ? ' special-price' : ''}" data-product-price>
+                ${formatMoney(price)}
+              </span>
+            </div>
+      `;
+      
+      // Se tem desconto, adiciona preço comparativo e badge COM ESTILO INLINE
+      if (hasDiscount) {
+        priceHTML += `
+            <div class="price__sale grey-color" data-sale-price-wrapper style="display: flex !important; align-items: center;">
+              <span class="visually-hidden visually-hidden--inline">Preço promocional</span>
+              <span>
+                <s class="price-item compare-price" data-compare-price>
+                  ${formatMoney(compareAtPrice)}
+                </s>
+              </span>
+              <span class="price__discount-badge" data-discount-badge style="
+                background-color: #ff0000 !important;
+                color: #FFFFFF !important;
+                padding: 5px 10px !important;
+                border-radius: 13px !important;
+                font-size: 1rem !important;
+                font-weight: bold !important;
+                line-height: 1 !important;
+                position: relative !important;
+                margin-left: 5px !important;
+                bottom: 0px !important;
+                display: inline-block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+              ">
+                ${discountPercent}% OFF
+              </span>
+            </div>
+        `;
+        console.log('✅ Badge criado com desconto:', discountPercent + '%');
+      } else {
+        console.log('ℹ️ Sem desconto para esta variante');
+      }
+      
+      priceHTML += `
+          </div>
+        </div>
+      `;
+      
+      stickyPriceWrapper.innerHTML = priceHTML;
+      console.log('✅ Preços atualizados!', hasDiscount ? `com ${discountPercent}% desconto` : 'sem desconto');
+      
+      // FORÇA ATUALIZAÇÃO DO BADGE (caso já exista)
+      setTimeout(() => {
+        const badge = stickyPriceWrapper.querySelector('[data-discount-badge]');
+        if (badge) {
+          badge.textContent = discountPercent + '% OFF';
+          badge.style.display = hasDiscount ? 'inline-block' : 'none';
+          badge.style.visibility = 'visible';
+          badge.style.opacity = '1';
+          console.log('🔄 Badge forçadamente atualizado:', badge.textContent);
+        } else if (hasDiscount) {
+          console.warn('⚠️ Badge não encontrado após atualização!');
+        }
+      }, 50);
+    }
+    
+    // 3. ATUALIZA BOTÃO DE COMPRA
+    const submitButton = document.querySelector('#bls__sticky-addcart button[type="submit"]');
+    if (submitButton) {
+      const buttonText = submitButton.querySelector('.btn-sticky-span');
+      if (!variant.available) {
+        submitButton.disabled = true;
+        if (buttonText) buttonText.textContent = 'Esgotado';
+        console.log('❌ Variante esgotada');
+      } else {
+        submitButton.disabled = false;
+        if (buttonText) buttonText.textContent = 'Adicionar ao carrinho';
+        console.log('✅ Variante disponível');
+      }
+    }
+    
+    console.log('✨ Sticky atualizado completamente!');
+  }
+  
+  // LISTENER 1: Quando muda o select do STICKY
+  stickySelect.addEventListener('change', function(e) {
+    const variantId = e.target.value;
+    console.log('🎯 Select do sticky mudou para:', variantId);
+    
+    updateStickyProduct(variantId);
+    
+    // Sincroniza com o select principal da página
+    if (mainSelect) {
+      mainSelect.value = variantId;
+      mainSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      console.log('🔄 Select principal sincronizado');
+    }
+  });
+  
+  // LISTENER 2: Quando muda o select PRINCIPAL (sincroniza sticky)
+  if (mainSelect) {
+    mainSelect.addEventListener('change', function(e) {
+      const variantId = e.target.value;
+      console.log('🎯 Select principal mudou para:', variantId);
+      
+      // Atualiza o select do sticky
+      if (stickySelect.value !== variantId) {
+        stickySelect.value = variantId;
+        updateStickyProduct(variantId);
+        console.log('🔄 Sticky sincronizado com página principal');
+      }
+    });
+  }
+  
+  // LISTENER 3: Escuta eventos de mudança de variante da página
+  document.addEventListener('variant:change', function(e) {
+    if (e.detail && e.detail.variant) {
+      console.log('🎯 Evento variant:change detectado');
+      const variantId = e.detail.variant.id;
+      if (stickySelect.value !== variantId.toString()) {
+        stickySelect.value = variantId;
+        updateStickyProduct(variantId);
+      }
+    }
+  });
+  
+  console.log('✅ Todos os listeners do sticky instalados!');
+  
+  // Atualiza na carga inicial
+  const initialVariantId = stickySelect.value;
+  if (initialVariantId) {
+    console.log('🚀 Atualizando sticky com variante inicial:', initialVariantId);
+    updateStickyProduct(initialVariantId);
+  }
+  
+})();
+</script>

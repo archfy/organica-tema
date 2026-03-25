@@ -1,0 +1,114 @@
+{% liquid
+  assign product_resource = product
+
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% if product_resource != blank %}
+  <section
+    id="section-{{ section.id }}"
+    class="product-variant-picker-section"
+    style="
+      padding-top: {{ section.settings.padding-block-start }}px;
+      padding-bottom: {{ section.settings.padding-block-end }}px;
+      padding-left: {{ section.settings.padding-inline-start }}px;
+      padding-right: {{ section.settings.padding-inline-end }}px;
+      text-align: {{ section.settings.alignment }};
+    "
+  >
+  {% render 'variant-picker', product: product %}
+  </section>
+{% endif %}
+{% schema %}
+{
+  "name": "Product Variant Picker",
+  "tag": "section",
+  "class": "product-variant-picker",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Configure o seletor de variantes do produto"
+    },
+    {
+      "type": "select",
+      "id": "variant_style",
+      "label": "Estilo do seletor",
+      "options": [
+        {
+          "value": "dropdowns",
+          "label": "Dropdown"
+        },
+        {
+          "value": "buttons",
+          "label": "Botões"
+        }
+      ],
+      "default": "buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Exibir swatches",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alinhamento",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Espaçamento"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Padding superior",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Padding inferior",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Padding esquerdo",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Padding direito",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Variant Picker",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,687 @@
+{% comment %}
+  Seção Shopify: Bloco Intro 2 - Sophia.ArtistaQuantica -info-nutri
+  - Molde adaptável a qualquer novo produto.
+  - Título principal da seção (opcional) e botão customizável em uma div separada, centralizados.
+  - Coluna da esquerda com até duas imagens customizáveis (largura, espaçamento e título Rich Text, e AGORA com personalização de bordas).
+  - Coluna da direita com conteúdo de texto principal.
+  - O botão agora aparece no final do bloco, abaixo das colunas, com opções de alinhamento.
+  - Todas as classes CSS e IDs HTML são unicamente identificadas com a assinatura '-sophiaAQ-intro2-info-nutri'.
+{% endcomment %}
+
+{%- liquid
+  assign current_section_id_info_nutri = section.id
+  assign background_color_info_nutri = section.settings.background_color_info_nutri
+  assign border_color_info_nutri = section.settings.border_color_info_nutri
+  assign border_thickness_info_nutri = section.settings.border_thickness_info_nutri
+  assign border_radius_info_nutri = section.settings.border_radius_info_nutri
+  assign container_margin_left_info_nutri = section.settings.container_margin_left_info_nutri
+  assign container_margin_right_info_nutri = section.settings.container_margin_right_info_nutri
+  assign section_padding_top_info_nutri = section.settings.section_padding_top_info_nutri
+  assign section_padding_bottom_info_nutri = section.settings.section_padding_bottom_info_nutri
+  assign inner_padding_info_nutri = section.settings.inner_padding_info_nutri
+  assign content_vertical_align_info_nutri = section.settings.content_vertical_align_info_nutri
+  assign reverse_columns_info_nutri = section.settings.reverse_columns_info_nutri
+
+  assign main_title_content_info_nutri = section.settings.main_title_content_info_nutri
+  assign show_main_title_info_nutri = section.settings.show_main_title_info_nutri
+  assign title_font_size_desktop_info_nutri = section.settings.title_font_size_desktop_info_nutri
+  assign title_font_size_mobile_info_nutri = section.settings.title_font_size_mobile_info_nutri
+  assign title_line_height_info_nutri = section.settings.title_line_height_info_nutri
+  assign title_font_weight_info_nutri = section.settings.title_font_weight_info_nutri
+  assign title_color_info_nutri = section.settings.title_color_info_nutri
+  assign title_margin_top_info_nutri = section.settings.title_margin_top_info_nutri
+  assign title_margin_bottom_info_nutri = section.settings.title_margin_bottom_info_nutri
+
+  assign btn_text_info_nutri = section.settings.btn_text_info_nutri
+  assign btn_link_info_nutri = section.settings.btn_link_info_nutri
+  assign btn_color_info_nutri = section.settings.btn_color_info_nutri
+  assign btn_bg_color_info_nutri = section.settings.btn_bg_color_info_nutri
+  assign btn_border_radius_info_nutri = section.settings.btn_border_radius_info_nutri
+  assign show_button_info_nutri = section.settings.show_button_info_nutri
+  assign button_alignment_info_nutri = section.settings.button_alignment_info_nutri
+  assign button_margin_top_info_nutri = section.settings.button_margin_top_info_nutri
+  assign button_margin_bottom_info_nutri = section.settings.button_margin_bottom_info_nutri
+
+  assign image1_info_nutri = section.settings.image1_info_nutri
+  assign image2_info_nutri = section.settings.image2_info_nutri
+  assign image_spacing_info_nutri = section.settings.image_spacing_info_nutri
+  assign image_width_desktop_info_nutri = section.settings.image_width_desktop_info_nutri
+  assign image_width_mobile_info_nutri = section.settings.image_width_mobile_info_nutri
+  assign image_border_radius_info_nutri = section.settings.image_border_radius_info_nutri
+  assign image_border_thickness_info_nutri = section.settings.image_border_thickness_info_nutri
+  assign image_border_color_info_nutri = section.settings.image_border_color_info_nutri
+  assign image_top_text_info_nutri = section.settings.image_top_text_info_nutri
+  assign image_top_text_color_info_nutri = section.settings.image_top_text_color_info_nutri
+  assign image_top_text_font_size_desktop_info_nutri = section.settings.image_top_text_font_size_desktop_info_nutri
+  assign image_top_text_font_size_mobile_info_nutri = section.settings.image_top_text_font_size_mobile_info_nutri
+
+  assign main_text_content_info_nutri = section.settings.main_text_content_info_nutri
+  assign main_text_color_info_nutri = section.settings.main_text_color_info_nutri
+  assign main_text_font_size_desktop_info_nutri = section.settings.main_text_font_size_desktop_info_nutri
+  assign main_text_font_size_mobile_info_nutri = section.settings.main_text_font_size_mobile_info_nutri
+  assign main_text_line_height_info_nutri = section.settings.main_text_line_height_info_nutri
+  assign main_text_margin_top_info_nutri = section.settings.main_text_margin_top_info_nutri
+  assign main_text_margin_bottom_info_nutri = section.settings.main_text_margin_bottom_info_nutri
+%}
+
+{%- style -%}
+  .section-intro2-info-nutri {
+    background-color: {{ background_color_info_nutri }};
+    padding-top: {{ section_padding_top_info_nutri }}px;
+    padding-bottom: {{ section_padding_bottom_info_nutri }}px;
+    border-top: {{ border_thickness_info_nutri }}px solid {{ border_color_info_nutri }};
+    border-bottom: {{ border_thickness_info_nutri }}px solid {{ border_color_info_nutri }};
+    border-radius: {{ border_radius_info_nutri }}px;
+    margin-left: {{ container_margin_left_info_nutri }}px;
+    margin-right: {{ container_margin_right_info_nutri }}px;
+    overflow: hidden; /* Garante que o border-radius seja aplicado */
+  }
+
+  .intro2-container-info-nutri {
+    max-width: 1200px; /* Largura máxima do conteúdo */
+    margin: 0 auto;
+    padding: {{ inner_padding_info_nutri }}px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .intro2-main-title-wrapper-info-nutri {
+    width: 100%;
+    text-align: center;
+    margin-top: {{ title_margin_top_info_nutri }}px;
+    margin-bottom: {{ title_margin_bottom_info_nutri }}px;
+  }
+
+  .intro2-main-title-info-nutri {
+    font-size: {{ title_font_size_desktop_info_nutri }}px;
+    line-height: {{ title_line_height_info_nutri }};
+    font-weight: {{ title_font_weight_info_nutri }};
+    color: {{ title_color_info_nutri }};
+  }
+
+  .intro2-columns-wrapper-info-nutri {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    align-items: {{ content_vertical_align_info_nutri }};
+    {% if reverse_columns_info_nutri %}
+      flex-direction: row-reverse;
+    {% endif %}
+  }
+
+  .intro2-column-left-info-nutri {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: {{ image_spacing_info_nutri }}px;
+  }
+
+  .intro2-column-right-info-nutri {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: {{ image_border_thickness_info_nutri }}px solid {{ image_border_color_info_nutri }};
+    border-radius: {{ image_border_radius_info_nutri }}px;      
+    justify-content: center; /* Centraliza o texto verticalmente se a imagem for menor */
+  }
+
+  .intro2-image-container-info-nutri {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .intro2-image-caption-info-nutri {
+    color: {{ image_top_text_color_info_nutri }};
+    font-size: {{ image_top_text_font_size_desktop_info_nutri }}px;
+    text-align: center;
+    margin-bottom: 10px; /* Espaçamento entre texto e imagem */
+  }
+
+  .intro2-image-info-nutri {
+    width: {{ image_width_desktop_info_nutri }}%;
+    height: auto;
+    display: block;
+    border-radius: {{ image_border_radius_info_nutri }}px;
+    border: {{ image_border_thickness_info_nutri }}px solid {{ image_border_color_info_nutri }};
+  }
+
+  .intro2-main-text-content-info-nutri {
+    color: {{ main_text_color_info_nutri }};
+    font-size: {{ main_text_font_size_desktop_info_nutri }}px;
+    line-height: {{ main_text_line_height_info_nutri }};
+    margin-top: {{ main_text_margin_top_info_nutri }}px;
+    margin-bottom: {{ main_text_margin_bottom_info_nutri }}px;
+    padding: 40px;
+  }
+
+  .intro2-button-wrapper-info-nutri {
+    width: 100%;
+    text-align: {{ button_alignment_info_nutri }};
+    margin-top: {{ button_margin_top_info_nutri }}px;
+    margin-bottom: {{ button_margin_bottom_info_nutri }}px;
+  }
+
+  .intro2-button-info-nutri {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: {{ btn_bg_color_info_nutri }};
+    color: {{ btn_color_info_nutri }} !important;
+    text-decoration: none;
+    border-radius: {{ btn_border_radius_info_nutri }}px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .intro2-button-info-nutri:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .intro2-columns-wrapper-info-nutri {
+      flex-direction: column;
+    }
+
+    .intro2-image-info-nutri {
+      width: 152%;
+      margin-left: auto;
+    margin-right: auto;
+   
+    }
+
+    .intro2-main-title-info-nutri {
+      font-size: {{ title_font_size_mobile_info_nutri }}px;
+    }
+
+    .intro2-image-caption-info-nutri {
+      font-size: {{ image_top_text_font_size_mobile_info_nutri }}px;
+    }
+
+    .intro2-main-text-content-info-nutri {
+      font-size: {{ main_text_font_size_mobile_info_nutri }}px;
+    }
+
+    {% if reverse_columns_info_nutri %}
+      .intro2-columns-wrapper-info-nutri {
+        flex-direction: column; /* Em mobile, sempre em coluna, a ordem reversa não se aplica bem visualmente aqui */
+      }
+    {% endif %}
+  }
+
+  @media (min-width: 375px) and (max-width: 375px) {
+.intro2-image-info-nutri {
+      width: 121%;
+}
+  }
+{%- endstyle -%}
+
+<div class="section-intro2-info-nutri" id="SectionIntro2-{{ current_section_id_info_nutri }}">
+  <div class="intro2-container-info-nutri">
+    {% if show_main_title_info_nutri and main_title_content_info_nutri != blank %}
+      <div class="intro2-main-title-wrapper-info-nutri">
+        <h2 class="intro2-main-title-info-nutri">{{ main_title_content_info_nutri }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="intro2-columns-wrapper-info-nutri">
+      <div class="intro2-column-left-info-nutri">
+        {% if image1_info_nutri != blank %}
+          <div class="intro2-image-container-info-nutri">
+            {% if image_top_text_info_nutri != blank %}
+              <div class="intro2-image-caption-info-nutri">{{ image_top_text_info_nutri }}</div>
+            {% endif %}
+            <img src="{{ image1_info_nutri | image_url: width: 600 }}"
+                 srcset="{{ image1_info_nutri | image_url: width: 400 }} 400w,
+                         {{ image1_info_nutri | image_url: width: 600 }} 600w,
+                         {{ image1_info_nutri | image_url: width: 800 }} 800w,
+                         {{ image1_info_nutri | image_url: width: 1000 }} 1000w"
+                 sizes="(max-width: 768px) {{ image_width_mobile_info_nutri }}vw, {{ image_width_desktop_info_nutri }}vw"
+                 alt="{{ image1_info_nutri.alt | default: 'Imagem 1' }}"
+                 class="intro2-image-info-nutri"
+                 loading="lazy">
+          </div>
+        {% endif %}
+        {% if image2_info_nutri != blank %}
+          <div class="intro2-image-container-info-nutri">
+            <img src="{{ image2_info_nutri | image_url: width: 600 }}"
+                 srcset="{{ image2_info_nutri | image_url: width: 400 }} 400w,
+                         {{ image2_info_nutri | image_url: width: 600 }} 600w,
+                         {{ image2_info_nutri | image_url: width: 800 }} 800w,
+                         {{ image2_info_nutri | image_url: width: 1000 }} 1000w"
+                 sizes="(max-width: 768px) {{ image_width_mobile_info_nutri }}vw, {{ image_width_desktop_info_nutri }}vw"
+                 alt="{{ image2_info_nutri.alt | default: 'Imagem 2' }}"
+                 class="intro2-image-info-nutri"
+                 loading="lazy">
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="intro2-column-right-info-nutri">
+        <div class="intro2-main-text-content-info-nutri">
+          {{ main_text_content_info_nutri }}
+        </div>
+      </div>
+    </div>
+
+    {% if show_button_info_nutri and btn_text_info_nutri != blank %}
+      <div class="intro2-button-wrapper-info-nutri">
+        <a href="{{ btn_link_info_nutri }}" class="intro2-button-info-nutri">
+          {{ btn_text_info_nutri }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Colágeno V. Info Nutri",
+  "tag": "section",
+  "class": "section-intro2-info-nutri",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais do Bloco"
+    },
+    {
+      "type": "color",
+      "id": "background_color_info_nutri",
+      "label": "Cor de Fundo",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "border_color_info_nutri",
+      "label": "Cor da Borda",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "border_thickness_info_nutri",
+      "label": "Espessura da Borda",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 0,
+      "info": "Define a espessura da borda superior e inferior do bloco. Defina como 0 para não ter borda."
+    },
+    {
+      "type": "range",
+      "id": "border_radius_info_nutri",
+      "label": "Raio da Borda do Bloco",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0,
+      "info": "Arredonda os cantos do bloco. Defina como 0 para cantos retos."
+    },
+    {
+      "type": "range",
+      "id": "container_margin_left_info_nutri",
+      "label": "Margem Esquerda do Contêiner",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0,
+      "info": "Margem externa à esquerda do bloco."
+    },
+    {
+      "type": "range",
+      "id": "container_margin_right_info_nutri",
+      "label": "Margem Direita do Contêiner",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0,
+      "info": "Margem externa à direita do bloco."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_info_nutri",
+      "label": "Espaçamento Interno Superior",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 40,
+      "info": "Espaçamento do conteúdo ao topo do bloco."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_info_nutri",
+      "label": "Espaçamento Interno Inferior",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 40,
+      "info": "Espaçamento do conteúdo à base do bloco."
+    },
+    {
+      "type": "range",
+      "id": "inner_padding_info_nutri",
+      "label": "Espaçamento Interno Lateral",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20,
+      "info": "Espaçamento lateral do conteúdo dentro do bloco."
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align_info_nutri",
+      "label": "Alinhamento Vertical do Conteúdo",
+      "options": [
+        {"value": "flex-start", "label": "Topo"},
+        {"value": "center", "label": "Centro"},
+        {"value": "flex-end", "label": "Fundo"}
+      ],
+      "default": "flex-start",
+      "info": "Alinha verticalmente o conteúdo das colunas."
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_columns_info_nutri",
+      "label": "Inverter Ordem das Colunas (Desktop)",
+      "default": false,
+      "info": "A coluna da direita irá para a esquerda e vice-versa (apenas em desktop)."
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Título Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_main_title_info_nutri",
+      "label": "Mostrar Título Principal",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "main_title_content_info_nutri",
+      "label": "Conteúdo do Título Principal",
+      "default": "<h2>Título Destaque Aqui!</h2>",
+      "info": "Use este campo para um título impactante na parte superior do bloco."
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_desktop_info_nutri",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 20, "max": 80, "step": 1, "unit": "px", "default": 48
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_mobile_info_nutri",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 16, "max": 60, "step": 1, "unit": "px", "default": 32
+    },
+    {
+      "type": "range",
+      "id": "title_line_height_info_nutri",
+      "label": "Altura da Linha",
+      "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.2
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight_info_nutri",
+      "label": "Peso da Fonte",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Médio"},
+        {"value": "600", "label": "Semi-bold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "title_color_info_nutri",
+      "label": "Cor do Título",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_top_info_nutri",
+      "label": "Margem Superior do Título",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom_info_nutri",
+      "label": "Margem Inferior do Título",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Imagem (Esquerda)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image1_info_nutri",
+      "label": "Primeira Imagem",
+      "info": "Principal imagem a ser exibida na coluna da esquerda."
+    },
+    {
+      "type": "image_picker",
+      "id": "image2_info_nutri",
+      "label": "Segunda Imagem (Opcional)",
+      "info": "Uma imagem secundária que aparece abaixo da primeira."
+    },
+    {
+      "type": "richtext",
+      "id": "image_top_text_info_nutri",
+      "label": "Texto Acima da Primeira Imagem",
+      "default": "<p>Subtítulo da Imagem</p>",
+      "info": "Um texto curto ou título exibido acima da primeira imagem."
+    },
+    {
+      "type": "color",
+      "id": "image_top_text_color_info_nutri",
+      "label": "Cor do Texto Acima da Imagem",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "image_top_text_font_size_desktop_info_nutri",
+      "label": "Tamanho da Fonte do Texto da Imagem (Desktop)",
+      "min": 10, "max": 30, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "image_top_text_font_size_mobile_info_nutri",
+      "label": "Tamanho da Fonte do Texto da Imagem (Mobile)",
+      "min": 8, "max": 24, "step": 1, "unit": "px", "default": 14
+    },
+    {
+      "type": "range",
+      "id": "image_spacing_info_nutri",
+      "label": "Espaçamento Entre Imagens",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20,
+      "info": "Define o espaço entre a primeira e a segunda imagem."
+    },
+    {
+      "type": "range",
+      "id": "image_width_desktop_info_nutri",
+      "label": "Largura das Imagens (Desktop)",
+      "min": 50, "max": 100, "step": 1, "unit": "%", "default": 100,
+      "info": "Largura das imagens dentro da coluna da esquerda."
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile_info_nutri",
+      "label": "Largura das Imagens (Mobile)",
+      "min": 50, "max": 100, "step": 1, "unit": "%", "default": 100,
+      "info": "Largura das imagens dentro da coluna em dispositivos móveis."
+    },
+    {
+      "type": "header",
+      "content": "Bordas das Imagens"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius_info_nutri",
+      "label": "Raio da Borda das Imagens",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0,
+      "info": "Arredonda os cantos das imagens."
+    },
+    {
+      "type": "range",
+      "id": "image_border_thickness_info_nutri",
+      "label": "Espessura da Borda das Imagens",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 0,
+      "info": "Define a espessura da borda. Defina como 0 para não ter borda."
+    },
+    {
+      "type": "color",
+      "id": "image_border_color_info_nutri",
+      "label": "Cor da Borda das Imagens",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Texto (Direita)"
+    },
+    {
+      "type": "richtext",
+      "id": "main_text_content_info_nutri",
+      "label": "Conteúdo Principal de Texto",
+      "default": "<p>Este espaço é ideal para apresentar detalhes sobre o seu produto, destacando sua proposta de valor e características essenciais.</p><ul><li>Ponto chave 1: Benefício claro.</li><li>Ponto chave 2: Vantagem competitiva.</li><li>Ponto chave 3: Chamada para ação.</li></ul>",
+      "info": "O texto principal que descreve o produto ou serviço."
+    },
+    {
+      "type": "color",
+      "id": "main_text_color_info_nutri",
+      "label": "Cor do Texto Principal",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "main_text_font_size_desktop_info_nutri",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 14, "max": 30, "step": 1, "unit": "px", "default": 18
+    },
+    {
+      "type": "range",
+      "id": "main_text_font_size_mobile_info_nutri",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "main_text_line_height_info_nutri",
+      "label": "Altura da Linha",
+      "min": 1.0, "max": 2.5, "step": 0.1, "default": 1.6
+    },
+    {
+      "type": "range",
+      "id": "main_text_margin_top_info_nutri",
+      "label": "Margem Superior do Texto",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "range",
+      "id": "main_text_margin_bottom_info_nutri",
+      "label": "Margem Inferior do Texto",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_info_nutri",
+      "label": "Mostrar Botão",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btn_text_info_nutri",
+      "label": "Texto do Botão",
+      "default": "Saiba Mais Agora!"
+    },
+    {
+      "type": "url",
+      "id": "btn_link_info_nutri",
+      "label": "Link do Botão",
+      "info": "URL para onde o botão irá direcionar."
+    },
+    {
+      "type": "color",
+      "id": "btn_color_info_nutri",
+      "label": "Cor do Texto do Botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color_info_nutri",
+      "label": "Cor de Fundo do Botão",
+      "default": "#007bff"
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius_info_nutri",
+      "label": "Raio da Borda do Botão",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 5
+    },
+    {
+      "type": "select",
+      "id": "button_alignment_info_nutri",
+      "label": "Alinhamento do Botão",
+      "options": [
+        {"value": "left", "label": "Esquerda"},
+        {"value": "center", "label": "Centro"},
+        {"value": "right", "label": "Direita"}
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "button_margin_top_info_nutri",
+      "label": "Margem Superior do Botão",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_margin_bottom_info_nutri",
+      "label": "Margem Inferior do Botão",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colágeno V. Info Nutri",
+      "category": "Informações",
+      "settings": {
+        "background_color_info_nutri": "#f8f8f8",
+        "border_color_info_nutri": "#e0e0e0",
+        "border_thickness_info_nutri": 0,
+        "border_radius_info_nutri": 0,
+        "container_margin_left_info_nutri": 0,
+        "container_margin_right_info_nutri": 0,
+        "section_padding_top_info_nutri": 40,
+        "section_padding_bottom_info_nutri": 40,
+        "inner_padding_info_nutri": 20,
+        "content_vertical_align_info_nutri": "flex-start",
+        "reverse_columns_info_nutri": false,
+        "show_main_title_info_nutri": true,
+        "main_title_content_info_nutri": "<h2>Informações Nutricionais Detalhadas</h2>",
+        "title_font_size_desktop_info_nutri": 48,
+        "title_font_size_mobile_info_nutri": 32,
+        "title_line_height_info_nutri": 1.2,
+        "title_font_weight_info_nutri": "700",
+        "title_color_info_nutri": "#333333",
+        "title_margin_top_info_nutri": 0,
+        "title_margin_bottom_info_nutri": 20,
+        "image_top_text_info_nutri": "<p>Benefícios do Produto</p>",
+        "image_top_text_color_info_nutri": "#555555",
+        "image_top_text_font_size_desktop_info_nutri": 16,
+        "image_top_text_font_size_mobile_info_nutri": 14,
+        "image_spacing_info_nutri": 20,
+        "image_width_desktop_info_nutri": 100,
+        "image_width_mobile_info_nutri": 100,
+        "image_border_radius_info_nutri": 0,
+        "image_border_thickness_info_nutri": 0,
+        "image_border_color_info_nutri": "#cccccc",
+        "main_text_content_info_nutri": "<p>Este espaço é ideal para apresentar detalhes sobre o seu produto, destacando sua proposta de valor e características essenciais.</p><ul><li>Rico em nutrientes essenciais.</li><li>Ideal para uma dieta equilibrada.</li><li>Promove bem-estar e vitalidade.</li></ul>",
+        "main_text_color_info_nutri": "#666666",
+        "main_text_font_size_desktop_info_nutri": 18,
+        "main_text_font_size_mobile_info_nutri": 16,
+        "main_text_line_height_info_nutri": 1.6,
+        "main_text_margin_top_info_nutri": 0,
+        "main_text_margin_bottom_info_nutri": 0,
+        "show_button_info_nutri": true,
+        "btn_text_info_nutri": "Ver Tabela Nutricional Completa",
+        "btn_link_info_nutri": "#",
+        "btn_color_info_nutri": "#ffffff",
+        "btn_bg_color_info_nutri": "#28a745",
+        "btn_border_radius_info_nutri": 5,
+        "button_alignment_info_nutri": "center",
+        "button_margin_top_info_nutri": 30,
+        "button_margin_bottom_info_nutri": 0
+      }
+    }
+  ]
+}
+{% endschema %}

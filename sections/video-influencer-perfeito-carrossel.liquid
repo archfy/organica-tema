@@ -1,0 +1,1467 @@
+{%- comment -%}
+  Nave Aurora 3: Bloco "Video Influencer Autônomo" - Versão 'Perfeita'
+  Conceito: Catalisador de Conversão do Influenciador
+  Foco: Imersão, Performance, Usabilidade Inteligente e Otimização Proativa.
+  Otimizado por Sophia (base) com base em compreensão total e nível proativo.
+  **MODIFICAÇÃO: Área do vídeo convertida para um carrossel de até 6 vídeos.**
+  **EVOLUÇÃO 2: Arquitetura Unificada e Funcional.**
+{%- endcomment -%}
+
+
+{%- liquid
+assign header_image1_img_width_x40 = section.settings.header_image1_img_width_x40
+assign header_image1_img_height_x40 = section.settings.header_image1_img_height_x40
+assign header_image1_img_width_mobile_x40 = section.settings.header_image1_img_width_mobile_x40
+assign header_image1_img_height_mobile_x40 = section.settings.header_image1_img_height_mobile_x40
+-%}
+
+{%- style -%}
+ <style>
+  /* RESET & BASE */
+  .pg-2x8, .blk-2x8, .blk-2__hdrx8, .blk-2__ttlx8, .blk-2__subx8,
+  .blk-2__colsx8, .blk-2__colx8, .blk-2__col-cntx8, .blk-2__col-contentx8,
+  .blk-2__col-ttlx8, .blk-2__col-subx8,
+  .btn-2-wrapx8, .btn-2x8,
+  .video-containerx8, .video-containerx8 video, .video-poster-overlayx8 {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  :root {
+  --video-width-x8: {{ section.settings.video_width | default: 360 }}px; /* Alterado para múltiplo de 9 */
+  --video-height-x8: {{ section.settings.video_height | default: 640 }}px; /* Alterado para múltiplo de 16 */
+  --video-object-fit-x8: {{ section.settings.video_object_fit | default: 'cover' }};
+  --video-brd-radius-x8: {{ section.settings.video_brd_radius | default: 12 }}px;
+}
+
+  .pg-2x8{
+    border-radius: 20px;
+    margin: 0 10px;
+  }
+
+  /* BLOCO PRINCIPAL */
+  .blk-2x8 {
+    width: 100%;
+    margin: var(--margin-top-1x8) auto var(--margin-bottom-1x8) auto;
+    background-color: {{ section.settings.background_colorx8 }};
+    border: {{ section.settings.brd_width_1x8 }}px solid {{ section.settings.brd_color_1x8 }};
+    border-radius: {{ section.settings.brd_radius_1x8 }}px;
+    padding: {{ section.settings.padding_top_1x8 }}px {{ section.settings.padding_right_1x8 }}px {{ section.settings.padding_bottom_1x8 }}px 0px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* TÍTULOS E IMAGEM */
+  {%- if section.settings.show_imagem_titulox8 and section.settings.banner_image != blank -%}
+  .blk-2__hdr-imgx8 { display: block; }
+  .blk-2__hdr-imgx8 img { width: 100%; height:auto;}
+  {%- endif -%}
+  .blk-2__ttlx8 { color: {{ section.settings.hd_colorx8 }}; font-size: {{ section.settings.title_font_sizex8 }}px; font-weight: {{ section.settings.title_font_weightx8 }}; line-height: {{ section.settings.title_line_heightx8 }}px; letter-spacing: {{ section.settings.title_letter_spacingx8 }}px; text-align: center; margin-bottom: 10px; }
+  .blk-2__subx8 { color: {{ section.settings.sub_hd_colorx8 }}; font-size: {{ section.settings.sub_font_sizex8 }}px; font-weight: {{ section.settings.sub_font_weightx8 }}; line-height: {{ section.settings.sub_line_heightx8 }}px; letter-spacing: {{ section.settings.sub_letter_spacingx8 }}px; text-align: center; margin-bottom: 0px!important; }
+
+  /* --- CARROSSEL CORRIGIDO --- */
+  .video-carousel-containerx8 {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+  }
+  .video-carousel-wrapperx8 {
+    overflow: visible; /* CORREÇÃO: alterado de hidden para visible */
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .video-carousel-trackx8 {
+    display: flex;
+    position: relative;
+    height: 100%;
+    align-items: center;
+    transition: transform 0.5s ease;
+    gap: 20px;
+  }
+  .video-carousel-slidex8 {
+    flex-shrink: 0;
+    position: relative;
+    width: var(--video-width-x8);
+    height: var(--video-height-x8);
+    transition: all 0.3s ease;
+  }
+  .video-containerx8 {
+    width: 100%;
+    height: 100%;
+    position: relative; /* CORREÇÃO: adicionado */
+    border-radius: var(--video-brd-radius-x8);
+    overflow: hidden;
+    background: #000; /* CORREÇÃO: fundo para áreas não cobertas */
+  }
+  /* CORREÇÃO CRÍTICA - VISIBILIDADE DOS VÍDEOS */
+  .video-containerx8 video,
+  .video-containerx8 iframe {
+    display: block; /* CORREÇÃO: garante renderização */
+    width: 100%;
+    height: 100%;
+    object-fit: var(--video-object-fit-x8);
+    border-radius: var(--video-brd-radius-x8);
+    position: relative; /* CORREÇÃO: alterado de absolute */
+    z-index: 1;
+  }
+  .video-poster-overlayx8 { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: opacity 0.3s ease; 
+    z-index: 2;
+    border-radius: inherit; 
+  }
+  .video-containerx8.is-playing .video-poster-overlayx8 { 
+    opacity: 0; 
+    pointer-events: none; 
+  }
+  .video-poster-overlayx8 .play-icon { 
+    fill: white; 
+    width: 60px; 
+    height: 60px; 
+    opacity: 0.8; 
+  }
+  .video-containerx8.no-video-msg { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 200px; 
+    background-color: #f0f0f0; 
+    color: #666; 
+    font-size: 1.2em; 
+    text-align: center; 
+    border: 1px dashed #ccc; 
+    padding: 20px; 
+    height: 100%; 
+    border-radius: var(--video-brd-radius-x8); 
+  }
+  
+  /* NAVEGAÇÃO */
+  .video-carousel-button { 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    background-color: rgba(0, 0, 0, 0.5); 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    z-index: 10; 
+    font-size: 1.5em; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 40px; 
+    height: 40px; 
+  }
+  .video-carousel-button--prevx8 { left: 10px; }
+  .video-carousel-button--nextx8 { right: 10px; }
+  .video-carousel-button:hover { background-color: rgba(0, 0, 0, 0.8); }
+  .video-carousel-dotsx8 { 
+    position: absolute; 
+    bottom: 10px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    display: flex; 
+    gap: 8px; 
+    z-index: 10; 
+  }
+  .video-carousel-dotx8 { 
+    width: 10px; 
+    height: 10px; 
+    background-color: rgba(255, 255, 255, 0.5); 
+    border-radius: 50%; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+  }
+  .video-carousel-dotx8.active { 
+    background-color: white; 
+  }
+
+  /* COLUNAS E BOTÃO */
+  .blk-2__colsx8 { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
+  .blk-2__colx8 { flex: 1 1 calc(50% - 10px); max-width: calc(50% - 10px); display: flex; flex-direction: row; align-items: center; gap: 15px; padding: 20px; border: {{ section.settings.brd_width_2x8 }}px solid; border-radius: {{ section.settings.brd_radius_2x8 }}px; }
+  .blk-2__colx8:nth-child(-n + 2) { border-color: {{ section.settings.brd_color_2x8 }}; background-color: {{ section.settings.background_color_2x8 }}; }
+  .blk-2__colx8:nth-child(n + 3):nth-child(-n + 4) { border-color: {{ section.settings.brd_color_3x8 }}; background-color: {{ section.settings.background_color_3x8 }}; }
+  .blk-2__col-imgx8 { flex-shrink: 0; width: {{ section.settings.col_img_widthx8 }}px; height: {{ section.settings.col_img_heightx8 }}px; }
+  .blk-2__col-imgx8 img { width: 100%; height: 100%; object-fit: contain; }
+  .blk-2__col-contentx8 { flex-grow: 1; }
+  .blk-2__col-ttlx8 { color: {{ section.settings.col_ttl_colorx8 }}; font-size: {{ section.settings.col_title_font_sizex8 }}px; font-weight: {{ section.settings.col_title_font_weightx8 }}; line-height: {{ section.settings.col_title_line_heightx8 }}px; margin-bottom: 5px; }
+  .blk-2__col-subx8 { color: {{ section.settings.col_sub_colorx8 }}; font-size: {{ section.settings.col_sub_font_sizex8 }}px; font-weight: {{ section.settings.col_sub_font_weightx8 }}; line-height: {{ section.settings.col_sub_line_heightx8 }}px; }
+  .btn-2-wrapx8 { width: 100%; text-align: center; margin-top: 0px; }
+  .btn-2x8 { display: inline-block; padding: {{ section.settings.btn_padding_topx8 }}px {{ section.settings.btn_padding_rightx8 }}px {{ section.settings.btn_padding_bottomx8 }}px {{ section.settings.btn_padding_leftx8 }}px; background-color: {{ section.settings.btn_bgx8 }}; color: {{ section.settings.btn_txt_clrx8 }}; text-decoration: none; border: {{ section.settings.btn_brd_widthx8 }}px solid {{ section.settings.btn_brd_colorx8 }}; border-radius: {{ section.settings.btn_radiusx8 }}px; font-size: {{ section.settings.btn_font_sizex8 }}px; font-weight: {{ section.settings.btn_font_weightx8 }}; width:250px; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+  .btn-2x8:hover { background-color: {{ section.settings.btn_hover_bgx8 }}; color: {{ section.settings.btn_hover_txt_clrx8 }}; border-color: {{ section.settings.btn_hover_brd_colorx8 }}; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); }
+
+  /* MEDIA QUERIES */
+  @media screen and (min-width: 48em) {
+    .blk-2x8 { flex-direction: column; align-items: center; }
+    {%- if section.settings.show_imagem_titulox8 and section.settings.banner_image != blank -%}
+    .blk-2__hdr-imgx8 img { width:{{ header_image1_img_width_x40 }}%; margin-left: auto;margin-right: auto; }
+    {%- endif -%}
+    .blk-2__hdrx8 { max-width: 460px; color: {{ section.settings.sub_hd_colorx8 }}; font-size: {{ section.settings.sub_font_sizex8 }}px; font-weight: {{ section.settings.sub_font_weightx8 }}; line-height: {{ section.settings.sub_line_heightx8 }}px; letter-spacing: {{ section.settings.sub_letter_spacingx8 }}px; }
+    .blk-2__colsx8 { flex-wrap: nowrap; justify-content: space-around; }
+    .blk-2__colx8 { flex: 1; max-width: none; }
+    
+    /* Ajuste para a proporção 9:16 */
+  .video-carousel-slidex8 {
+     flex: 0 0 calc(var(--video-width-x8) * 0.95); /* 85% do tamanho original */
+  width: calc(var(--video-width-x8) * 0.95);
+  height: calc((var(--video-width-x8) * 1.7778) * 0.95); /* Mantém 9:16 com redução */
+    opacity: 0.7;
+    margin: 0 10px;
+  }
+
+   .video-carousel-slidex8.is-active-slide {
+    height: calc(var(--video-width-x8) * 1.7778); /* Mantém a mesma proporção */
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+  
+  /* Garante que o container do vídeo mantenha a proporção */
+  .video-containerx8 {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 9/16; /* Nova propriedade CSS que força a proporção */
+  }
+
+  }
+
+  @media screen and (max-width: 47.9375em) {
+    .blk-2x8 { padding: {{ section.settings.padding_top_1_mobilex8 }}px {{ section.settings.padding_right_1_mobilex8 }}px {{ section.settings.padding_bottom_1_mobilex8 }}px 0px; }
+    {%- if section.settings.show_imagem_titulox8 and section.settings.banner_image != blank -%}
+    .blk-2__hdr-imgx8 { width: {{ header_image1_img_width_mobile_x40 }}px; }
+    .blk-2__hdr-imgx8 img { height: auto; }
+    {%- endif -%}
+    .blk-2__hdrx8 { max-width: 312px; }
+    .blk-2__ttlx8 { font-size: {{ section.settings.title_font_size_mobilex8 }}px; line-height: {{ section.settings.title_line_height_mobilex8 }}px; }
+    .blk-2__subx8 { font-size: {{ section.settings.sub_font_size_mobilex8 }}px; line-height: {{ section.settings.sub_line_height_mobilex8 }}px; }
+    .blk-2__colsx8 { flex-direction: column; gap: 15px; }
+    .blk-2__colx8 { max-width: 100%; flex-direction: column; text-align: center; }
+    
+    /* Carrossel Mobile */
+    .video-containerx8 {
+    width: 100%;
+    height: 100%;
+    }
+    .video-containerx8 video,
+  .video-containerx8 iframe {
+    width: 100%;
+  }
+    .video-carousel-containerx8 { height: 500px; margin-top:-45px;}
+    .video-carousel-slidex8 {
+      flex-basis: 70%;
+      height: 80%;
+      margin: 0 6px;
+      margin-right: 6px;
+      margin-left: 6px;
+    }
+    .is-active-slide{
+      height: 90%;
+    }
+    {% if section.settings.dots_carrossel_mobile == false %}
+    .video-carousel-dotsx8{ display:none;}
+    {% endif %}
+    {% if section.settings.botao_carrossel_mobile == false %}
+    .video-carousel-button { display: none; }
+    {% endif %}
+  }
+
+  /* EFEITO INFINITO (CLONES) */
+  .video-carousel-slidex8.clone {
+    display: none;
+  }
+  
+  @media (min-width: 769px) {
+    .video-carousel-slidex8.clone {
+      display: block;
+    }
+  }
+</style>
+
+  
+{%- endstyle -%}
+
+<section class="pg-2x8">
+  <div class="blk-2x8">
+
+     {%- if section.settings.show_imagem_titulox8 and section.settings.banner_image != blank -%}
+    <div class="blk-2__hdr-imgx8">
+        <img
+            src="{{ section.settings.banner_image | image_url: width: 800 }}"
+            srcset="
+                {{ section.settings.banner_image | image_url: width: 400 }} 400w,
+                {{ section.settings.banner_image | image_url: width: 800 }} 800w,
+                {{ section.settings.banner_image | image_url: width: 1200 }} 1200w
+            "
+            sizes="(max-width: 47.9375em) {{ header_image1_img_width_mobile_x40 }}px, {{ header_image1_img_width_x40 }}%"
+            alt="{{ section.settings.banner_image.alt | escape }}"
+            loading="lazy"
+            width="{{ header_image1_img_width_x40 }}"
+            height="{{ header_image1_img_height_x40 }}"
+        >
+    </div>
+    {%- endif -%}
+
+    <div class="blk-2__hdrx8">
+      {%- if section.settings.show_titlex8 -%}
+        <h2 class="blk-2__ttlx8">{{ section.settings.main_title_text }}</h2>
+      {%- endif -%}
+      {%- if section.settings.show_subtitlex8 -%}
+        <p class="blk-2__subx8">{{ section.settings.main_subtitle_text }}</p>
+      {%- endif -%}
+    </div>
+
+   
+
+
+          {%- if section.settings.show_composicaox8 -%}
+      <div class="blk-2__colsx8">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'column' -%}
+              <div class="blk-2__colx8" {{ block.shopify_attributes }}>
+                {%- if block.settings.column_image != blank -%}
+                  <div class="blk-2__col-imgx8">
+                    <img
+                      src="{{ block.settings.column_image | image_url: width: 100 }}"
+                      alt="{{ block.settings.column_image.alt | escape }}"
+                      loading="lazy"
+                      width="100"
+                      height="100"
+                    >
+                  </div>
+                {%- endif -%}
+                <div class="blk-2__col-contentx8">
+                  <h3 class="blk-2__col-ttlx8">{{ block.settings.column_title }}</h3>
+                  <p class="blk-2__col-subx8">{{ block.settings.column_subtitle }}</p>
+                </div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+
+    {%- if section.settings.show_videox8 -%}
+  <div class="video-carousel-containerx8" data-section-id="{{ section.id }}" data-above-fold="{% if section.settings.section_position == 'first_section' %}true{% else %}false{% endif %}">
+    <div class="video-carousel-wrapperx8">
+      <div class="video-carousel-trackx8">
+        {%- assign has_any_video = false -%}
+        {%- assign video_count = 0 -%}
+        
+        <!-- Primeiro loop para slides originais -->
+        {%- for i in (1..6) -%}
+          {%- assign video_url_setting_name = 'influencer_video_' | append: i -%}
+          {%- assign video_poster_setting_name = 'video_poster_' | append: i -%}
+          {%- assign video_url = section.settings[video_url_setting_name] -%}
+          {%- assign video_poster = section.settings[video_poster_setting_name] -%}
+
+          {%- if video_url != blank -%}
+            {%- assign has_any_video = true -%}
+            {%- assign video_count = video_count | plus: 1 -%}
+            <div class="video-carousel-slidex8" data-video-index="{{ forloop.index0 }}" data-original-slide>
+              <div class="video-containerx8">
+                {%- assign video_id = video_url | split: '/' | last -%}
+                {%- assign provider = '' -%}
+                
+                {%- if video_url contains 'youtube.com' or video_url contains 'youtu.be' -%}
+                  {%- assign provider = 'youtube' -%}
+                  {%- assign video_id = video_url | split: 'v=' | last | split: '&' | first -%}
+                  {%- if video_url contains 'youtu.be' -%}
+                    {%- assign video_id = video_url | split: '/' | last -%}
+                  {%- endif -%}
+                {%- elsif video_url contains 'vimeo.com' -%}
+                  {%- assign provider = 'vimeo' -%}
+                  {%- assign video_id = video_url | split: '/' | last -%}
+                {%- else -%}
+                  {%- assign provider = 'direct' -%}
+                {%- endif -%}
+
+                {%- if provider == 'youtube' or provider == 'vimeo' -%}
+                  <iframe
+                    src="{% if provider == 'youtube' %}https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&origin={{ request.host }}&controls={{ section.settings.video_controls | replace: 'true', '1' | replace: 'false', '0' }}&autoplay=0&loop={{ section.settings.video_loop | replace: 'true', '1' | replace: 'false', '0' }}&mute={{ section.settings.video_muted | replace: 'true', '1' | replace: 'false', '0' }}&playsinline=1{% elsif provider == 'vimeo' %}https://player.vimeo.com/video/{{ video_id }}?autoplay=0&loop={{ section.settings.video_loop | replace: 'true', '1' | replace: 'false', '0' }}&muted={{ section.settings.video_muted | replace: 'true', '1' | replace: 'false', '0' }}&playsinline=1&controls={{ section.settings.video_controls | replace: 'true', '1' | replace: 'false', '0' }}{% endif %}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                    id="Video-{{ section.id }}-{{ forloop.index }}"
+                    width="{{ section.settings.video_width }}"
+                    height="{{ section.settings.video_height }}"
+                    style="object-fit: {{ section.settings.video_object_fit }}; border-radius: {{ section.settings.video_brd_radius }}px;"
+                    tabindex="-1"
+                    loading="lazy"
+                    data-video-provider="{{ provider }}"
+                  ></iframe>
+                {%- else -%}
+                  <video
+                    id="Video-{{ section.id }}-{{ forloop.index }}"
+                    {% if section.settings.video_autoplay %}autoplay{% endif %}
+                    {% if section.settings.video_loop %}loop{% endif %}
+                    {% if section.settings.video_muted %}muted{% endif %}
+                    playsinline
+                    controls="{{ section.settings.video_controls }}"
+                    preload="none"
+                    width="{{ section.settings.video_width }}"
+                    height="{{ section.settings.video_height }}"
+                    style="object-fit: {{ section.settings.video_object_fit }}; border-radius: {{ section.settings.video_brd_radius }}px;"
+                    {% if video_poster != blank %}
+                      poster="{{ video_poster | image_url: width: 1500, format: 'pjpg' }}"
+                    {% endif %}
+                    tabindex="-1"
+                    loading="lazy"
+                    data-video-provider="direct"
+                  >
+                    <source src="{{ video_url }}" type='video/mp4; codecs="avc1.64001F, mp4a.40.2"'>
+                    <source src="{{ video_url }}" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                  </video>
+                {%- endif -%}
+
+                {%- if section.settings.video_autoplay == false and video_poster != blank -%}
+                  <div class="video-poster-overlayx8" data-video-target="#Video-{{ section.id }}-{{ forloop.index }}">
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        
+        <!-- Segundo loop para clones dos slides (apenas se houver vídeos) -->
+        {%- if has_any_video -%}
+          {%- for i in (1..6) -%}
+            {%- assign video_url_setting_name = 'influencer_video_' | append: i -%}
+            {%- assign video_poster_setting_name = 'video_poster_' | append: i -%}
+            {%- assign video_url = section.settings[video_url_setting_name] -%}
+            {%- assign video_poster = section.settings[video_poster_setting_name] -%}
+
+            {%- if video_url != blank -%}
+              <div class="video-carousel-slidex8 clone" data-video-index="{{ forloop.index0 }}" data-clone-slide>
+                <div class="video-containerx8">
+                  {%- assign video_id = video_url | split: '/' | last -%}
+                  {%- assign provider = '' -%}
+                  
+                  {%- if video_url contains 'youtube.com' or video_url contains 'youtu.be' -%}
+                    {%- assign provider = 'youtube' -%}
+                    {%- assign video_id = video_url | split: 'v=' | last | split: '&' | first -%}
+                    {%- if video_url contains 'youtu.be' -%}
+                      {%- assign video_id = video_url | split: '/' | last -%}
+                    {%- endif -%}
+                  {%- elsif video_url contains 'vimeo.com' -%}
+                    {%- assign provider = 'vimeo' -%}
+                    {%- assign video_id = video_url | split: '/' | last -%}
+                  {%- else -%}
+                    {%- assign provider = 'direct' -%}
+                  {%- endif -%}
+
+                  {%- if provider == 'youtube' or provider == 'vimeo' -%}
+                    <iframe
+                      src="{% if provider == 'youtube' %}https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&origin={{ request.host }}&controls={{ section.settings.video_controls | replace: 'true', '1' | replace: 'false', '0' }}&autoplay=0&loop={{ section.settings.video_loop | replace: 'true', '1' | replace: 'false', '0' }}&mute={{ section.settings.video_muted | replace: 'true', '1' | replace: 'false', '0' }}&playsinline=1{% elsif provider == 'vimeo' %}https://player.vimeo.com/video/{{ video_id }}?autoplay=0&loop={{ section.settings.video_loop | replace: 'true', '1' | replace: 'false', '0' }}&muted={{ section.settings.video_muted | replace: 'true', '1' | replace: 'false', '0' }}&playsinline=1&controls={{ section.settings.video_controls | replace: 'true', '1' | replace: 'false', '0' }}{% endif %}"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                      id="Video-clone-{{ section.id }}-{{ forloop.index }}"
+                      width="{{ section.settings.video_width }}"
+                      height="{{ section.settings.video_height }}"
+                      style="object-fit: {{ section.settings.video_object_fit }}; border-radius: {{ section.settings.video_brd_radius }}px;"
+                      tabindex="-1"
+                      loading="lazy"
+                      data-video-provider="{{ provider }}"
+                    ></iframe>
+                  {%- else -%}
+                    <video
+                      id="Video-clone-{{ section.id }}-{{ forloop.index }}"
+                      {% if section.settings.video_autoplay %}autoplay{% endif %}
+                      {% if section.settings.video_loop %}loop{% endif %}
+                      {% if section.settings.video_muted %}muted{% endif %}
+                      playsinline
+                      controls="{{ section.settings.video_controls }}"
+                      preload="none"
+                      width="{{ section.settings.video_width }}"
+                      height="{{ section.settings.video_height }}"
+                      style="object-fit: {{ section.settings.video_object_fit }}; border-radius: {{ section.settings.video_brd_radius }}px;"
+                      {% if video_poster != blank %}
+                        poster="{{ video_poster | image_url: width: 1500, format: 'pjpg' }}"
+                      {% endif %}
+                      tabindex="-1"
+                      loading="lazy"
+                      data-video-provider="direct"
+                    >
+                      <source src="{{ video_url }}" type='video/mp4; codecs="avc1.64001F, mp4a.40.2"'>
+                      <source src="{{ video_url }}" type="video/mp4">
+                      Your browser does not support HTML5 video.
+                    </video>
+                  {%- endif -%}
+
+                  {%- if section.settings.video_autoplay == false and video_poster != blank -%}
+                    <div class="video-poster-overlayx8" data-video-target="#Video-clone-{{ section.id }}-{{ forloop.index }}">
+                      <svg class="play-icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if has_any_video -%}
+      <button class="video-carousel-button video-carousel-button--prevx8" aria-label="Anterior">❮</button>
+      <button class="video-carousel-button video-carousel-button--nextx8" aria-label="Próximo">❯</button>
+      <div class="video-carousel-dotsx8" data-dots-for="original"></div>
+    {%- endif -%}
+  </div>
+  {%- unless has_any_video -%}
+    <div class="video-containerx8 no-video-msg">
+      <p>Configure pelo menos um vídeo nas configurações da seção para o carrossel.</p>
+    </div>
+  {%- endunless -%}
+{%- endif -%}
+
+
+
+      {%- if section.settings.btn_lblx8 != blank -%}
+      <div class="btn-2-wrapx8">
+        <a href="{% if section.settings.ancorax8 != blank %}#{{ section.settings.ancorax8 }}{% else %}{{ section.settings.btn_linkx8 }}{% endif %}"
+           class="btn-2x8 {% if section.settings.ancorax8 != blank %}btn-compra-2-{{ section.id }}{% endif %}"
+           {% if section.settings.ancorax8 == blank %}target="_blank"{% endif %}
+        >
+          {{ section.settings.btn_lblx8_text }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  
+ document.addEventListener('DOMContentLoaded', function() {
+   // Sua lógica de scroll de âncora permanece a mesma...
+  const scrollButtons = document.querySelectorAll('.btn-compra-2-{{ section.id }}');
+  scrollButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          const offset = 100;
+          window.scrollTo({
+            top: targetElement.offsetTop - offset,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+  const sectionId = '{{ section.id }}';
+  const carouselContainer = document.querySelector(`.video-carousel-containerx8[data-section-id="${sectionId}"]`);
+
+  if (carouselContainer) {
+    const carouselWrapper = carouselContainer.querySelector('.video-carousel-wrapperx8');
+    const carouselTrack = carouselContainer.querySelector('.video-carousel-trackx8');
+    const slides = Array.from(carouselTrack.querySelectorAll('.video-carousel-slidex8:not(.clone)'));
+    const allSlides = Array.from(carouselTrack.querySelectorAll('.video-carousel-slidex8'));
+    const prevButton = carouselContainer.querySelector('.video-carousel-button--prevx8');
+    const nextButton = carouselContainer.querySelector('.video-carousel-button--nextx8');
+    const dotsContainer = carouselContainer.querySelector('.video-carousel-dotsx8');
+    
+    let currentSlideIndex = 0;
+    const totalSlides = slides.length;
+
+    // Posiciona inicialmente mostrando o último slide à esquerda
+    function initializeInfinitePosition() {
+      if (totalSlides > 1) {
+        currentSlideIndex = 1; // Começa no primeiro slide real
+        carouselTrack.style.transition = 'none';
+        updateCarousel();
+        
+        // Força um reflow para aplicar a mudança sem animação
+        void carouselTrack.offsetWidth;
+        
+        // Agora sim permite transições
+        carouselTrack.style.transition = 'transform 0.5s ease';
+      }
+    }
+
+    function updateCarousel() {
+      // Atualiza navegação infinita
+      if (currentSlideIndex >= totalSlides) {
+        currentSlideIndex = 0;
+        carouselTrack.style.transition = 'none';
+        updateCarouselPosition();
+        void carouselTrack.offsetWidth;
+        carouselTrack.style.transition = 'transform 0.5s ease';
+      } else if (currentSlideIndex < 0) {
+        currentSlideIndex = totalSlides - 1;
+        carouselTrack.style.transition = 'none';
+        updateCarouselPosition();
+        void carouselTrack.offsetWidth;
+        carouselTrack.style.transition = 'transform 0.5s ease';
+      } else {
+        updateCarouselPosition();
+      }
+
+      // Atualiza UI
+      updateActiveStates();
+      handleVideoPlayback();
+    }
+
+    function updateCarouselPosition() {
+      const activeSlide = allSlides[currentSlideIndex];
+      const wrapperCenter = carouselWrapper.offsetWidth / 2;
+      const activeSlideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
+      const offset = wrapperCenter - activeSlideCenter;
+      carouselTrack.style.transform = `translateX(${offset}px)`;
+    }
+
+    function updateActiveStates() {
+      slides.forEach((slide, index) => {
+        const realIndex = (currentSlideIndex % totalSlides + totalSlides) % totalSlides;
+        slide.classList.toggle('is-active-slide', index === realIndex);
+      });
+      
+      updateDots();
+    }
+
+    function updateDots() {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      slides.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('video-carousel-dotx8');
+        dot.classList.toggle('active', index === (currentSlideIndex % totalSlides));
+        dot.addEventListener('click', () => {
+          currentSlideIndex = index;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function handleVideoPlayback() {
+      const realIndex = (currentSlideIndex % totalSlides + totalSlides) % totalSlides;
+      
+      slides.forEach((slide, index) => {
+        const videoElement = slide.querySelector('video, iframe');
+        if (!videoElement) return;
+
+        const isActive = index === realIndex;
+        const provider = videoElement.dataset.videoProvider;
+
+        if (isActive) {
+          if ('{{ section.settings.video_autoplay }}' === 'true') {
+            if (provider === 'direct') {
+              videoElement.play().catch(e => console.log("Autoplay bloqueado:", e));
+            } else {
+              const newSrc = videoElement.src.replace('autoplay=0', 'autoplay=1');
+              if (videoElement.src !== newSrc) {
+                videoElement.src = newSrc;
+              }
+            }
+          }
+        } else {
+          if (provider === 'direct') {
+            videoElement.pause();
+            videoElement.currentTime = 0;
+          } else {
+            const newSrc = videoElement.src.replace('autoplay=1', 'autoplay=0');
+            if (videoElement.src !== newSrc) {
+              videoElement.src = newSrc;
+            }
+          }
+        }
+      });
+    }
+
+    // Event Listeners
+    prevButton.addEventListener('click', () => {
+      currentSlideIndex--;
+      updateCarousel();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentSlideIndex++;
+      updateCarousel();
+    });
+
+    // Inicialização
+    initializeInfinitePosition();
+    window.addEventListener('resize', updateCarousel);
+  }
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Influencer Carrossel",
+  "tag": "section",
+  "class": "section-video-influencer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais do Bloco"
+    },
+      {
+      "type": "select",
+      "id": "section_position",
+      "label": "Posição da Seção",
+        "info": "Importante para performance e carregamento dos vídeos",
+      "options": [
+        { "value": "first_section", "label": "É na Primeira ou Segunda Seção (Above Fold)" },
+        { "value": "other", "label": "Outra Posição" }
+      ],
+      "default": "other"
+    },
+    {
+      "type": "color",
+      "id": "background_colorx8",
+      "label": "Cor de Fundo",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "range",
+      "id": "brd_width_1x8",
+      "min": 0, "max": 10, "step": 1, "unit": "px",
+      "label": "Largura da Borda",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "brd_color_1x8",
+      "label": "Cor da Borda",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "brd_radius_1x8",
+      "min": 0, "max": 50, "step": 1, "unit": "px",
+      "label": "Raio da Borda",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_top_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno (Topo)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_right_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno (Direita)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno (Inferior)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_left_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno (Esquerda)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Margem Externa (Topo)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_1x8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Margem Externa (Inferior)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Configurações Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_1_mobilex8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno Mobile (Topo)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_right_1_mobilex8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno Mobile (Direita)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_1_mobilex8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno Mobile (Inferior)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_left_1_mobilex8",
+      "min": 0, "max": 100, "step": 5, "unit": "px",
+      "label": "Espaçamento Interno Mobile (Esquerda)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Imagem de Título (Banner)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_imagem_titulox8",
+      "label": "Mostrar Imagem de Título (Banner)",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Imagem de Título (Banner)"
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_width_x40",
+      "min": 20, "max": 100, "step": 1, "unit": "%", "default": 80,
+      "label": "Largura da Imagem (Desktop)",
+      "info": "Largura da imagem dentro do bloco (desktop)."
+          },
+    {
+      "type": "range",
+      "id": "header_image1_img_height_x40",
+      "min": 50, "max": 800, "step": 10, "unit": "px",
+      "label": "Altura da Imagem (Desktop)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_width_mobile_x40",
+      "min": 100, "max": 800, "step": 10, "unit": "px",
+      "label": "Largura da Imagem (Mobile)",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "header_image1_img_height_mobile_x40",
+      "min": 50, "max": 600, "step": 10, "unit": "px",
+      "label": "Altura da Imagem (Mobile)",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Título Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_titlex8",
+      "label": "Mostrar Título Principal",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "main_title_text",
+      "label": "Título Principal",
+      "default": "<h2>Destaque o seu Influenciador com Maestria!</h2>"
+    },
+    {
+      "type": "color",
+      "id": "hd_colorx8",
+      "label": "Cor do Título",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "title_font_sizex8",
+      "min": 16, "max": 60, "step": 2, "unit": "px",
+      "label": "Tamanho da Fonte (Desktop)",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_font_weightx8",
+      "min": 100, "max": 900, "step": 100,
+      "label": "Peso da Fonte",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "title_line_heightx8",
+      "min": 10, "max": 80, "step": 1, "unit": "px",
+      "label": "Altura da Linha (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacingx8",
+      "min": -2, "max": 5, "step": 0.1, "unit": "px",
+      "label": "Espaçamento de Letras (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_mobilex8",
+      "min": 14, "max": 40, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte (Mobile)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "title_line_height_mobilex8",
+      "min": 10, "max": 60, "step": 1, "unit": "px",
+      "label": "Altura da Linha (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing_mobilex8",
+      "min": -2, "max": 5, "step": 0.1, "unit": "px",
+      "label": "Espaçamento de Letras (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Subtítulo Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitlex8",
+      "label": "Mostrar Subtítulo Principal",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "main_subtitle_text",
+      "label": "Subtítulo Principal",
+      "default": "<p>Cative a audiência com uma apresentação impecável e profissional.</p>"
+    },
+    {
+      "type": "color",
+      "id": "sub_hd_colorx8",
+      "label": "Cor do Subtítulo",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "sub_font_sizex8",
+      "min": 12, "max": 30, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte (Desktop)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "sub_font_weightx8",
+      "min": 100, "max": 900, "step": 100,
+      "label": "Peso da Fonte",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "sub_line_heightx8",
+      "min": 10, "max": 40, "step": 1, "unit": "px",
+      "label": "Altura da Linha (Desktop)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "sub_letter_spacingx8",
+      "min": -1, "max": 3, "step": 0.1, "unit": "px",
+      "label": "Espaçamento de Letras (Desktop)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "sub_font_size_mobilex8",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_line_height_mobilex8",
+      "min": 10, "max": 30, "step": 1, "unit": "px",
+      "label": "Altura da Linha (Mobile)",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "sub_letter_spacing_mobilex8",
+      "min": -1, "max": 3, "step": 0.1, "unit": "px",
+      "label": "Espaçamento de Letras (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Carrossel de Vídeos"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_videox8",
+      "label": "Mostrar Carrossel de Vídeos",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "botao_carrossel_mobile",
+      "label": "Mostrar botão de setas (mobile)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "dots_carrossel_mobile",
+      "label": "Mostrar dots/bolinhas de navegação (mobile)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "min": 180, "max": 540, "step": 10, "unit": "px",
+      "label": "Largura Base do Vídeo",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "video_height",
+      "min": 320, "max": 960, "step": 10, "unit": "px",
+      "label": "Altura Base do Vídeo",
+      "default": 640
+    },
+    {
+      "type": "select",
+      "id": "video_object_fit",
+      "label": "Ajuste do Objeto de Vídeo",
+      "options": [
+        { "value": "fill", "label": "Preencher" },
+        { "value": "contain", "label": "Conter" },
+        { "value": "cover", "label": "Cobrir" },
+        { "value": "none", "label": "Nenhum" },
+        { "value": "scale-down", "label": "Reduzir Escala" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "video_brd_radius",
+      "min": 0, "max": 50, "step": 1, "unit": "px",
+      "label": "Raio da Borda do Vídeo",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Reprodução Automática (para cada vídeo ativo)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop (para cada vídeo)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mudo (para cada vídeo)",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "video_preload_type",
+      "label": "Tipo de Pré-carregamento do Vídeo",
+      "options": [
+        { "value": "auto", "label": "Automático" },
+        { "value": "metadata", "label": "Metadados" },
+        { "value": "none", "label": "Nenhum" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Mostrar Controles do Vídeo",
+      "default": false
+    },
+    {
+      "type": "paragraph",
+      "content": "Configure até 6 vídeos para o carrossel."
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_1",
+      "label": "URL do Vídeo 1 (YouTube/Vimeo/Direto)"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_1",
+      "label": "Imagem de Capa do Vídeo 1"
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_2",
+      "label": "URL do Vídeo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_2",
+      "label": "Imagem de Capa do Vídeo 2"
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_3",
+      "label": "URL do Vídeo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_3",
+      "label": "Imagem de Capa do Vídeo 3"
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_4",
+      "label": "URL do Vídeo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_4",
+      "label": "Imagem de Capa do Vídeo 4"
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_5",
+      "label": "URL do Vídeo 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_5",
+      "label": "Imagem de Capa do Vídeo 5"
+    },
+    {
+      "type": "url",
+      "id": "influencer_video_6",
+      "label": "URL do Vídeo 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster_6",
+      "label": "Imagem de Capa do Vídeo 6"
+    },
+    {
+      "type": "header",
+      "content": "Configurações de Composição (Colunas)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_composicaox8",
+      "label": "Mostrar Composição (Colunas)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "brd_width_2x8",
+      "min": 0, "max": 10, "step": 1, "unit": "px",
+      "label": "Largura da Borda (Colunas)",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "brd_radius_2x8",
+      "min": 0, "max": 50, "step": 1, "unit": "px",
+      "label": "Raio da Borda (Colunas)",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "brd_color_2x8",
+      "label": "Cor da Borda (Colunas 1-2)",
+      "default": "#a0e9ff"
+    },
+    {
+      "type": "color",
+      "id": "background_color_2x8",
+      "label": "Cor de Fundo (Colunas 1-2)",
+      "default": "#e6f7ff"
+    },
+    {
+      "type": "color",
+      "id": "brd_color_3x8",
+      "label": "Cor da Borda (Colunas 3-4)",
+      "default": "#b7eb8f"
+    },
+    {
+      "type": "color",
+      "id": "background_color_3x8",
+      "label": "Cor de Fundo (Colunas 3-4)",
+      "default": "#f0fff0"
+    },
+    {
+      "type": "range",
+      "id": "col_img_widthx8",
+      "min": 20, "max": 200, "step": 5, "unit": "px",
+      "label": "Largura da Imagem da Coluna",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "col_img_heightx8",
+      "min": 20, "max": 200, "step": 5, "unit": "px",
+      "label": "Altura da Imagem da Coluna",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "col_ttl_colorx8",
+      "label": "Cor do Título da Coluna",
+      "default": "#002766"
+    },
+    {
+      "type": "range",
+      "id": "col_title_font_sizex8",
+      "min": 14, "max": 30, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte do Título (Desktop)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "col_title_font_weightx8",
+      "min": 100, "max": 900, "step": 100,
+      "label": "Peso da Fonte do Título",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "col_title_line_heightx8",
+      "min": 10, "max": 40, "step": 1, "unit": "px",
+      "label": "Altura da Linha do Título (Desktop)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "col_title_font_size_mobilex8",
+      "min": 12, "max": 24, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte do Título (Mobile)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "col_title_line_height_mobilex8",
+      "min": 10, "max": 30, "step": 1, "unit": "px",
+      "label": "Altura da Linha do Título (Mobile)",
+      "default": 26
+    },
+    {
+      "type": "color",
+      "id": "col_sub_colorx8",
+      "label": "Cor do Subtítulo da Coluna",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "col_sub_font_sizex8",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte do Subtítulo (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "col_sub_font_weightx8",
+      "min": 100, "max": 900, "step": 100,
+      "label": "Peso da Fonte do Subtítulo",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "col_sub_line_heightx8",
+      "min": 10, "max": 30, "step": 1, "unit": "px",
+      "label": "Altura da Linha do Subtítulo (Desktop)",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "col_sub_font_size_mobilex8",
+      "min": 8, "max": 20, "step": 1, "unit": "px",
+      "label": "Tamanho da Fonte do Subtítulo (Mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "col_sub_line_height_mobilex8",
+      "min": 10, "max": 26, "step": 1, "unit": "px",
+      "label": "Altura da Linha do Subtítulo (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Botão de Chamada para Ação"
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_lblx8",
+      "label": "Mostrar Botão",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btn_lblx8_text",
+      "label": "Texto do Botão",
+      "default": "Adquirir Agora!"
+    },
+    {
+      "type": "url",
+      "id": "btn_linkx8",
+      "label": "Link do Botão (URL externa)"
+    },
+    {
+      "type": "text",
+      "id": "ancorax8",
+      "label": "Âncora (ID do elemento na página)"
+    },
+    {
+      "type": "color",
+      "id": "btn_bgx8",
+      "label": "Cor de Fundo do Botão",
+      "default": "#ffc107"
+    },
+    {
+      "type": "color",
+      "id": "btn_txt_clrx8",
+      "label": "Cor do Texto do Botão",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "btn_brd_widthx8",
+      "min": 0, "max": 10, "step": 1, "unit": "px",
+      "label": "Largura da Borda do Botão",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "btn_brd_colorx8",
+      "label": "Cor da Borda do Botão",
+      "default": "#ffc107"
+    },
+    {
+      "type": "range",
+      "id": "btn_radiusx8",
+      "min": 0, "max": 50, "step": 1, "unit": "px",
+      "label": "Raio da Borda do Botão",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_topx8",
+      "min": 5, "max": 30, "step": 1, "unit": "px",
+      "label": "Padding Top do Botão",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_rightx8",
+      "min": 10, "max": 60, "step": 1, "unit": "px",
+      "label": "Padding Right do Botão",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_bottomx8",
+      "min": 5, "max": 30, "step": 1, "unit": "px",
+      "label": "Padding Bottom do Botão",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_leftx8",
+      "min": 10, "max": 60, "step": 1, "unit": "px",
+      "label": "Padding Left do Botão",
+      "default": 25
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bgx8",
+      "label": "Cor de Fundo do Botão (Hover)",
+      "default": "#e0a800"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_txt_clrx8",
+      "label": "Cor do Texto do Botão (Hover)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_brd_colorx8",
+      "label": "Cor da Borda do Botão (Hover)",
+      "default": "#c09500"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Coluna de Conteúdo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "column_image",
+          "label": "Imagem da Coluna"
+        },
+        {
+          "type": "text",
+          "id": "column_title",
+          "label": "Título da Coluna",
+          "default": "Título da Coluna"
+        },
+        {
+          "type": "richtext",
+          "id": "column_subtitle",
+          "label": "Subtítulo da Coluna",
+          "default": "<p>Descrição breve do item ou benefício.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Influencer Carrossel",
+      "blocks": [
+        { "type": "column" },
+        { "type": "column" },
+        { "type": "column" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{% liquid
+  assign product_resource = product
+
+  if product_resource == blank and request.visual_preview_mode
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% if product_resource != blank %}
+  <div
+    class="variant-picker-wrapper"
+    data-product-id="{{ product_resource.id }}"
+  >
+    {% for option in product_resource.options_with_values %}
+      <div class="variant-picker-option">
+        <p class="variant-picker-label">
+          {{ option.name }}
+        </p>
+
+        <div class="variant-picker-values">
+          {% for value in option.values %}
+            {% liquid
+              assign is_available = false
+              for variant in product_resource.variants
+                if variant.options contains value and variant.available
+                  assign is_available = true
+                  break
+                endif
+              endfor
+            %}
+
+            <button
+              type="button"
+              class="variant-picker-button{% unless is_available %} is-disabled{% endunless %}"
+              data-option-name="{{ option.name | escape }}"
+              data-option-value="{{ value | escape }}"
+              {% unless is_available %}disabled{% endunless %}
+            >
+              {{ value }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

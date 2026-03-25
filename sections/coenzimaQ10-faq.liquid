@@ -1,0 +1,492 @@
+{% comment %}
+  Template de página personalizada com bloco de Perguntas e Respostas (FAQ) dinâmicas.
+  Estrutura:
+  - Título principal e subtítulo da seção (configuráveis)
+  - Acordeão (FAQ) com itens de pergunta e resposta adicionáveis dinamicamente via blocos no schema.
+  - Estilos de cor e borda configuráveis.
+{% endcomment %}
+
+{%- style -%}
+/* ========== [INÍCIO] CSS do Bloco de Perguntas e Respostas (FAQ) ========== */
+.custom-page-faq {
+  margin: 0 auto;
+  font-family: inherit;
+}
+
+.content-block-faq {
+  background-color: {{ section.settings.background_color }};
+  margin: 10px;
+  width: auto;
+  border-radius: {{ section.settings.border_radius }}px;
+  padding-top: 0px !important;
+  padding-bottom: 60px; /* Adicionado padding inferior para melhor visualização */
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 60px; /* Mantido para o espaçamento superior */
+}
+
+.faq-main-title {
+  color: {{ section.settings.main_title_color }};
+  font-size: {{ section.settings.main_title_size }}px;
+  font-weight: {{ section.settings.main_title_weight }};
+  margin: 0 auto;
+  letter-spacing: 0.25px !important;
+  line-height: 1.15 !important;
+  max-width: 33.33%; /* Mantido para desktop */
+}
+
+.faq-subtitle {
+  color: {{ section.settings.subtitle_color }};
+  font-size: {{ section.settings.subtitle_size }}px;
+  font-weight: {{ section.settings.subtitle_weight }};
+  margin-top: 10px; /* Espaçamento entre título principal e subtítulo */
+}
+
+/* Acordeão FAQ */
+.accordion-faq {
+  width: 100%;
+  max-width: {{ section.settings.accordion_max_width }}px;
+  margin: 30px auto;
+  border-radius: {{ section.settings.accordion_border_radius }}px;
+  background: transparent !important;
+  border: {{ section.settings.accordion_border_width }}px solid {{ section.settings.accordion_border_color }};
+  box-shadow: none;
+}
+.accordion-faq-item {
+  border-bottom: {{ section.settings.accordion_border_width }}px solid {{ section.settings.accordion_border_color }};
+}
+.accordion-faq-item:last-child {
+  border-bottom: none; /* Remove a borda do último item */
+}
+
+.accordion-faq-header {
+  background: transparent !important;
+  border: none;
+  outline: none;
+  width: 100%;
+  text-align: left;
+  padding: 20px 24px;
+  font-size: {{ section.settings.question_text_size }}px;
+  font-weight: {{ section.settings.question_text_weight }};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: none;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  color: {{ section.settings.question_text_color }};
+}
+
+.accordion-faq-header:focus,
+.accordion-faq-header:active,
+.accordion-faq-header:hover {
+  background: transparent !important;
+  color: inherit; /* Mantém a cor do texto definida no settings */
+  box-shadow: none;
+}
+
+.accordion-faq-content {
+  display: none;
+  overflow: hidden;
+  background: transparent !important;
+  padding: 0 24px;
+}
+.accordion-faq-item.active .accordion-faq-content {
+  display: block;
+  padding: 20px 24px;
+  background: transparent !important;
+  border-top: {{ section.settings.accordion_border_width }}px solid {{ section.settings.accordion_border_color }};
+  font-size: {{ section.settings.answer_text_size }}px;
+  font-weight: {{ section.settings.answer_text_weight }};
+  line-height: 1.5;
+  color: {{ section.settings.answer_text_color }};
+}
+
+.accordion-faq-icon .icon-chevron {
+  min-width: 18px; /* Garante que o ícone não encolha muito */
+}
+
+/* ========== Responsividade ========== */
+@media (max-width: 768px) {
+  .faq-main-title {
+    max-width: calc(100% - 80px);
+    padding: 0 40px !important;
+  }
+  .content-block-faq {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+  }
+  .faq-header {
+    padding-top: 30px; /* Reduz espaçamento superior em mobile */
+    margin-bottom: 2rem;
+  }
+  .faq-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+  .accordion-faq {
+    max-width: 100%;
+    border-radius: {{ section.settings.accordion_border_radius_mobile }}px; /* Raio da borda específico para mobile */
+  }
+  .accordion-faq-header, .accordion-faq-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .accordion-faq-item.active .accordion-faq-content {
+    border-top: {{ section.settings.accordion_border_width }}px solid {{ section.settings.accordion_border_color }}; /* Mantém a mesma espessura da borda do desktop para a borda superior em mobile */
+  }
+}
+
+/* ========== [FIM] CSS do Bloco de Perguntas e Respostas (FAQ) ========== */
+{%- endstyle -%}
+
+<div class="content-block-faq">
+  {% assign product = all_products[section.settings.selected_product] %}
+  {% if product != blank %}
+    <div class="faq-header">
+      <h2 class="faq-main-title">{{ section.settings.main_heading_text }}</h2>
+      <h3 class="faq-subtitle">{{ section.settings.sub_heading_text }}</h3>
+    </div>
+
+    <div class="accordion-faq" id="accordion-faq-panel-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'faq_item' -%}
+            <div class="accordion-faq-item">
+              <button class="accordion-faq-header" type="button">
+                {{ block.settings.question_text }}
+                <span class="accordion-faq-icon">
+                  <svg class="icon-chevron" width="18" height="18" viewBox="0 0 18 18" style="display:inline;vertical-align:middle" xmlns="http://www.w3.org/2000/svg">
+                    <polyline points="4,7 9,12 14,7" fill="none" stroke="{{ section.settings.icon_color }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </button>
+              <div class="accordion-faq-content">
+                {{ block.settings.answer_html }}
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+  {% else %}
+    <div class="content-block-faq__error">
+      <p>⚠️ **Nenhum produto selecionado ou nenhum item de FAQ adicionado.**</p>
+      <p>Para usar este bloco, você pode:</p>
+      <ul>
+        <li>**Adicionar itens de FAQ** clicando em "Adicionar FAQ" nesta seção.</li>
+        <li>(Opcional) **Selecionar um produto** nas configurações para vincular metacampos, se aplicável.</li>
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  // Adiciona um listener de evento para cada bloco FAQ na página
+  document.querySelectorAll('#accordion-faq-panel-{{ section.id }} .accordion-faq-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      var item = header.parentElement;
+      var open = item.classList.contains('active');
+      var parentAccordion = item.closest('.accordion-faq');
+
+      // Fecha todos os outros itens no mesmo acordeão
+      parentAccordion.querySelectorAll('.accordion-faq-item').forEach(function(i) {
+        if (i !== item) { // Não altera o item clicado
+          i.classList.remove('active');
+          var svg = i.querySelector('.icon-chevron polyline');
+          if (svg) svg.setAttribute('points', '4,7 9,12 14,7'); // seta para baixo
+        }
+      });
+
+      // Abre ou fecha o item clicado
+      if (!open) {
+        item.classList.add('active');
+        var svg = item.querySelector('.icon-chevron polyline');
+        if (svg) svg.setAttribute('points', '4,11 9,6 14,11'); // seta para cima
+      } else {
+        item.classList.remove('active');
+        var svg = item.querySelector('.icon-chevron polyline');
+        if (svg) svg.setAttribute('points', '4,7 9,12 14,7'); // seta para baixo
+      }
+    });
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Coenzima Q10 FAQ",
+  "tag": "section",
+  "class": "section-faq",
+  "settings": [
+    {
+      "type": "product",
+      "id": "selected_product",
+      "label": "Produto para Metacampos (Opcional)",
+      "info": "Selecione o produto para vincular metacampos, se necessário. O conteúdo do FAQ é configurado nos blocos abaixo."
+    },
+    {
+      "type": "header",
+      "content": "Configurações Gerais do Bloco"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de fundo da seção",
+      "default": "#FFF4D5"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Arredondamento da seção (px)",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Configurações de Títulos"
+    },
+    {
+      "type": "text",
+      "id": "main_heading_text",
+      "label": "Título Principal da Seção",
+      "default": "Ainda com dúvidas?",
+      "info": "Ex: 'Ainda com dúvidas?'"
+    },
+    {
+      "type": "color",
+      "id": "main_title_color",
+      "label": "Cor do Título Principal",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "main_title_size",
+      "label": "Tamanho do Título Principal (px)",
+      "min": 24,
+      "max": 60,
+      "step": 1,
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "main_title_weight",
+      "label": "Espessura do Título Principal",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" },
+        { "value": "800", "label": "Extra-negrito" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading_text",
+      "label": "Subtítulo da Seção",
+      "default": "Veja aqui as principais dúvidas sobre a Coenzima Q10.",
+      "info": "Ex: 'Veja aqui as principais dúvidas sobre o produto'"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Cor do Subtítulo",
+      "default": "#59000B"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Tamanho do Subtítulo (px)",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "subtitle_weight",
+      "label": "Espessura do Subtítulo",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Acordeão (FAQ)"
+    },
+    {
+      "type": "color",
+      "id": "accordion_border_color",
+      "label": "Cor da borda do Acordeão",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "accordion_border_width",
+      "label": "Espessura da borda do Acordeão (px)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "accordion_border_radius",
+      "label": "Arredondamento do Acordeão (Desktop - px)",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "accordion_border_radius_mobile",
+      "label": "Arredondamento do Acordeão (Mobile - px)",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "accordion_max_width",
+      "label": "Largura máxima do Acordeão (Desktop - px)",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "question_text_color",
+      "label": "Cor do Texto da Pergunta",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "question_text_size",
+      "label": "Tamanho do Texto da Pergunta (px)",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "question_text_weight",
+      "label": "Espessura do Texto da Pergunta",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" },
+        { "value": "600", "label": "Semi-negrito" },
+        { "value": "700", "label": "Negrito" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "answer_text_color",
+      "label": "Cor do Texto da Resposta",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "answer_text_size",
+      "label": "Tamanho do Texto da Resposta (px)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "answer_text_weight",
+      "label": "Espessura do Texto da Resposta",
+      "options": [
+        { "value": "300", "label": "Leve" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Médio" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Cor do Ícone (seta)",
+      "default": "#444444"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Item de FAQ",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "question_text",
+          "label": "Pergunta",
+          "default": "Qual é a sua pergunta frequente?"
+        },
+        {
+          "type": "html",
+          "id": "answer_html",
+          "label": "Resposta",
+          "default": "<p>Insira a resposta para a pergunta aqui. Você pode usar <strong>negrito</strong>, <em>itálico</em> e <ul><li>listas</li><li>simples</li></ul>.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coenzima Q10 FAQ",
+      "category": "Conteúdo",
+      "settings": {
+        "main_heading_text": "Ainda com dúvidas?",
+        "sub_heading_text": "Veja aqui as principais dúvidas sobre a Coenzima Q10."
+      },
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question_text": "O Jejoom ajuda na perda de peso?",
+            "answer_html": "<p>Sim, pois sua fórmula atua na lipólise, que é a quebra da gordura corporal. Portanto, Jejoom desincha, acelera a detoxificação e, consequentemente, o metabolismo.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question_text": "Posso tomar à noite?",
+            "answer_html": "<p>Jejoom pode ser consumido a qualquer horário do dia, sendo excelente para se manter em Jejum pela manhã, antes das refeições para melhorar a digestão dos alimentos e/ou a noite, ao iniciar o seu jejum noturno para melhorar o processo de detox corporal.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question_text": "O que é Morosil?",
+            "answer_html": "<p>É o extrato concentrado das laranja moro, uma laranja exclusivamente cultivada na Itália, próximo ao vulcão Etna, com poderosos antioxidantes capazes de promover a lipólise, que é a quebra de gorduras corporal, facilitando sua eliminação para promover a redução de medidas.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question_text": "Quais são os benefícios do Jejoom?",
+            "answer_html": "<p>Este produto foi pensado e criado com ativos metabólicos antioxidantes e antiinflamatórios, para auxiliar na imunidade e acelerar o metabolismo, oferecendo mais energia para o dia todo.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

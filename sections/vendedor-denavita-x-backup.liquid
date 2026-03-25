@@ -1,0 +1,5736 @@
+{% if section.settings.enabled %}
+<style>
+ 
+  :root {
+    --vz-cor-primaria: {{ section.settings.cor_primaria }};
+    --vz-cor-secundaria: {{ section.settings.cor_secundaria }};
+    --vz-cor-sucesso: {{ section.settings.cor_sucesso }};
+    --vz-cor-texto: #333;
+    --vz-cor-acento: #FFD700;
+    --vz-cor-contraste: #fff;
+    --vz-spacing: 20px;
+    --btn-padding: unset;
+  }
+ 
+  
+  /*
+  .vz-mascote {
+    position: fixed;
+    bottom: 20px;
+    right: -200px;
+   
+    z-index: 99999;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+  }
+  .vz-mascote.visivel {
+    right: 20px;
+  }
+  .vz-mascote:hover {
+    animation: balanco-leve 2s infinite;
+  }
+  .vz-mascote-img {
+    width: 100%;
+    height: auto;
+  }
+  .vz-mascote-default {
+   
+    text-align: center;
+  }
+  .vz-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+    min-width: 20px;
+    text-align: center;
+  }
+  .vz-balao {
+    position: absolute;
+    bottom: 100%;
+    right: auto;
+    left: -150px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 250px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+  }
+  .vz-balao::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    border: 10px solid transparent;
+    border-top-color: white;
+  }
+  .vz-fechar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    color: #999;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #vz-balao-texto {
+    margin: 0;
+    font-size: 14px;
+    color: var(--vz-cor-texto);
+    text-shadow: 0 0 2px rgba(255,255,255,0.5);
+  }
+ 
+  .vz-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 99998;
+    display: none;
+  } */
+  .vz-gaveta {
+    position: fixed;
+    bottom: -100%;
+    left: 10%;
+    right: 10%;
+    width: 80%;
+    height: 60vh;
+    background: linear-gradient(135deg, var(--vz-cor-primaria), var(--vz-cor-secundaria));
+    border-radius: 20px;
+    transition: bottom 0.5s ease;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-gaveta.aberto {
+    bottom: 0;
+  }
+  .vz-gaveta-header {
+    color: white;
+    padding: var(--vz-spacing);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+    background: #153201;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .vz-gaveta-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+    padding-bottom: 3px
+  }
+  #dark-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  .vz-gaveta-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .vz-gaveta-close:hover {
+    background: white;
+    color: var(--vz-cor-primaria);
+    transform: scale(1.1);
+  }
+  .vz-dots-loader {
+    display: inline;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--vz-cor-sucesso);
+    margin-left: 5px;
+    animation: dots 1.5s infinite;
+    height:26px;
+  }
+  .vz-dots-loader.active {
+    display: none;
+  }
+  @keyframes dots {
+    0%, 20% { transform: translateY(0); }
+    10% { transform: translateY(-10px); }
+    30% { transform: translateY(0); }
+    100% { transform: translateY(0); }
+  }
+  .vz-gaveta-body {
+    flex: 1;
+    padding: var(--vz-spacing);
+    overflow-y: auto;
+    background: white;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  .vz-progress-container {
+    font-size: 12px;
+    border-radius: 8px;
+    background: #ebffd9;
+    border: 1px solid #BDC0B9;
+    padding: 0 13px 35px;
+    margin: 5px auto 0;
+    min-width: 95%;
+  padding-left: 10px;
+  padding-right: 30px;
+  min-height: 12%;
+  }
+  .vz-progress {
+    background: #c5c5c5;
+    height: 8px;
+    border-radius: 20px;
+    position: relative;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .vz-progress-fill {
+    height: 100%;
+    border-radius: 20px;
+    transition: all 4s;
+  animation: 5s linear infinite progress;
+  background-color: #54b101;
+  -webkit-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  -moz-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  -ms-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  background-image: linear-gradient(135deg,#ffffff26 0 25%,#fff0 25% 50%,#ffffff26 50% 75%,#fff0 75% 100%);
+  background-size: 40px 40px;
+    
+  }
+  .vz-progress-msg {
+    font-size:11px;
+    font-weight: bold;
+    color: var(--vz-cor-texto);
+    text-align: center;
+  padding: 0 20px;
+  padding-left: 40px;
+  margin-top: 10px;
+  padding-bottom: 20px;
+  }
+  .vz-milestone {
+    text-align: center;
+    font-size: 12px;
+    /*opacity: 0.5;*/
+    transition: all 0.3s;
+    flex: 1;
+    position: relative;
+  }
+  .vz-milestone.achieved {
+   /* opacity: 1;*/
+    transform: scale(1.2);
+  }
+  .vz-milestone .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .vz-milestone:hover .tooltip {
+    display: block;
+  }
+  .vz-produtos-carrossel,
+  .vz-recs {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: calc(var(--vz-spacing) * 1.5);
+    -webkit-overflow-scrolling: touch;
+  }
+  .vz-produto,
+  .vz-rec-item {
+    flex: 0 0 150px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid #eee;
+    transition: all 0.3s;
+  }
+  .vz-produto:hover,
+  .vz-rec-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--vz-cor-sucesso);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .vz-produto img,
+  .vz-rec-item img {
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    max-width: 120px;
+  }
+  .vz-produto h4,
+  .vz-rec-item h4 {
+    font-size: 14px;
+    margin: 10px 0 5px;
+  }
+  .vz-produto p,
+  .vz-rec-item p {
+    font-weight: bold;
+    color: var(--vz-cor-sucesso);
+    margin: 0;
+  }
+  .vz-trilha-gamificacao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--vz-spacing) * 1.5);
+    position: relative;
+    background: linear-gradient(135deg, #f5f5f5, #ffffff);
+    border-radius: 15px;
+    margin: var(--vz-spacing);
+  }
+  .vz-trilha-item {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+    max-width: 120px;
+  }
+  .vz-trilha-circulo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(224,224,224,0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 10px;
+    transition: all 0.3s;
+    border: 3px solid #ccc;
+    position: relative;
+  }
+  .vz-trilha-item.ativo .vz-trilha-circulo {
+    background: linear-gradient(135deg, var(--vz-cor-sucesso), #00ff88);
+    border-color: var(--vz-cor-sucesso);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(0,255,136,0.5);
+  }
+  .vz-trilha-item.conquistado .vz-trilha-circulo {
+    background: var(--vz-cor-sucesso);
+    border-color: #00ff88;
+  }
+  .vz-trilha-item.conquistado .vz-trilha-check {
+    display: block;
+  }
+  .vz-trilha-check {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #00ff88;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .vz-trilha-linha {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: 1;
+    transform: translateY(-20px);
+  }
+  .vz-trilha-linha-progresso {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--vz-cor-sucesso), #00ff88);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .vz-trilha-titulo {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  .vz-trilha-valor {
+    font-size: 14px;
+    color: var(--vz-cor-sucesso);
+    font-weight: bold;
+  }
+  .vz-trilha-item.conquistado .vz-trilha-titulo {
+    color: var(--vz-cor-sucesso);
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  .vz-chat-btn {
+    /*position: relative;
+    bottom: var(--vz-spacing);
+    right: var(--vz-spacing);*/
+    background: var(--vz-cor-sucesso);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 11px;
+  }
+  .vz-carrinho {
+    position: fixed;
+    right: -430px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-carrinho.aberto {
+    right: 0;
+  }
+  .vz-carrinho-header {
+    background: #153201;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    max-height: 33px;
+    height: auto;
+  }
+  .vz-brindes-container {
+    display: none;
+    margin: 8px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    box-sizing: border-box;
+    margin-left: 10px;
+  }
+  
+  .vz-brindes-carrossel {
+    position: relative;
+    display: flex;
+    height: 65px;
+    width: 100%;
+    transition: transform 0.5s ease;
+    margin: 0 auto;
+  }
+  .vz-brinde-slide {
+    min-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+    border: 1px solid #BDC0B9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 200, 81, 0.1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    line-height: 1.4;
+  }
+  .vz-brinde-slide img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  #vz-quickbuy {
+    position: fixed;
+    bottom: -100%;
+    height: auto;
+    background: linear-gradient(135deg, var(--vz-cor-primaria), var(--vz-cor-secundaria));
+    border-radius: 20px 20px 0 0;
+    transition: bottom 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 100002;
+    overflow: hidden;
+  }
+  #vz-quickbuy.aberto {
+    bottom: 0;
+  }
+  .vz-qb-header {
+    background: #153201;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .vz-qb-body {
+    background: white;
+    padding: 20px;
+    text-align: center;
+  }
+  .vz-qb-product-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .vz-qb-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .vz-qb-details {
+    flex: 1;
+    text-align: left;
+  }
+  .vz-qb-variants {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .vz-qb-variant {
+    padding: 0 20px;
+    background: #fff;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    color: #000;
+    border: 2px solid #DEDEDE;
+  }
+  .vz-qb-variant:hover {
+    
+    border: 2px solid #54b101;
+    color: #0B6809;
+    background:#fff;
+  }
+  .vz-qb-variant.selecionado {
+    
+    color: #fff;
+    border: 2px solid #54B101;
+  }
+  .vz-qb-variant.adicionando::after {
+    content: '✓';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #54B101;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.3s;
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+  .vz-qb-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--vz-cor-sucesso);
+    margin: 10px 0;
+    display: none;
+  }
+  .vz-carrinho-items {
+    overflow-y: auto;
+    padding: var(--vz-spacing);
+    padding-top: 0;
+  }
+  .vz-carrinho-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .vz-carrinho-div-qnt{
+    margin-top: 5px;border: 1px solid #dedede;border-radius: 30px;position:relative;width:fit-content;top:-43%;margin-left:auto;margin-right:auto;
+  }
+  .vz-carrinho-item img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    padding: 5px;
+    transition: opacity .3s;
+  }
+  @media (max-width: 390px) {
+    
+  .vz-carrinho-div-qnt{
+    zoom: 95%;
+    right: -2%;
+  }
+}
+
+@media (max-width: 390px) {
+  .vz-carrinho-header{
+  zoom:95%;
+  }
+  .vz-progress-container{
+  zoom:95%;
+  }
+  .vz-brindes-container{
+  zoom:95%;
+  }
+  .vz-carrinho-items{
+  zoom:95%;
+  }
+  .vz-carrinho-item{
+  zoom:95%;
+  }
+  .vz-carrinho-div-qnt{
+  zoom:95%;
+  }
+  .vz-leve-tambem{
+  zoom:95%;
+  }
+  .vz-leve-carrossel{
+  zoom:95%;
+  }
+  .vz-carrinho-footer{
+  zoom:95%;
+  }
+  .vz-cupom-container{
+  zoom:95%;
+  }
+}
+  .vz-carrinho-footer {
+    height: auto;
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    position: absolute;
+  bottom: 0%;
+  background: #fff;
+  width: 100%;
+  }
+  .vz-carrinho-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .vz-checkout-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: white;
+  position: sticky;
+  bottom: 0;
+  z-index: 1001;
+}
+
+/* Link "Continuar Comprando" */
+.vz-continuar-comprando {
+  flex: 0 0 30%;
+  text-align: center;
+  color: #000;
+  font-size: 12px;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  overflow: hidden;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.vz-continuar-comprando:hover {
+  
+  transform: scale(1.02);
+}
+
+.vz-continuar-comprando:active {
+  transform: scale(0.98);
+}
+
+  .vz-checkout-btn {
+    /*width: 100%;
+    padding: 10px;
+    background: #54B101;
+    color: white;
+    border: none;
+    border-radius: 73px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    height: auto;*/
+
+ flex: 1;              /* Ocupa resto (70%) */
+  position: relative;   /* Remove sticky */
+  bottom: auto;
+  margin: 0;
+  background: #54B101;
+  color: white;
+  border: none;
+  border-radius: 73px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  min-height: 56px;
+  z-index: auto; 
+  transition: all 0.2s ease;
+ 
+  box-shadow: 0 -4px 20px rgba(84, 177, 1, 0.3);
+  margin-top: 15px;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  transition: all 0.2s ease;
+  backface-visibility: hidden;
+  }
+
+  /* Mobile: Ajustes */
+@media (max-width: 768px) {
+  .vz-checkout-container {
+    
+    gap: 8px;
+  }
+  
+  .vz-continuar-comprando {
+    flex: 0 0 23%;
+    font-size: 11px;
+    padding: 0px 0px;
+    position: relative;
+    left: -2%;
+    top: 8%;
+    font-style: italic;
+    text-decoration: underline;
+  }
+  
+  .vz-checkout-btn {
+    
+  }
+}
+
+  .vz-chat {
+    display: none;
+    padding: var(--vz-spacing);
+    background: #f8f9fa;
+    height: 100%;
+  }
+  .vz-chat.active {
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-messages {
+    flex: 1;
+    max-height: 60vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .vz-msg {
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 70%;
+  }
+  .vz-msg-vendor {
+    background: #e8f5e9;
+  }
+  .vz-msg-customer {
+    background: #f3e5f5;
+    margin-left: auto;
+    text-align: right;
+  }
+  .vz-input-area {
+    display: flex;
+    gap: 10px;
+  }
+  .vz-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+  }
+  .vz-send {
+    padding: 10px 20px;
+    background: var(--vz-cor-sucesso);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #vz-confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 100002;
+    display:none;
+  }
+  @keyframes cair {
+    to { transform: translateY(100vh) rotate(360deg); 
+     /* opacity: 0; */
+    }
+  }
+  @keyframes balanco-leve {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+  @keyframes pula-pula {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  @keyframes tremendo {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --vz-cor-texto: #000;
+      --vz-cor-contraste: #000;
+    }
+    .vz-gaveta-body {
+      background: #f0f0f0;
+    }
+    .vz-balao {
+      background: rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,0,0,0.2);
+      color: var(--vz-cor-texto);
+    }
+    .vz-carrinho {
+      background: #fff;
+    }
+    .vz-chat {
+      background: #222;
+    }
+    .vz-messages {
+      background: #333;
+    }
+    .vz-produtos-carrossel .vz-produto,
+    .vz-rec-item {
+      background: #444;
+      border-color: #555;
+    }
+    .vz-trilha-gamificacao {
+      background: linear-gradient(135deg, #333, #444);
+    }
+    .vz-trilha-circulo {
+      background: rgba(255,255,255,0.1);
+      border-color: #555;
+    }
+    .vz-progress {
+      background: #c5c5c5;
+    }
+    .vz-input {
+      background: #333;
+      color: #eee;
+      border-color: #555;
+    }
+  }
+  @media (max-width: 768px) {
+    /*.vz-mascote {
+      width: {{ section.settings.mobile_mascote_size }}px;
+      height: {{ section.settings.mobile_mascote_size | plus: 30 }}px;
+    }
+    */
+    .vz-gaveta {
+    height: 80vh;
+    width: auto;
+    left: 1%;
+    right: 1%;
+    border: 2px solid;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    }
+    .vz-carrinho {
+      width: 100%;
+      width: 94%;   
+      right: -94%;  
+      border-radius: 20px 0 0 20px;
+    }
+    .vz-produtos-carrossel,
+    .vz-recs {
+      padding: 10px;
+    }
+    .vz-produto,
+    .vz-rec-item {
+      flex: 0 0 120px;
+    }
+    .vz-trilha-gamificacao {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .vz-trilha-linha {
+      width: 4px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+    .vz-trilha-item {
+      max-width: 100%;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .desk-none {
+      display: none !important;
+    }
+    .text-juros {
+      text-align: center;
+    }
+    text-juros-desk {
+      font-size: 14px;
+    }
+    #vz-quickbuy {
+      left: 2% !important;
+      right: 2% !important;
+      height: auto !important;
+      max-height: 483px !important;
+      border-radius: 10px 10px 0 0 !important;
+    }
+    .vz-qb-header {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+    .vz-qb-header-h3 {
+      color: #FFF;
+      font-size: 28px;
+      font-weight: 500;
+    }
+    .vz-qb-product-info {
+      max-width: 56%;
+      position: absolute;
+      /*bottom: 35%;*/
+      left: 6%;
+    }
+    .vz-qb-variants {
+      zoom: 85%;
+      max-width: 891px;
+      margin: 10px auto;
+      margin-left: auto;
+     margin-right: 0;
+    }
+    .vz-qb-variant-bt {
+      color: #0B6809;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 auto;
+    }
+    .vz-qb-image {
+      width: 168px !important;
+      height: 168px !important;
+    }
+    .vz-qb-details {
+      max-width: 57%;
+    }
+    .vz-qb-details-h4 {
+      color: #000;
+      font-size: 22px;
+      font-weight: 500;
+    }
+    vz-qb-details-p {
+      color: rgba(75, 85, 99, 0.40);
+      font-size: 20px;
+      font-weight: 400;
+    }
+  }
+  @media screen and (max-width: 48em) {
+    #vz-quickbuy {
+      left: 1%;
+      right: 1%;
+      border-radius: 8px;
+      border: 2px solid;
+     
+    }
+    .vz-qb-header {
+      padding: 3px 15px;
+      padding-left: 30px;
+    }
+    .vz-qb-header-h3 {
+      font-size: 18px;
+      padding-bottom: 3px;
+    }
+    .vz-qb-btclick-x {
+      font-size: 25px;
+      padding: 0 10px 0 0;
+    }
+  }
+  button, .btn, .btn-primary, .btn-secondary {
+    text-transform: inherit !important;
+  }
+  .product-form__input:not(.color) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    zoom: 89%;
+  }
+  .product-form__input:not(.color) .bls__option-swatch,
+  .bls__product-color-swatches-text {
+    background: #ffffff;
+    border: 1px solid #54b101;
+    border-radius: 18px !important;
+    padding: 10px !important;
+    /*text-align: left;*/
+    /*display: flex;*/
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease !important;
+    color: #000;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 2px !important;
+    gap: 15px;
+    padding-top:0px!important;
+  }
+  .product-form__input:not(.color) .bls__option-swatch:hover,
+  .product-form__input:not(.color) .bls__option-swatch.active,
+  .bls__product-color-swatches-text.active {
+    background-color: #fff;
+    border: 2px solid #54b101;
+    color: #0b6809;
+  }
+  .labels-container-x9 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 0 2px 3px 4px;
+  }
+  @media (min-width: 960px){
+  /*.labels-x9-black{display:block;}*/
+  }
+  .prod-x9-option-label,
+  .prod-x9-option-label-2 {
+    display: flex;
+    width: 90px;
+    padding: 4px 0 3px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 0 5px 5px;
+    color: #FFF;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-transform: uppercase;
+    height: 24px;
+  }
+  .prod-x9-option-label {
+    background: #0B6809;
+  }
+  .prod-x9-option-label-2 {
+    background-color: #F80;
+  }
+  .prod-x9-option-image {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    width: auto;
+    padding-left: unset;
+  }
+  .prod-x9-option {
+    height: auto;
+    max-width: 198px;
+    width: 197.33px;
+    flex-shrink: 0;
+  }
+  .text-juros {
+    color: #4B5563;
+    font-weight: 400;
+    font-size: 16px;
+  }
+  .text-s-juros {
+    color: #4B5563;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .value-parcela {
+    font-weight: 700;
+    color: #0B6809;
+    font-size: 24px;
+    margin-top: -10px;
+    display: block;
+  }
+  .ou-a-vista {
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .value-vista {
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .text-a-vista {
+    color: #4B5563;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .product-form__quantity {
+    display: flex;
+  }
+  .bls__visitors {
+    margin-top: -2.5rem;
+  }
+  .swatch-attribute-label {
+    color: #9ca3af !important;
+  }
+  .swatch-selected-value {
+    color: #000 !important;
+  }
+  .bls__product-label-detail {
+    position: relative;
+    top: -52px;
+    left: 43%;
+  }
+  .bls__zoom-image {
+    display: none;
+  }
+  .right-content {
+    display: flex;
+    flex-direction:  column;
+    gap: 8px;
+    flex: 1;
+    margin-top: 220px;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
+  .bls__product-swatches {
+    width: auto;
+    height: auto;
+    margin: 0;
+    display: flex;
+    width: 100%;
+    height: 24px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .variant-price-wrapper {
+    margin-top: 0 !important;
+    text-align: left;
+    width: 100%;
+  }
+
+/*
+.vz-brindes-trilha {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: calc(var(--vz-spacing) * 1.5);
+    position: relative;
+    background: linear-gradient(135deg, #f5f5f5, #ffffff);
+    border-radius: 15px;
+    margin: var(--vz-spacing);
+  }
+  .vz-brindes-trilha .vz-produto {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+    
+    transition: all 0.3s;
+    filter: grayscale(1);
+    height: auto;
+    max-width: 160px;
+  }
+  .vz-brindes-trilha .vz-produto.conquistado {
+   
+    filter: grayscale(0);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  }
+  .vz-brindes-trilha .vz-produto.ativo {
+   
+    filter: grayscale(0);
+    background: linear-gradient(135deg, var(--vz-cor-sucesso), #00ff88);
+    border-color: var(--vz-cor-sucesso);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(0,255,136,0.5);
+  }
+  .vz-brindes-trilha-linha {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: 1;
+    transform: translateY(-20px);
+  }
+  .vz-brindes-trilha-linha-progresso {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--vz-cor-sucesso), #00ff88);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  */
+  @media (max-width: 768px) {
+    /*.vz-brindes-trilha {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .vz-brindes-trilha-linha {
+      width: 4px;
+      height: 85%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+    .vz-brindes-trilha .vz-produto {
+      max-width: 100%;
+    }
+    */
+  }
+
+  @media (max-width: 576px) {
+   /* .vz-brindes-trilha{
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        border: 1px solid #dedede;
+    }
+    .vz-brindes-trilha .vz-produto.conquistado{
+    padding: 0;
+    display: grid;
+    background-color: #fff !important;
+    grid-template-columns: repeat(3, 1fr);
+    color: #000;
+    font-size: 13px;
+    font-weight: 700;
+    height: auto;
+    width:100%;
+    }
+    */
+    .vz-produto-3{
+    display: initial!important;
+    width:55%!important;
+    }
+
+    .vz-produto img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-left: 5px;
+    }
+    .vz-produto-div{
+    display: contents;
+    width: auto;
+    height: auto;
+    margin: 0;
+    margin-top: 0px;
+    margin-top: 0px;
+    }
+    .vz-produto h4{
+    align-content: center;
+    margin: 0px;
+    font-size:13px;
+    }
+    .vz-produto p{
+    align-content: center;
+    margin: 0px;
+    }
+
+    .sticky-addcart-opstion ~ .product-form__buttons .product-form__quantity,
+    .sticky-addcart-product-form form.form select,
+    .mobile-none {
+      display: none !important;
+    }
+    .vz-qb-body {
+      padding: 15px 10px;
+    }
+    .vz-qb-image {
+      width: 93px;
+      height: 93px;
+    }
+    .vz-qb-details-h4 {
+      font-size: 18px;
+    }
+    .vz-qb-details-p {
+      font-size: 13px;
+      line-height: 16px;
+    }
+    .vz-qb-variants {
+      margin: 0 15px;
+    }
+    .vz-qb-variant {
+      padding: 0;
+      display: grid;
+      background-color: #fff !important;
+      grid-template-columns: repeat(3, 1fr);
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      height: auto;
+    }
+    .vz-qb-variant-bt {
+      line-height: 5px;
+      color: #0B6809 !important;
+      padding-left: 5px;
+    }
+    .bls__product-label-detail {
+      top: -51px;
+      left: 65%;
+    }
+    .prod-x9-option-image {
+      padding-left: 10px;
+    }
+    .prod-x9-option {
+      width: 100%;
+      width: 110px;
+      height: 110px;
+      flex-shrink: 0;
+    }
+    .labels-container-x9 {
+      padding: 2px 2px 3px 0px;
+    }
+    .prod-x9-option-label {
+      font-size: 10px !important;
+      flex-direction: column;
+      color: #FFF;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #0B6809;
+      display: flex;
+      width: 90px;
+      height: 23px;
+      padding: 3px 0;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .prod-x9-option-label-2 {
+      font-size: 9px !important;
+      flex-direction: column;
+      color: #FFF;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #F80;
+      display: flex;
+      width: 90px;
+      height: 23px;
+      padding: 3px 0;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .bls__product-swatches {
+      display: flex;
+      width: 197px;
+      height: auto;
+      flex-shrink: 0;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    .value-parcela {
+      font-size: 16px;
+      margin-top: -1px;
+    margin-left: 5px;
+    }
+    .text-s-juros,
+    .text-juros {
+      font-size: 13px;
+      color: #4B5563;
+    font-weight: 400;
+    margin-left: 5px;
+    display: inline-flex;
+    padding-bottom: 1px;
+    /*display: block ruby;*/
+    }
+    .ou-a-vista,
+    .value-vista,
+    .text-a-vista {
+      font-size: 11px;
+      padding-bottom: 5px;
+    }
+    .value-vista {
+    padding-left: 3px;
+    padding-right: 3px;
+    }
+    .cart-lixeira{
+  font-size:11px;
+  color:#2e2e2e;
+  border:0;
+  background:0;
+  cursor:pointer;
+  position: relative;
+  top: -78%;
+  margin-left: 83%;
+  transition: opacity 0.3s;
+}
+  }
+  @media (max-width: 480px) {
+    .mobile-none {
+      display: none !important;
+    }
+    .product-form__input:not(.color) {
+      display: flex;
+      gap: 5px;
+    }
+    .product-form__input:not(.color) .bls__option-swatch {
+      flex-direction: column !important;
+      gap: 5px;
+      padding: 6px !important;
+      font-size: 10px !important;
+      margin: 1.5px !important;
+      display: grid;
+      margin-top: 9px !important;
+      border-radius: 18px !important;
+      border: 2px solid #54B101;
+      background: rgba(255, 255, 255, 0.00);
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .labels-container-x9 {
+      padding: 2px 2px 3px 1px;
+    }
+    .prod-x9-option-label {
+      width: 79px;
+      height: 18px;
+    }
+    .prod-x9-option-label-2 {
+      width: 79px;
+      height: 18px;
+    }
+    .bls__product-swatches {
+      width: 197px;
+    }
+    .variant-price-wrapper {
+      width: 203px;
+      height: 41px;
+      color: #4B5563;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 15px;
+      display: flex;
+    flex-direction: column;
+    justify-content: center;
+    }
+    .right-content {
+      margin-top: 0 !important;
+      width: 100%;
+      padding-left: 10px;
+    }
+    .prod-x9-option {
+      width: 83px;
+      height: 83px;
+    }
+  }
+
+  /* === CUPOM DE DESCONTO === */
+.vz-cupom-container {
+  margin-bottom: 0px;
+  padding-top:0px;
+  display: none;
+}
+.vz-cupom-form {
+  display: flex;
+  gap: 10px;
+}
+.vz-cupom-input {
+  background: #fff;
+  border: 1px solid #ccc !important;
+  color: #333;
+  display: block;
+  flex: 1;
+  line-height: 2.5em;
+  max-height: 38px;
+  max-width: 70%;
+  min-height: 10px;
+  outline: none !important;
+  padding: 0 10px !important;
+  pointer-events: all;
+  text-indent: 0 !important;
+  width: auto;
+  position: relative;
+}
+.vz-cupom-btn {
+  padding: 0px 16px;
+  background:#000;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  max-height: 38px;
+  position: relative;
+  min-width: 95px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.vz-cupom-btn:hover {
+  /*opacity: 0.9;*/
+}
+.vz-cupom-msg {
+  font-size: 12px;
+  margin-top: 5px;
+}
+.vz-cupom-msg.success {
+  color: var(--vz-cor-sucesso);
+  padding: .7rem 2rem .7rem 4.5rem;
+  margin-bottom: 1.5rem;
+}
+.vz-cupom-msg.error {
+  color: #e74c3c;
+}
+/* === CUPOM APLICADO (layout igual imagem) === */
+.vz-cupom-aplicado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 6px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  border: 1px solid #e0e0e0;
+  max-height: 39px;
+}
+.vz-cupom-tag {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 6px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+}
+.vz-cupom-tag::before {
+  content: '🎟️';
+  font-size: 14px;
+}
+.vz-cupom-remove {
+  background: transparent;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 5px;
+  line-height: 1;
+}
+.vz-cupom-remove:hover {
+  color: #333;
+}
+
+/* === TOTAIS COM DESCONTO === */
+.vz-carrinho-subtotal,
+.vz-carrinho-desconto,
+.vz-carrinho-frete {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+}
+.vz-carrinho-desconto {
+  color: #00c851;
+  font-weight: 600;
+}
+.vz-carrinho-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0px;
+  padding-top: 5px;
+  border-top: 1px solid #eee;
+  color: #000;
+  margin-bottom: 0px!important;
+}
+
+.vz-carrinho-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.vz-carrinho-overlay.ativo {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* Mobile: Overlay mais visível nos 6% */
+@media (max-width: 768px) {
+  .vz-carrinho-overlay.ativo {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* === PARCELAMENTO === */
+.vz-parcelamento {
+  font-size: 13px;
+  color: #666;
+  margin-top: 0px!important;
+  text-align: right;
+}
+
+/* === LEVE TAMBÉM === */
+.vz-leve-tambem {
+  padding-top: 0px;
+  position: relative;
+  background: #fff;
+  border-top: 2px solid #eee;
+  margin-top:auto;
+}
+.vz-leve-tambem h4 {
+  margin: 0px;
+  font-size: 12.5px;
+  font-weight: bold;
+  color: var(--vz-cor-texto);
+  justify-content: left;
+  align-items: center;
+  width: 75%;
+  display: flex;
+  margin-left: 7%;
+}
+.vz-leve-carrossel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: -10px;
+}
+.vz-leve-track {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+.vz-leve-item {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  padding: 6px 0;
+  gap: 0px;
+}
+.vz-leve-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  padding: 0px;
+  padding-left:16px;
+}
+.vz-leve-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  right: 20px;
+  max-width: 75%;
+}
+.vz-leve-info h5 {
+  margin: 0px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+.vz-leve-info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--vz-cor-sucesso);
+}
+.vz-leve-add-btn {
+  padding: 6px 8px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  height: fit-content;
+  align-self: center;
+  white-space: nowrap;
+  width: auto;
+  position: relative;
+  right: 30px;
+}
+.vz-leve-add-btn:hover {
+  /*opacity: 0.9;*/
+}
+.vz-leve-add-btn:disabled {
+  /*opacity: 0.5;*/
+  cursor: not-allowed;
+}
+
+/* ✅ SETAS NO LUGAR DOS DOTS */
+.vz-leve-nav {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  width: 30%;
+  margin-right: 11px;
+}
+.vz-leve-arrow {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+.vz-leve-arrow:hover {
+  background:#fff;
+  transform: scale(1.1);
+  color:#2e2e2e;
+}
+.vz-leve-arrow:disabled {
+  /*opacity: 0.3;*/
+  cursor: not-allowed;
+}
+.vz-leve-arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: #2e2e2e;
+}
+.vz-leve-arrow svg:hover {
+   fill: #2e2e2e;
+}
+.vz-leve-counter {
+  display:none;
+  font-size: 8px;
+  color: #666;
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
+}
+/* === ANIMAÇÕES FADE === */
+.vz-fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    /*opacity: 1;*/
+    max-height: 100px;
+    margin-bottom: 10px;
+  }
+  to {
+    /*opacity: 0;*/
+    max-height: 0;
+    margin-bottom: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+.vz-fade-in {
+  animation: vzFadeInCustom 0.5s ease forwards;
+}
+
+@keyframes vzFadeInCustom {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 100px;
+  }
+}
+  
+/* === BARRA DE PROGRESSO COM ÍCONES === */
+.vz-progress-container {
+  font-size: 12px;
+  border-radius: 8px;
+  background: #ebffd9;
+  border: 1px solid #BDC0B9;
+  padding: 0 13px 35px;
+  margin: 5px auto 0;
+  min-width: 95%;
+  padding-left: 10px;
+  padding-right: 30px;
+  min-height: 12%;
+}
+
+ @media (max-width: 376px) {
+  .vz-progress-container{
+  min-height: 14%;
+  }  
+  .vz-brindes-container {
+ margin-top: 2px;
+  }
+  }
+.vz-progress {
+  background: #c5c5c5;
+  height: 8px;
+  border-radius: 20px;
+  position: relative;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vz-progress-fill {
+  height: 100%;
+    border-radius: 20px;
+    transition: all 4s;
+  animation: 5s linear infinite progress;
+  background-color: #54b101;
+  -webkit-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  -moz-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  -ms-background-image: linear-gradient(135deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 25%,rgba(255,255,255,0) 25%,rgba(255,255,255,0) 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%);
+  background-image: linear-gradient(135deg,#ffffff26 0 25%,#fff0 25% 50%,#ffffff26 50% 75%,#fff0 75% 100%);
+  background-size: 40px 40px;
+}
+
+.vz-progress-msg {
+  text-align: center;
+  font-weight: bold;
+  color: var(--vz-cor-texto);
+  padding-left: 40px;
+  margin-top: 10px;
+  padding-bottom: 20px;
+}
+
+/* === ÍCONES NA BARRA === */
+.item-circle {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  background: #e0e0e0; /* Cinza quando não alcançado */
+  border-radius: 50%;
+  position: absolute;
+  bottom: -129%; /* Ajuste conforme necessário */
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.item-circle.achieved {
+  background: #54B101;
+  animation: pulse 1s ease;
+}
+
+.item-circle svg {
+  width: 17px;
+  height: 17px;
+  stroke: #f0f0f0;
+}
+
+.item-circle span {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%);
+  margin-top: 10px;
+  text-align: center;
+  max-width: 50px;
+  line-height: 1;
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Tamanhos progressivos */
+.item-circle[data-index="0"] {
+  left: 25.287%;
+  width: 29px;
+  height: 29px;
+  bottom: -129%;
+}
+
+.item-circle[data-index="1"] {
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  bottom: -142%;
+}
+
+.item-circle[data-index="2"] {
+  left: 70.287%;
+  width: 34px;
+  height: 34px;
+  bottom: -150%;
+}
+
+.item-circle[data-index="3"] {
+  left: 100%;
+  width: 40px;
+  height: 40px;
+  bottom: -184%;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%) scale(1); }
+  50% { transform: translate(-50%) scale(1.1); }
+}
+
+// === ADICIONAR CSS PARA TRANSIÇÃO ===
+// (Inserir dentro da tag <style>)
+
+.vz-carrinho-item.updating {
+  /*opacity: 0.5;*/
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.vz-carrinho-item.updating::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(84, 177, 1, 0.2);
+  border-top-color: #54B101;
+  border-radius: 50%;
+  animation: vz-spin 0.8s linear infinite;
+}
+
+@keyframes vz-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.vz-carrinho-btn-qnt:disabled {
+  /*opacity: 0.4;*/
+  cursor: not-allowed;
+}
+.cart-lixeira{
+  font-size:11px;
+  color:#2e2e2e;
+  border:0;
+  background:0;
+  cursor:pointer;
+  position: relative;
+  top: -78%;
+  margin-left: 83%;
+  transition: opacity 0.3s;
+}
+
+/* === SUBSTITUIR TODO O CSS DAS SUGESTÕES === */
+
+/* === SUBSTITUIR TODO O CSS DAS SUGESTÕES === */
+
+.vz-carrinho-sugestoes {
+  padding: 15px 10px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
+
+.vz-carrinho-sugestoes-titulo {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  padding: 15px 0;
+  margin-bottom: 15px;
+}
+
+/* Item de sugestão (produto completo) */
+.vz-sugestao-item {
+ 
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 5px;
+  background: #fff;
+ 
+}
+
+/* Header do produto (sem usar - vai direto pras variantes) */
+.vz-sugestao-header {
+  display: none;
+}
+
+.vz-sugestao-subtitulo {
+  display: none;
+}
+
+/* Container de variantes */
+.vz-sugestao-variantes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Botão de variante (LAYOUT DA IMAGEM) */
+.vz-sugestao-variant-btn {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #fff;
+  border: 2px solid #54B101;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  text-align: left;
+}
+
+.vz-sugestao-variant-btn:hover {
+  border-color: #0B6809;
+  background: rgba(84, 177, 1, 0.02);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(84, 177, 1, 0.15);
+}
+
+.vz-sugestao-variant-btn:active {
+  transform: translateY(0);
+}
+
+.vz-sugestao-variant-btn:disabled {
+  /*opacity: 0.5;*/
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.vz-sugestao-variant-btn.adding::after {
+  content: '✓';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #00c851;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  animation: scaleInBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 3px 10px rgba(0,200,81,0.4);
+}
+
+/* Imagem da variante (GRANDE, esquerda) */
+.vz-sugestao-variant-image-principal {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.vz-sugestao-variant-image-principal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+/* Conteúdo direito (badges + nome + preços) */
+.vz-sugestao-variant-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Badges (Mais Vendido + Frete Grátis) */
+.vz-sugestao-variant-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vz-sugestao-badge-verde {
+  background: #0B6809;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.vz-sugestao-badge-laranja {
+  background: #F80;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Nome da variante */
+.vz-sugestao-variant-nome {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Preços */
+.vz-sugestao-variant-precos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vz-sugestao-preco-parcelado {
+  font-size: 13px;
+  color: #4B5563;
+  font-weight: 400;
+}
+
+.vz-sugestao-preco-parcelado strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0B6809;
+}
+
+.vz-sugestao-preco-vista {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 400;
+}
+
+.vz-sugestao-preco-vista strong {
+  font-weight: 700;
+  color: #6B7280;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .vz-sugestao-variant-btn {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .vz-sugestao-variant-image-principal {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .vz-sugestao-badge-verde,
+  .vz-sugestao-badge-laranja {
+    font-size: 9px;
+    padding: 3px 10px;
+  }
+  
+  .vz-sugestao-variant-nome {
+    font-size: 14px;
+  }
+  
+  .vz-sugestao-preco-parcelado {
+    font-size: 12px;
+  }
+  
+  .vz-sugestao-preco-parcelado strong {
+    font-size: 14px;
+  }
+  
+  .vz-sugestao-preco-vista {
+    font-size: 11px;
+  }
+}
+
+@keyframes scaleInBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+
+
+/* ========================================
+   VARIANTE BLACK FRIDAY (4ª variante)
+   ======================================== */
+
+.vz-qb-variant-black {
+  /* Herda base */
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  
+  /* Específico BLACK */
+  background: #000000 !important;
+  border-width: 3px;
+}
+
+.vz-qb-variant-black:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5);
+  border-color: #54B101;
+}
+
+.vz-qb-variant-black.selecionado {
+  border-color: #54B101;
+  box-shadow: 0 0 0 4px rgba(84, 177, 1, 0.2);
+}
+
+/* Badges topo */
+.vz-qb-black-badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 10;
+}
+
+.vz-qb-black-badge-oferta {
+  background: #54B101;
+  color: #000000;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.vz-qb-black-badge-frete {
+  background: #ffffff;
+  color: #000000;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Countdown */
+.vz-qb-black-countdown {
+  margin-top: 45px;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.vz-qb-black-countdown-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  color: #cccccc;
+}
+
+.vz-qb-black-countdown-timer {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+/* Título da variante BLACK */
+.vz-qb-variant-black .vz-qb-variant-bt {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-align: center;
+}
+
+/* Imagem na variante BLACK */
+.vz-qb-variant-black .prod-x9-option-image img {
+  filter: brightness(1.1) contrast(1.05);
+}
+
+/* Preços na variante BLACK */
+.vz-qb-variant-black .variant-price-wrapper {
+  color: #ffffff;
+}
+
+.vz-qb-variant-black .text-juros {
+  color: #ffffff !important;
+}
+
+.vz-qb-variant-black .value-parcela {
+  color: #F90 !important;
+  font-weight: 800 !important;
+}
+
+.vz-qb-variant-black .value-vista {
+  color: #cccccc !important;
+}
+
+.vz-qb-variant-black .text-denavita-shopify {
+  color: #ffffff !important;
+}
+
+/* Mobile ajustes */
+@media (max-width: 768px) {
+  .vz-qb-variant-black {
+    height: auto;
+    width: auto;
+  }
+  
+  .vz-qb-black-countdown-timer {
+    font-size: 16px;
+  }
+  
+  .vz-qb-variant-black .vz-qb-variant-bt {
+    
+  }
+}
+
+/* Container do countdown */
+.vz-qb-countdown-third-container {
+  background: rgba(0, 0, 0, 0.85);
+ 
+  border-radius: 8px;
+  text-align: left;
+  margin-bottom: 5px;
+  width: 150px;
+}
+
+.vz-qb-countdown-third-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.vz-qb-countdown-third-timer {
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFF;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 15px;
+  width: 170px;
+}
+
+/* ========================================
+   3ª VARIANTE - FUNDO PRETO + TEXTOS BRANCOS
+   ======================================== */
+
+.vz-qb-variant.has-third-countdown {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+.vz-qb-variant.has-third-countdown .vz-qb-variant-bt {
+  color: #ffffff !important;
+}
+
+.vz-qb-variant.has-third-countdown .text-juros,
+.vz-qb-variant.has-third-countdown .text-gray-600,
+.vz-qb-variant.has-third-countdown .value-parcela,
+.vz-qb-variant.has-third-countdown .value-vista,
+.vz-qb-variant.has-third-countdown .text-denavita-shopify,
+.vz-qb-variant.has-third-countdown .ou-a-vista,
+.vz-qb-variant.has-third-countdown .text-a-vista,
+.vz-qb-variant.has-third-countdown .text-s-juros {
+  color: #ffffff !important;
+}
+
+/* Label "BLACK" (amarela, acima da imagem) */
+.vz-qb-third-label-black {
+  background: #CCFD3F;
+  color: #000000;
+  border-radius: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 3px;
+  display: block;
+  max-height: 30px;
+  width: auto;
+  height: auto;
+  padding: 2px 1px;
+  margin-top: 6px;
+}
+
+/* Label "Frete Grátis" (preta com borda branca, ao lado do nome) */
+.vz-qb-third-label-frete {
+  background: #000000;
+  display: inline-block;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+  border-radius: 5px;
+  border: 1px solid #FFF;
+  color:#fff;
+}
+
+/* Cor laranja no valor da parcela */
+.vz-qb-variant.has-third-countdown .value-parcela {
+  color: #FF9900 !important;
+}
+@media (min-width: 958px) {
+  .vz-qb-body {
+    min-height: 650px;
+  }
+.prod-x9-option-black {
+  max-width: 158px;  
+}
+.vz-qb-variant.has-third-countdown {
+  display: flex !important;
+  flex-direction: row !important;
+  position: absolute;
+  right: 59%;
+  bottom: 4%;
+  margin-bottom: 20px;
+  width: 447px;
+  height: 194px;
+}
+
+.vz-qb-variant-black {
+  display: flex;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #000000 !important;
+  position: absolute;
+  right: 62%;
+  bottom: 4%;
+  margin-bottom: 20px;
+  width: 447px;
+  height: 194px;
+}
+
+.vz-qb-variant.has-third-countdown .prod-x9-option-image.desk-none {
+  /*display: flex !important;
+  flex: 0 0 45% !important;*/
+}
+.auxiliar{
+  display:block!important;
+  width:40%;
+  align-content: center;
+}
+.vz-qb-third-label-frete {
+  padding-right: 5px;
+  padding-left: 5px;
+  font-size: 12px;
+}
+.vz-qb-third-label-black{
+max-height: 23px;
+  max-width: 115px;
+  padding: 0px 1px;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  top: -8%;
+  left: 16%;
+  z-index: 1000;
+}
+.labels-container-x9{
+  gap:unset;
+  padding:unset;
+}
+.right-content{
+  align-content: center;
+  display: unset;
+  flex-direction: unset;
+  gap: unset;
+  flex: unset;
+  margin-top: unset;
+  align-items: unset;
+  width: 60%;
+  height: unset;
+}
+.labels-x9-black{
+  display: unset;
+  grid-template-columns: unset;
+  gap: unset;
+  align-items: unset;
+  padding: unset;
+}
+.vz-qb-countdown-third-container{
+  width:unset;
+  text-align:center; 
+}
+.vz-qb-countdown-third-label{
+  font-size: 13px;
+  text-align: center;
+}
+.vz-qb-countdown-third-timer{
+  font-size: 13px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.variant-price-wrapper{
+  text-align:center;
+}
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .vz-qb-third-label-black {
+    font-size: 9px;
+  }
+  
+  .vz-qb-third-label-frete {
+    padding: 5px 4px;
+    margin-left: 6px;
+    width: auto;
+    color: #FFF;
+    text-align: center;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+    display:none;
+  }
+}
+
+/* Força 2 colunas */
+.vz-qb-variant.has-third-countdown {
+  display: flex !important;
+  flex-direction: row !important;
+  
+}
+
+/* Imagem direita oculta */
+.vz-qb-variant.has-third-countdown .prod-x9-option-image.mobile-none {
+  display: none !important;
+}
+
+/* Versão mobile dos preços */
+.vz-qb-variant.has-third-countdown .variant-price-wrapper.mobile-none {
+  display: none !important;
+}
+
+.vz-qb-variant.has-third-countdown .variant-price-wrapper.desk-none {
+  display: block !important;
+}
+
+  {{ section.settings.custom_css }}
+
+/* === CSS DINÂMICO PARA ÍCONES (baseado em quantos estão configurados) === */
+{% assign total_marcos = 0 %}
+{% if section.settings.valor_frete_gratis > 0 %}{% assign total_marcos = total_marcos | plus: 1 %}{% endif %}
+{% if section.settings.valor_brinde_1 > 0 and section.settings.produto_brinde_1 != blank %}{% assign total_marcos = total_marcos | plus: 1 %}{% endif %}
+{% if section.settings.valor_brinde_2 > 0 and section.settings.produto_brinde_2 != blank %}{% assign total_marcos = total_marcos | plus: 1 %}{% endif %}
+{% if section.settings.valor_brinde_3 > 0 and section.settings.produto_brinde_3 != blank %}{% assign total_marcos = total_marcos | plus: 1 %}{% endif %}
+
+{% if total_marcos == 1 %}
+/* Só frete grátis - ícone em 100% */
+.item-circle[data-index="0"] { left: 100% !important; }
+{% elsif total_marcos == 2 %}
+/* Frete + 1 brinde */
+.item-circle[data-index="0"] { left: 50% !important; }
+.item-circle[data-index="1"] { left: 100% !important; }
+{% elsif total_marcos == 3 %}
+/* Frete + 2 brindes */
+.item-circle[data-index="0"] { left: 33.33% !important; }
+.item-circle[data-index="1"] { left: 66.66% !important; }
+.item-circle[data-index="2"] { left: 100% !important; }
+{% endif %}
+</style>
+<canvas id="vz-confetti-canvas" width="100%" height="100%"></canvas>
+<div id="vz-overlay" class="vz-overlay"></div>
+
+{% comment %}
+<div id="vz-mascote" class="vz-mascote">
+  {% if section.settings.mascote_imagem %}
+    <img src="{{ section.settings.mascote_imagem | img_url: '200x200' }}" alt="Vendedor" class="vz-mascote-img">
+  {% else %}
+    <div class="vz-mascote-default">🏖️</div>
+  {% endif %}
+  <span id="vz-badge" class="vz-badge">0</span>
+  <div class="vz-balao">
+    <button class="vz-fechar" onclick="VZ.tentarFechar()" aria-label="Fechar balão">×</button>
+    <p id="vz-balao-texto"></p>
+  </div>
+</div>
+{% endcomment %}
+
+<div id="vz-gaveta" class="vz-gaveta">
+  <div class="vz-gaveta-header">
+    <div style="display: flex; align-items: center;">
+      <h3>{{ section.settings.mensagem_gaveta }}</h3>
+      <span id="vz-dots-loader" class="vz-dots-loader">...</span>
+    </div>
+    <button id="dark-toggle" onclick="VZ.toggleDarkMode()" aria-label="Alternar modo escuro"></button>
+    <button class="vz-gaveta-close" onclick="VZ.fecharGaveta()" aria-label="Fechar gaveta">×</button>
+  </div>
+  <div class="vz-gaveta-body">
+    <div id="tab-progress" class="vz-tab-content active">
+      
+      <div class="vz-progress-msg"></div>
+
+      {% comment %}
+      <div class="vz-brindes-trilha">
+        <div class="vz-brindes-trilha-linha">
+          <div class="vz-brindes-trilha-linha-progresso" id="vz-brindes-progresso"></div>
+        </div>
+        {% if section.settings.produto_brinde_1 %}
+          <div class="vz-produto" onclick="VZ.adicionarAoCarrinho('{{ section.settings.produto_brinde_1.selected_or_first_available_variant.id }}')" data-valor="{{ section.settings.valor_brinde_1 }}">
+            <img src="{{ section.settings.produto_brinde_1.featured_image | img_url: '300x300' }}" alt="{{ section.settings.produto_brinde_1.title }}">
+            <div class="vz-produto-div"> 
+                <h4>{{ section.settings.produto_brinde_1.title | truncate: 30 }}</h4>
+                <p>Grátis!</p>
+            </div>  
+          </div>
+        {% endif %}
+        {% if section.settings.produto_brinde_2 %}
+          <div class="vz-produto" onclick="VZ.adicionarAoCarrinho('{{ section.settings.produto_brinde_2.selected_or_first_available_variant.id }}')" data-valor="{{ section.settings.valor_brinde_2 }}">
+            <img src="{{ section.settings.produto_brinde_2.featured_image | img_url: '300x300' }}" alt="{{ section.settings.produto_brinde_2.title }}">
+            <div class="vz-produto-div"> 
+                <h4>{{ section.settings.produto_brinde_2.title | truncate: 30 }}</h4>
+                <p>Grátis!</p>
+            </div>
+          </div>
+        {% endif %}
+        {% if section.settings.produto_brinde_3 %}
+          <div class="vz-produto vz-produto-3" onclick="VZ.adicionarAoCarrinho('{{ section.settings.produto_brinde_3.selected_or_first_available_variant.id }}')" data-valor="{{ section.settings.valor_brinde_3 }}">
+            <img src="{{ section.settings.produto_brinde_3.featured_image | img_url: '300x300' }}" alt="{{ section.settings.produto_brinde_3.title }}">
+            <div class="vz-produto-div"> 
+                <h4>{{ section.settings.produto_brinde_3.title | truncate: 30 }}</h4>
+                <p>Grátis!</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      {% endcomment %}
+
+    </div>
+    <button class="vz-chat-btn" onclick="VZ.transformarEmChat()" aria-label="Preciso de ajuda">💬 Preciso de ajuda</button>
+  </div>
+</div>
+<div id="vz-carrinho-overlay" class="vz-carrinho-overlay" onclick="VZ.fecharCarrinho()"></div>
+<div id="vz-carrinho" class="vz-carrinho">
+  <div class="vz-carrinho-header">
+    <h3 style="margin: 0px;padding-left: 20px;font-size: 16px;color: #f0f0f0;" class="vz-carrinho-header-h3">Carrinho (<span id="vz-cart-count">0</span>)</h3>
+    <button onclick="VZ.fecharCarrinho()" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;" aria-label="Fechar carrinho">×</button>
+  </div>
+  
+<div class="vz-progress-container">
+  <div class="vz-progress-msg"></div>
+  <div class="vz-progress">
+    <!-- === LOCALIZAR ESTA PARTE NO HTML E SUBSTITUIR === -->
+
+<div class="vz-progress-fill" id="vz-progress-fill-carrinho">
+  
+  <!-- ✅ ÍCONE 0: FRETE GRÁTIS (mantém caminhão) -->
+  <div class="item-circle" data-index="0" data-minvalue="{{ section.settings.valor_frete_gratis }}">
+    <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.5 7V2C1.5 1.44772 1.94771 1 2.5 1H10.5C11.0523 1 11.5 1.44772 11.5 2V6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11.5 6V2H13.5C15.1569 2 16.5 3.34315 16.5 5V9C16.5 9.55228 16.0523 10 15.5 10H15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16.5 6H14.5C13.9477 6 13.5 5.55228 13.5 5V2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 11C11.1716 11 10.5 10.3284 10.5 9.5C10.5 8.67157 11.1716 8 12 8C12.8284 8 13.5 8.67157 13.5 9.5C13.5 10.3284 12.8284 11 12 11Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M4 11C3.17157 11 2.5 10.3284 2.5 9.5C2.5 8.67157 3.17157 8 4 8C4.82843 8 5.5 8.67157 5.5 9.5C5.5 10.3284 4.82843 11 4 11Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 10H7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Frete Grátis</span>
+  </div>
+
+  {% if section.settings.valor_brinde_1 > 0 and section.settings.produto_brinde_1 != blank %}
+  <!-- ✅ ÍCONE 1: BRINDE 1 (gift) -->
+  <div class="item-circle" data-index="1" data-minvalue="{{ section.settings.valor_brinde_1 }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8V21M12 8C12 8 10.5 6 9 6C7 6 6 7.5 6 9C6 11 8 12 12 12M12 8C12 8 13.5 6 15 6C17 6 18 7.5 18 9C18 11 16 12 12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="4" y="12" width="16" height="3" rx="1" stroke="white" stroke-width="2"/>
+      <rect x="5" y="15" width="14" height="6" rx="1" stroke="white" stroke-width="2"/>
+    </svg>
+    <span>Brinde 1</span>
+  {% endif %}
+  </div>
+
+  {% if section.settings.valor_brinde_2 > 0 and section.settings.produto_brinde_2 != blank %}
+  <!-- ✅ ÍCONE 2: BRINDE 2 (gift) -->
+  <div class="item-circle" data-index="2" data-minvalue="{{ section.settings.valor_brinde_2 }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8V21M12 8C12 8 10.5 6 9 6C7 6 6 7.5 6 9C6 11 8 12 12 12M12 8C12 8 13.5 6 15 6C17 6 18 7.5 18 9C18 11 16 12 12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="4" y="12" width="16" height="3" rx="1" stroke="white" stroke-width="2"/>
+      <rect x="5" y="15" width="14" height="6" rx="1" stroke="white" stroke-width="2"/>
+    </svg>
+    <span>Brinde 2</span>
+  </div>
+  {% endif %}
+
+  <!-- ✅ ÍCONE 3: BRINDE 3 (gift) -->
+  {% if section.settings.valor_brinde_3 > 0 and section.settings.produto_brinde_3 != blank %}
+  <div class="item-circle" data-index="3" data-minvalue="{{ section.settings.valor_brinde_3 }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8V21M12 8C12 8 10.5 6 9 6C7 6 6 7.5 6 9C6 11 8 12 12 12M12 8C12 8 13.5 6 15 6C17 6 18 7.5 18 9C18 11 16 12 12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="4" y="12" width="16" height="3" rx="1" stroke="white" stroke-width="2"/>
+      <rect x="5" y="15" width="14" height="6" rx="1" stroke="white" stroke-width="2"/>
+    </svg>
+    <span>Brinde 3</span>
+  </div>
+</div>
+  {% endif %}
+  </div>
+</div>
+
+
+  <div style="overflow-y: auto;">
+    <div class="vz-brindes-container" id="vz-brindes-container">
+    <div class="vz-brindes-carrossel" id="vz-brindes-carrossel"></div>
+  </div>
+  <div class="vz-carrinho-items" id="vz-cart-items">
+    
+  </div>
+</div>
+
+
+<div class="vz-carrinho-footer">
+<!-- LEVE TAMBÉM (antes do footer) -->
+<div class="vz-leve-tambem" id="vz-leve-tambem" style="">
+ <div style="display: inline-flex;width:100%;background:#fff;"> <h4>Leve Também</h4><div class="vz-leve-nav" id="vz-leve-nav"></div></div>
+  <div class="vz-leve-carrossel">
+    <div class="vz-leve-track" id="vz-leve-track"></div>
+  </div>
+  
+</div>
+
+  <!-- CUPOM DE DESCONTO -->
+  <div class="vz-cupom-container">
+    <div id="vz-cupom-aplicado-container"></div>
+    <form class="vz-cupom-form" id="vz-cupom-form" onsubmit="VZ.aplicarCupom(event)">
+      <input 
+        type="text" 
+        class="vz-cupom-input" 
+        id="vz-cupom-input" 
+        placeholder="Cupom"
+        aria-label="Código do cupom"
+      >
+      <button type="submit" class="vz-cupom-btn">Aplicar</button>
+    </form>
+    <div class="vz-cupom-msg" id="vz-cupom-msg"></div>
+  </div>
+
+  <!-- TOTAIS (subtotal + desconto + frete + total) -->
+  <div id="vz-totais-container">
+    
+    <div class="vz-carrinho-desconto" id="vz-desconto-line" style="display: none;">
+      <span>Desconto cupons/combos (<span id="vz-desconto-percent">0%</span>)</span>
+      <span id="vz-cart-desconto">-R$ 0,00</span>
+    </div>
+   
+    <div class="vz-carrinho-total">
+      <span>Total</span>
+      <span id="vz-cart-total">R$ 0,00</span>
+    </div>
+  </div>
+
+  <div class="vz-parcelamento" id="vz-parcelamento">
+    ou 3x de R$ 0,00 sem juros
+  </div>
+  <div class="vz-checkout-container">
+    <a href="#" class="vz-continuar-comprando" onclick="VZ.fecharCarrinho(); return false;">
+      Continuar Comprando
+    </a>
+    <button class="vz-checkout-btn" id="vz-checkout-final-btn" onclick="VZ.finalizarCompraYampi()">
+      Finalizar Compra
+    </button>
+  </div>
+</div>
+  <div id="vz-chat" class="vz-chat">
+    <div class="vz-messages" id="vz-messages"></div>
+    <div class="vz-input-area">
+      <input type="text" class="vz-input" id="vz-input" placeholder="Digite sua dúvida..." onkeypress="if(event.key==='Enter')VZ.enviarMensagem()" aria-label="Campo de mensagem">
+      <button class="vz-send" onclick="VZ.enviarMensagem()" aria-label="Enviar mensagem">Enviar</button>
+    </div>
+  </div>
+  
+
+</div>
+<div id="vz-quickbuy">
+  <div class="vz-qb-header">
+    <h3 class="vz-qb-header-h3" style="color: white; margin: 0;">Escolha sua opção</h3>
+    <button onclick="VZQuickBuy.close()" class="vz-qb-btclick-x" style="background: none; border: none; color: white; cursor: pointer;">×</button>
+  </div>
+  
+  <div class="vz-qb-body">
+    <div class="vz-qb-product-info" id="qb-product-info"></div>
+    <div class="vz-qb-variants" id="qb-variants"></div>
+    <div id="qb-message" style="font-size: 13px; margin-top: 0px; color: var(--vz-cor-sucesso); font-weight:500;"></div>
+    <div class="vz-qb-price" id="qb-price"></div>
+  </div>
+</div>
+
+
+<script>
+const VZ = {
+  config: {
+    enabled: {{ section.settings.enabled | json }},
+    delay: {{ section.settings.delay_segundos }}000,
+    personality: {{ section.settings.personalidade | json }},
+    modo_gaveta: {{ section.settings.modo_gaveta | json }},
+    frete_gratis: {{ section.settings.valor_frete_gratis }},
+    brinde1_valor: {{ section.settings.valor_brinde_1 }},
+    brinde2_valor: {{ section.settings.valor_brinde_2 }},
+    brinde3_valor: {{ section.settings.valor_brinde_3 }},
+    brinde1_id: '{{ section.settings.produto_brinde_1.selected_or_first_available_variant.id }}',
+    brinde2_id: '{{ section.settings.produto_brinde_2.selected_or_first_available_variant.id }}',
+    brinde3_id: '{{ section.settings.produto_brinde_3.selected_or_first_available_variant.id }}',
+    debug: {{ section.settings.debug_mode | json }},
+    confetti: {{ section.settings.mostrar_confetti | json }},
+    high_contrast: {{ section.settings.high_contrast_mode | json }}
+  },
+   carrinhoCache: {
+    itemCount: 0,
+    totalPrice: 0,
+    items: []
+  },
+  // Debounce helper
+  debounceTimers: {},
+  debounce(func, delay, id = 'default') {
+    return (...args) => {
+      clearTimeout(this.debounceTimers[id]);
+      this.debounceTimers[id] = setTimeout(() => func.apply(this, args), delay);
+    };
+  },  
+
+  brindeCarrosselInterval: null,
+  ultimosBrindesKeys: '',
+  ultimoItemCount: 0,
+  estado_atual: 'observando',
+  tentativas_fechar: 0,
+  modo_chat: false,
+  carrinho_valor: 0,
+  monitorCarrinhoInterval: null,
+  isMonitoring: false,
+  brindes_no_carrinho: {
+    brinde1: false,
+    brinde2: false,
+    brinde3: false
+  },
+  cart_items: [],
+  sugestoesProdutos: [],
+  darkMode: false,
+  brindeLock: false,
+  eventListenersAttached: false,
+  swipeHandlerAttached: false,
+  
+  /*
+  mensagens: {
+    inicial: {{ section.settings.mensagens_iniciais | split: '|' | json }},
+    fechar: {{ section.settings.mensagens_fechar | split: '|' | json }},
+    chat: ['Como posso ajudar?', 'Alguma dúvida?', 'Tô aqui pra ajudar!']
+  },
+  */
+
+  leveTambemProdutos: [],
+  leveTambemIndex: 0,
+  cupomAtual: null,
+  descontoPercentual: 0,
+  descontoValor: 0,
+
+  async carregarSugestoesCarrinho() {
+    const collectionHandle = '{{ section.settings.colecao_produtos.handle }}';
+    if (!collectionHandle) {
+      if (this.config.debug) console.log('⚠️ Nenhuma coleção configurada para sugestões');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/collections/${collectionHandle}/products.json?limit=3`);
+      const data = await response.json();
+      this.sugestoesProdutos = data.products || [];
+      
+      if (this.config.debug) console.log('✅ Sugestões carregadas:', this.sugestoesProdutos.length, 'produtos');
+    } catch (e) {
+      if (this.config.debug) console.error('❌ Erro ao carregar sugestões:', e);
+    }
+  },
+
+  renderSugestoesCarrinhoVazio() {
+    const container = document.getElementById('vz-cart-items');
+    if (!container) {
+      if (this.config.debug) console.error('❌ Container não encontrado!');
+      return;
+    }
+    
+    if (!this.sugestoesProdutos || this.sugestoesProdutos.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+          <p style="font-size:18px;margin-bottom:20px;">🛒 Carrinho vazio</p>
+          <p style="color:#666;font-size:14px;">Adicione produtos para começar!</p>
+        </div>
+      `;
+      return;
+    }
+    
+    let html = '<div class="vz-carrinho-sugestoes">';
+    html += '<div class="vz-carrinho-sugestoes-titulo">✨ Comece seu pedido. Escolha e adicione ao carrinho</div>';
+    
+    this.sugestoesProdutos.forEach((produto, produtoIndex) => {
+      const variantsToShow = produto.variants.slice(0, 3);
+      
+      html += '<div class="vz-sugestao-item">';
+      
+      html += `
+        <div class="vz-qb-details" style="margin-bottom: 10px;">
+          <h4 class="vz-qb-details-h4" style="margin: 0 0 2px 0;">${produto.title}</h4>
+          <p class="vz-qb-details-p" style="color: #B7BBC1; margin: 0;">Escolha sua opção:</p>
+        </div>
+      `;
+      
+      html += '<div class="vz-sugestao-variantes">';
+      
+      variantsToShow.forEach((variant, index) => {
+        let variantImage = '';
+        
+        if (variant.featured_image) {
+          const featImg = variant.featured_image;
+          variantImage = typeof featImg === 'object' ? (featImg.src || featImg.url || '') : featImg;
+        } 
+        
+        if (!variantImage && produto.images && produto.images[variant.position - 1]) {
+          const posImg = produto.images[variant.position - 1];
+          variantImage = typeof posImg === 'object' ? (posImg.src || posImg.url || '') : posImg;
+        }
+        
+        if (!variantImage) {
+          let imagemProduto = produto.featured_image;
+          if (typeof imagemProduto === 'object' && imagemProduto !== null) {
+            imagemProduto = imagemProduto.src || imagemProduto.url || '';
+          }
+          variantImage = imagemProduto;
+        }
+        
+        variantImage = String(variantImage || '');
+        
+        if (variantImage && !variantImage.startsWith('http')) {
+          variantImage = 'https:' + variantImage;
+        }
+        
+        if (!variantImage) {
+          variantImage = 'https://via.placeholder.com/100';
+        }
+        
+        const variantTitle = variant.title === 'Default Title' ? 'Mix de Sabores' : variant.title;
+        const disponivel = variant.available;
+        
+        const precoVariante = variant.price;
+        const parcela3x = (precoVariante / 3).toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        const precoVista = precoVariante.toLocaleString('pt-BR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        
+        let badgesHTML = '';
+        
+        if (index === 1) {
+          badgesHTML += '<span class="vz-sugestao-badge-verde">Mais Vendido</span>';
+        }
+        
+        if (index === 2) {
+          badgesHTML += '<span class="vz-sugestao-badge-verde">Menor Preço</span>';
+        }
+        
+        if (precoVariante >= this.config.frete_gratis) {
+          badgesHTML += '<span class="vz-sugestao-badge-laranja">Frete Grátis</span>';
+        }
+        
+        html += `
+          <button 
+            class="vz-sugestao-variant-btn" 
+            onclick="VZ.adicionarVarianteSugestao(${variant.id}, event)"
+            ${!disponivel ? 'disabled' : ''}
+          >
+            <div class="vz-sugestao-variant-image-principal">
+              <img 
+                src="${variantImage}"
+                alt="${variantTitle}"
+                onerror="this.src='https://via.placeholder.com/100'"
+              >
+            </div>
+            
+            <div class="vz-sugestao-variant-info">
+              ${badgesHTML ? `<div class="vz-sugestao-variant-badges">${badgesHTML}</div>` : ''}
+              
+              <h4 class="vz-sugestao-variant-nome">${variantTitle}</h4>
+              
+              <div class="vz-sugestao-variant-precos">
+                <div class="vz-sugestao-preco-parcelado">
+                  3x de <strong>R$ ${parcela3x}</strong> s/ juros
+                </div>
+                <div class="vz-sugestao-preco-vista">
+                  ou <strong>R$ ${precoVista}</strong> à vista
+                </div>
+              </div>
+            </div>
+          </button>
+        `;
+      });
+      
+      html += '</div></div>';
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+    
+    if (this.config.debug) {
+      console.log('✅ Sugestões renderizadas:', this.sugestoesProdutos.length);
+    }
+  },
+
+  async adicionarVarianteSugestao(variantId, event) {
+    const btn = event?.currentTarget;
+    
+    if (btn) {
+      btn.classList.add('adding');
+      btn.disabled = true;
+      
+      const originalText = btn.querySelector('.vz-sugestao-variant-nome')?.textContent;
+      const textEl = btn.querySelector('.vz-sugestao-variant-nome');
+      if (textEl) textEl.textContent = 'Adicionando...';
+    }
+    
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      });
+      
+      if (btn) {
+        const textEl = btn.querySelector('.vz-sugestao-variant-nome');
+        if (textEl) textEl.textContent = '✓ Adicionado!';
+        
+        setTimeout(() => {
+          btn.classList.remove('adding');
+          btn.disabled = false;
+          if (textEl && originalText) textEl.textContent = originalText;
+        }, 1500);
+      }
+      
+      /*this.falar('Produto adicionado! 🛒');*/
+      
+    } catch (e) {
+      if (this.config.debug) console.error('Erro ao adicionar sugestão:', e);
+      
+      if (btn) {
+        btn.classList.remove('adding');
+        btn.disabled = false;
+        
+        const textEl = btn.querySelector('.vz-sugestao-variant-nome');
+        if (textEl && originalText) textEl.textContent = originalText;
+      }
+      
+      /*this.falar('Ops! Erro ao adicionar.');*/
+    }
+  },
+
+  async carregarLeveTambem() {
+    const collectionHandle = '{{ section.settings.colecao_leve_tambem.handle }}';
+    if (!collectionHandle) return;
+
+    try {
+      const response = await fetch(`/collections/${collectionHandle}/products.json?limit=5`);
+      const data = await response.json();
+      this.leveTambemProdutos = data.products || [];
+      
+      if (this.leveTambemProdutos.length > 0) {
+        this.renderLeveTambem();
+        document.getElementById('vz-leve-tambem').style.display = 'block';
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('Erro ao carregar Leve Também:', e);
+    }
+  },
+
+  renderLeveTambem() {
+    const track = document.getElementById('vz-leve-track');
+    const nav = document.getElementById('vz-leve-nav');
+    
+    if (!track || !nav) return;
+
+    track.innerHTML = '';
+    nav.innerHTML = '';
+
+    this.leveTambemProdutos.forEach((produto, index) => {
+      const item = document.createElement('div');
+      item.className = 'vz-leve-item';
+      
+      const variant = produto.variants[0];
+      
+      let imagem = 'https://via.placeholder.com/90';
+      if (produto.images && produto.images.length > 0) {
+        const img = produto.images[0];
+        imagem = typeof img === 'string' ? img : (img.src || img);
+      } else if (produto.featured_image) {
+        imagem = produto.featured_image;
+      }
+      
+      const precoReais = variant.price;
+      const preco = precoReais.toLocaleString('pt-BR', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+      });
+      
+      item.innerHTML = `
+        <img src="${imagem}" alt="${produto.title}">
+        <div class="vz-leve-info">
+          <h5>${produto.title}</h5>
+          <p>R$ ${preco}</p>
+        </div>
+        <button 
+          class="vz-leve-add-btn" 
+          onclick="VZ.adicionarLeveTambem(${variant.id})"
+          aria-label="Adicionar ${produto.title}"
+        >
+          Adicionar
+        </button>
+      `;
+      track.appendChild(item);
+    });
+
+    if (this.leveTambemProdutos.length > 1) {
+      nav.innerHTML = `
+        <button 
+          class="vz-leve-arrow" 
+          onclick="VZ.anteriorLeveTambem()"
+          aria-label="Produto anterior"
+        >
+          <svg viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.764 5.204a.75.75 0 0 1 .032 1.06l-3.516 3.736 3.516 3.736a.75.75 0 1 1-1.092 1.028l-4-4.25a.75.75 0 0 1 0-1.028l4-4.25a.75.75 0 0 1 1.06-.032Z"></path>
+          </svg>
+        </button>
+        <span class="vz-leve-counter">
+          <span id="vz-leve-current">1</span> / ${this.leveTambemProdutos.length}
+        </span>
+        <button 
+          class="vz-leve-arrow" 
+          onclick="VZ.proximoLeveTambem()"
+          aria-label="Próximo produto"
+        >
+          <svg viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.72 14.53a.75.75 0 0 1 0-1.06l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.06-1.06l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 0 1-1.06 0Z"></path>
+          </svg>
+        </button>
+      `;
+
+      setInterval(() => {
+        this.proximoLeveTambem();
+      }, 5000);
+    }
+  },
+
+  irParaLeveTambem(index) {
+    this.leveTambemIndex = index;
+    const track = document.getElementById('vz-leve-track');
+    if (track) {
+      track.style.transform = `translateX(-${index * 100}%)`;
+    }
+    
+    const counter = document.getElementById('vz-leve-current');
+    if (counter) {
+      counter.textContent = index + 1;
+    }
+  },
+
+  anteriorLeveTambem() {
+    const anterior = (this.leveTambemIndex - 1 + this.leveTambemProdutos.length) % this.leveTambemProdutos.length;
+    this.irParaLeveTambem(anterior);
+  },
+
+  proximoLeveTambem() {
+    const proximo = (this.leveTambemIndex + 1) % this.leveTambemProdutos.length;
+    this.irParaLeveTambem(proximo);
+  },
+
+  async adicionarLeveTambem(variantId) {
+    try {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = 'Adicionando...';
+
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      });
+
+      btn.textContent = '✓ Adicionado!';
+      btn.style.background = '#00c851';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Adicionar';
+        btn.style.background = '';
+      }, 2000);
+
+     /* this.falar('Produto adicionado! 🛒');*/
+    } catch (e) {
+      if (this.config.debug) console.error('Erro ao adicionar Leve Também:', e);
+      event.target.disabled = false;
+      event.target.textContent = 'Erro';
+    }
+  },
+
+  carregarCupomSalvo() {
+    try {
+      const cupomSalvo = sessionStorage.getItem('vz_cupom_ativo');
+      const descontoSalvo = sessionStorage.getItem('vz_desconto_percentual');
+      
+      if (cupomSalvo && descontoSalvo && cupomSalvo !== 'null' && descontoSalvo !== '0') {
+        this.cupomAtual = cupomSalvo;
+        this.descontoPercentual = parseFloat(descontoSalvo);
+        this.renderCupomAplicado();
+        if (this.config.debug) console.log('✅ Cupom restaurado:', cupomSalvo, descontoSalvo + '%');
+      } else {
+        sessionStorage.removeItem('vz_cupom_ativo');
+        sessionStorage.removeItem('vz_desconto_percentual');
+        if (this.config.debug) console.log('🧹 SessionStorage limpo (sem cupom válido)');
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('Erro ao carregar cupom salvo:', e);
+      sessionStorage.removeItem('vz_cupom_ativo');
+      sessionStorage.removeItem('vz_desconto_percentual');
+    }
+  },
+
+  salvarCupom() {
+    try {
+      if (this.cupomAtual && this.descontoPercentual > 0) {
+        sessionStorage.setItem('vz_cupom_ativo', this.cupomAtual);
+        sessionStorage.setItem('vz_desconto_percentual', this.descontoPercentual.toString());
+        if (this.config.debug) console.log('💾 Cupom salvo:', this.cupomAtual, this.descontoPercentual + '%');
+      } else {
+        sessionStorage.removeItem('vz_cupom_ativo');
+        sessionStorage.removeItem('vz_desconto_percentual');
+        if (this.config.debug) console.log('🗑️ Cupom removido do storage');
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('Erro ao salvar cupom:', e);
+    }
+  },
+
+  async aplicarCupom(event) {
+    event.preventDefault();
+    
+    const input = document.getElementById('vz-cupom-input');
+    const msg = document.getElementById('vz-cupom-msg');
+    const codigo = input.value.trim().toUpperCase();
+
+    if (!codigo) {
+      msg.textContent = 'Digite um cupom válido';
+      msg.className = 'vz-cupom-msg error';
+      return;
+    }
+
+    msg.textContent = 'Validando...';
+    msg.className = 'vz-cupom-msg';
+
+    try {
+      const cuponsValidos = {
+        'energia15': 15,
+        'MAIS10': 10,
+        'Larissalemos': 10,
+        'CUIDEHOJE': 15,
+        'SUPER15': 15,
+        'DENA10': 10,
+        'ENERGIA15': 15,
+        'PELE15': 15,
+        '10OFF72H': 10,
+        'DIGE10': 10,
+        'PRIMEIRACOMPRA': 15,
+        'JOYCE': 10,
+        'RAFAARLOTTA': 10,
+        'ANDRESSA': 10,
+        'JATESTEI': 10,
+        'BELEZACOMMARI': 10,
+        'LARIW': 10,
+        'ANNABORGES': 10,
+        'PETRA': 10,
+        'MINIPONEI': 10,
+        'ROMANA': 10,
+        'ANALUYZAC': 10,
+        'CLIENTEVIP': 10,
+        'JEZLAUAR': 10,
+        'MORGANAW': 10,
+        'EXECUTIVA': 10,
+        'JUFITNESS': 10,
+        'NUTRIRAPHA': 10,
+        'MENDES': 10,
+        'DANI': 10,
+        'VALESKA': 10,
+        'ISANOGUEIRA': 10,
+        'MARITZA': 10,
+        'HELLENCRIS': 10,
+        'FITCAMILE': 10,
+        'PICCININ': 10,
+        'NUTRIPRIBASTOS': 10,
+        'JUFONSECA': 10,
+        'RAFANAROTINA': 10,
+        'STENATUS': 10,
+        'CAMIFIT': 10,
+        'BOIADEIRA': 10,
+        'GABISANTIOFF': 10,
+        'ANNAB': 10,
+        'CAROLJONAS': 10,
+        'ESPECIAL': 10,
+        'ALFACINHA': 10,
+        'NATHBARROS': 10,
+        'LULY': 10,
+        'CUIDEHOJE': 15,
+        'JULYE': 10,
+        'THAISFN': 10,
+        'ANGOLINHA': 10,
+        'PALOMITA': 10,
+        'PRESENTE': 10,
+        'GABIMARTINEZ': 10,
+        'LEVENAVIAGEM': 10,
+        'ALEXIA': 10,
+        'DRURSINHO': 10,
+        'LORE': 10,
+        'BETAFRIAS': 10,
+        'MONIQUE': 10,
+        'ANDREA': 10,
+        'LORENACOELHO': 10,
+        'JESSICA': 10,
+        'LUIZAANDRADE': 10,
+        'DENISE': 10,
+        'THAYLA': 10,
+        'KAMILA': 10,
+        'CAROLPELICARI': 10,
+        'TAINA': 10,
+        'BRUNABEAUTY': 10,
+        'CAMILLA': 10,
+        'SONIA': 10,
+        'CHEFMILA': 10,
+        'PRIPESSANHA': 10,
+        'CAMILAMONTEIRO': 10,
+        'CAMILADIAS': 10,
+        'MEUDESCONTO': 10,
+        'DUDABORGES': 10,
+        'LARIMICHELIN': 10,
+        'NICOLE': 10,
+        'BIAOLIVEIRA': 10,
+        'MARIANA': 10,
+        'MARICPM': 10,
+        'JULIANAPOMPEU': 10,
+        'LORENAALVES': 10,
+        'CAMINEREU': 10,
+        'DUDABRASIL': 10,
+        'LANALOPES': 10,
+        'BRUPARAIZZO': 10,
+        'DUDA': 10,
+        'RAPHaAVENA': 10,
+        'BARBARAUBER': 10,
+        'SOLANGE': 10,
+        'ALENCAR': 10,
+        'DANISERRANO': 10,
+        'VANESSA': 10,
+        'ARIROQUE': 10,
+        'EUGOSDICASA': 10,
+        'LUCIANAOLIVE': 10,
+        'BELELISBOA': 10,
+        'NUTRILAILABOMTEMPO': 10,
+        'BRUAGUILAR': 10,
+        'KISS': 10,
+        'METREINAGABI': 10,
+        'ANAVALE': 10,
+        'RAFAAMORIM': 10,
+        'JOISOARES': 10,
+        'REBECA': 10,
+        'GRISALHEIEAGORA': 10,
+        'PATRICIA': 10,
+        'TAISLINS': 10,
+        'MAFIT': 10,
+        'ANILY': 10,
+        'NUTRIJE': 10,
+        'THAYNARA': 10,
+        'DEBORA': 10,
+        'LUFIT': 10,
+        'SARAH': 10,
+        'ILZA_MZ': 10,
+        'MEUG': 10,
+        'MAYARA': 10,
+        'FABYCORREDORA': 10,
+        'BIATORRES': 10,
+        'FERFERRAZ': 10,
+        'ANNAW': 10,
+        'FEGOMMES': 10,
+        'LARIPERSONAL': 10,
+        'MARI': 10,
+        'NATINGRACI': 10,
+        'NOGUEIRA': 10,
+        'PAULAMARTINS': 10,
+        'BELLANUTRI': 10,
+        'DANIBAIRRAL': 10,
+        'MAIRADIAS': 10,
+        'LUIZA': 10,
+        'CAMILA': 10,
+        'LINA': 10,
+        'MARIAMONTEIRO': 10,
+        'SIRI': 10,
+        'AMANDAMARQUES': 10,
+        'DEZA': 10,
+        'THAMIRES': 10,
+        'MADU': 10,
+        'FITFOODMENU': 10,
+        'PRILAR': 10,
+        'LARISSALEMOS': 10,
+        'NUTRICRIS': 10,
+        'CRISAMARONUTRI': 10,
+        'LAILA': 10,
+        'NUTRIMEUFILHO': 10,
+        'BRUFELICIANO': 10,
+        'HYNGRED': 10,
+        '30DNVIP': 30,
+        'DENAVITASX303': 30,
+        'DN30VIP': 30,
+        '20VIPDN': 20,
+        'VIP20OFF': 20,
+        '20XDJ': 20,
+        'XJH20OFF': 20,
+        'DENAVITAZM020': 20,
+        'ESPECIAL20': 20,
+        '15PRAVC': 15,
+        'DN15OFF': 15,
+        'JULIANA': 15,
+        'ALERY10': 10,
+        'ANAFISIO10': 10,
+        'ANAT10': 10,
+        'ANNABORGES10': 10,
+        'ARI10': 10,
+        'ARIELYLIRA10': 10,
+        'BACK10': 10,
+        'BEMESTAR10': 10,
+        'BLUSH10': 10,
+        'BORGES10': 10,
+        'BRUNINHA10': 10,
+        'CAMILLA10': 10,
+        'CINTIA10': 10,
+        'CLAUDIA10': 10,
+        'CLIENTE10': 10,
+        'DADY10': 10,
+        'DANICOUTINHO10': 10,
+        'DANIMENEZES10': 10,
+        'DENA10': 10,
+        'DENAVITA10': 10,
+        'DUDA10': 10,
+        'DUTRA10': 10,
+        'EL10': 10,
+        'ERIKA10': 10,
+        'FATIMA10': 10,
+        'FINALIZA10': 10,
+        'FRAN10': 10,
+        'GABIBEL10': 10,
+        'GIOMAZONI10': 10,
+        'ISAP10': 10,
+        'JANE10': 10,
+        'JANY10': 10,
+        'JEANE10': 10,
+        'JEFELIX10': 10,
+        'JLO10': 10,
+        'JU10': 10,
+        'KAROLC10': 10,
+        'LARIC10': 10,
+        'LAV10': 10,
+        'LUCIANA10': 10,
+        'MAIRA10': 10,
+        'MARIAARANHA10': 10,
+        'MARYFONTES10': 10,
+        'MICHELE10': 10,
+        'NUTRIFRAN10': 10,
+        'NUTRIGIO10': 10,
+        'NUTRILARI10': 10,
+        'NUTRIJU10': 10,
+        'PAUSA10': 10,
+        'PRI10': 10,
+        'QUERO10': 10,
+        'RECOMECE10': 10,
+        'RAISA10': 10,
+        'SEREIA10': 10,
+        'TALYTA10': 10,
+        'TENORIO10': 10,
+        'THAUANE10': 10,
+        'VAL10': 10,
+        'VIP10': 10,
+        'VITORIA10': 10,
+      };
+
+      if (!cuponsValidos[codigo]) {
+        throw new Error('Cupom inválido');
+      }
+
+      const novoDesconto = cuponsValidos[codigo];
+      
+      if (this.cupomAtual && this.descontoPercentual > 0) {
+        if (novoDesconto > this.descontoPercentual) {
+          /*this.falar(`Cupom ${codigo} (${novoDesconto}%) substituiu ${this.cupomAtual} (${this.descontoPercentual}%)!`);
+        */} else if (novoDesconto === this.descontoPercentual) {
+          msg.textContent = `⚠️ Cupom ${codigo} tem o mesmo valor do atual (${this.descontoPercentual}%)`;
+          msg.className = 'vz-cupom-msg error';
+          return;
+        } else {
+          msg.textContent = `⚠️ Cupom atual (${this.descontoPercentual}%) é melhor que ${codigo} (${novoDesconto}%)`;
+          msg.className = 'vz-cupom-msg error';
+          return;
+        }
+      }
+
+      this.descontoPercentual = novoDesconto;
+      this.cupomAtual = codigo;
+      
+      this.salvarCupom();
+      
+      this.recalcularTotais();
+      
+      msg.textContent = `✓ Cupom ${codigo} aplicado! ${novoDesconto}% de desconto`;
+      msg.className = 'vz-cupom-msg success';
+      input.value = '';
+      this.renderCupomAplicado();
+     /* this.falar(`Cupom ${codigo} pronto! Clique em "Finalizar" para usar! 🎉`);*/
+
+      setTimeout(() => {
+        msg.classList.add('vz-fade-out');
+      }, 1000);
+
+      setTimeout(() => {
+        const descontoEl = document.getElementById('vz-cart-desconto');
+        if (descontoEl && descontoEl.parentElement) {
+          descontoEl.parentElement.classList.add('vz-fade-out');
+        }
+      }, 3000);
+
+    } catch (e) {
+      msg.textContent = '✗ Cupom inválido ou expirado';
+      msg.className = 'vz-cupom-msg error';
+      if (this.config.debug) console.error('Erro ao validar cupom:', e);
+    }
+  },
+
+  renderCupomAplicado() {
+    const container = document.getElementById('vz-cupom-aplicado-container');
+    const form = document.getElementById('vz-cupom-form');
+    
+    if (!this.cupomAtual) {
+      container.innerHTML = '';
+      if (form) form.style.display = 'flex';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="vz-cupom-aplicado">
+        <div class="vz-cupom-tag">${this.cupomAtual}</div>
+        <button 
+          class="vz-cupom-remove" 
+          onclick="VZ.removerCupom()"
+          aria-label="Remover cupom"
+        >×</button>
+      </div>
+    `;
+    
+    if (form) form.style.display = 'none';
+  },
+
+  async removerCupom() {
+    this.cupomAtual = null;
+    this.descontoPercentual = 0;
+    this.descontoValor = 0;
+    
+    this.salvarCupom();
+    
+    this.recalcularTotais();
+    this.renderCupomAplicado();
+    
+    const msg = document.getElementById('vz-cupom-msg');
+    if (msg) {
+      msg.textContent = '';
+      msg.className = 'vz-cupom-msg';
+      msg.classList.remove('vz-fade-out');
+    }
+    
+    const descontoEl = document.getElementById('vz-cart-desconto');
+    
+    if (descontoEl && descontoEl.parentElement) {
+      descontoEl.parentElement.classList.remove('vz-fade-out');
+      descontoEl.parentElement.classList.add('vz-fade-in');
+    }
+    
+    /*this.falar('Cupom removido');*/
+  },
+
+  // ✅ INTEGRAÇÃO COM YAMPI CHECKOUT
+  // ========================================
+  
+  async finalizarCompraYampi() {
+    try {
+      const btnFinalizar = document.querySelector('.vz-btn-finalizar, [onclick*="finalizarCompraYampi"]');
+      if (btnFinalizar) {
+        btnFinalizar.disabled = true;
+        btnFinalizar.textContent = 'Processando...';
+      }
+      
+      if (this.config.debug) console.log('🔄 Finalizando compra com Yampi...');
+      
+      const response = await fetch('/cart.json');
+      if (!response.ok) throw new Error('Erro ao buscar carrinho');
+      const cartData = await response.json();
+      
+      if (this.config.debug) {
+        console.log('📦 Carrinho:', cartData);
+        console.log('🎟️ Cupom:', this.cupomAtual);
+      }
+      
+      const data = {
+        shop: window.location.host,
+        shopify_internal_domain: typeof shopifyInternalUrl !== 'undefined' ? shopifyInternalUrl : '',
+        cart_payload: cartData
+      };
+      
+      const yampiResponse = await fetch('https://api.dooki.com.br/v2/public/shopify/cart', {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (!yampiResponse.ok) throw new Error('Erro na API Yampi');
+      const yampiData = await yampiResponse.json();
+      
+      if (!yampiData.checkout_direct_url) {
+        throw new Error('URL de checkout não retornada');
+      }
+      
+      let checkoutUrl = yampiData.checkout_direct_url;
+      
+      if (this.config.debug) console.log('🔗 URL base:', checkoutUrl);
+      
+      if (this.cupomAtual) {
+        checkoutUrl = this.adicionarCupomNaUrl(checkoutUrl, this.cupomAtual);
+        if (this.config.debug) console.log('🔗 URL com cupom:', checkoutUrl);
+      }
+      
+      if (typeof ymp_getUrlWithUtms === 'function') {
+        checkoutUrl = ymp_getUrlWithUtms(checkoutUrl);
+      }
+      
+      if (this.config.debug) console.log('✅ Redirecionando...');
+      window.location.href = checkoutUrl;
+      
+    } catch (error) {
+      console.error('❌ Erro:', error);
+      const btnFinalizar = document.querySelector('.vz-btn-finalizar, [onclick*="finalizarCompraYampi"]');
+      if (btnFinalizar) {
+        btnFinalizar.disabled = false;
+        btnFinalizar.textContent = 'Finalizar Compra';
+      }
+      alert('Erro ao finalizar compra. Tente novamente.');
+    }
+  },
+  
+  adicionarCupomNaUrl(url, cupom) {
+    try {
+      const urlObj = new URL(url);
+      urlObj.searchParams.set('promocode', cupom.toUpperCase());
+      return urlObj.toString();
+    } catch (error) {
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}promocode=${cupom.toUpperCase()}`;
+    }
+  },
+
+  recalcularTotais() {
+    const subtotal = this.carrinho_valor;
+    
+    this.descontoValor = (subtotal * this.descontoPercentual) / 100;
+    
+    const totalComDesconto = subtotal - this.descontoValor;
+    
+    const total = totalComDesconto;
+
+    const descontoLine = document.getElementById('vz-desconto-line');
+    if (this.descontoValor > 0 && descontoLine) {
+      descontoLine.style.display = 'flex';
+      const percentEl = document.getElementById('vz-desconto-percent');
+      const valorEl = document.getElementById('vz-cart-desconto');
+      if (percentEl) percentEl.textContent = this.descontoPercentual + '%';
+      if (valorEl) valorEl.textContent = '-R$ ' + this.descontoValor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else if (descontoLine) {
+      descontoLine.style.display = 'none';
+    }
+
+    const totalEl = document.getElementById('vz-cart-total');
+    if (totalEl) {
+      totalEl.textContent = 'R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    this.atualizarParcelamento(total);
+    
+    this.atualizarProgressoComDesconto(totalComDesconto);
+  },
+
+  atualizarProgressoComDesconto(valorComDesconto) {
+    const barra = document.querySelectorAll('.vz-progress-fill');
+    const msgs = document.querySelectorAll('.vz-progress-msg');
+    
+    let percent = 0;
+    let mensagem = '';
+    
+    const milestones = [
+      { valor: this.config.frete_gratis, nome: 'frete grátis' },
+      { valor: this.config.brinde1_valor, nome: 'brinde 1' },
+      { valor: this.config.brinde2_valor, nome: 'brinde 2' },
+      { valor: this.config.brinde3_valor, nome: 'brinde 3' }
+    ];
+    const milestonesValidos = milestones.filter(m => m.valor && m.valor > 0 && !isNaN(m.valor)).sort((a, b) => a.valor - b.valor);
+    
+    const maxValor = milestonesValidos.length > 0 ? milestonesValidos[milestonesValidos.length - 1].valor : this.config.frete_gratis;
+    
+    if (valorComDesconto >= maxValor) {
+      percent = 100;
+      const ultimoMarco = milestonesValidos[milestonesValidos.length - 1];
+      mensagem = milestonesValidos.length === 1 ? `🎉 Parabéns! ${ultimoMarco.nome} conquistado!` : '🎉 Parabéns! Todas as metas desbloqueadas!';
+    } else {
+      percent = (valorComDesconto / maxValor) * 100;
+      
+      const proximaMeta = milestonesValidos.find(m => valorComDesconto < m.valor);
+      if (proximaMeta) {
+        const falta = (proximaMeta.valor - valorComDesconto).toFixed(2);
+        mensagem = `Falta R$ ${falta} para ${proximaMeta.nome}!`;
+      }
+    }
+    
+    barra.forEach(b => b.style.width = percent + '%');
+    msgs.forEach(m => m.textContent = mensagem);
+    
+    document.querySelectorAll('.item-circle').forEach((circle) => {
+      const minValue = parseFloat(circle.dataset.minvalue);
+      
+      if (minValue > 0 && valorComDesconto >= minValue) {
+        circle.classList.add('achieved');
+      } else {
+        circle.classList.remove('achieved');
+      }
+    });
+  },
+
+  atualizarParcelamento(total) {
+    const parcelamento = document.getElementById('vz-parcelamento');
+    if (!parcelamento) return;
+
+    const valorParcela = (total / 3).toLocaleString('pt-BR', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    });
+    parcelamento.textContent = `ou 3x de R$ ${valorParcela} sem juros`;
+  },
+
+
+async irParaCheckout() {
+  try {
+    // ✅ SE TEM CUPOM, APLICA AGORA (no momento do clique)
+    if (this.cupomAtual) {
+      if (this.config.debug) console.log('🎟️ Aplicando cupom no checkout:', this.cupomAtual);
+        
+        try {
+          await fetch('/cart/update.js', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              attributes: {
+                'discount_code': this.cupomAtual
+              }
+            })
+          });
+        } catch (e) {
+          if (this.config.debug) console.warn('⚠️ Falha ao salvar no cart, usando URL:', e);
+        }
+        
+        const url = `/checkout?promocode=${encodeURIComponent(this.cupomAtual)}`;
+        
+        if (this.config.debug) console.log('🛒 Redirecionando:', url);
+        window.location.href = url;
+        
+      } else {
+        if (this.config.debug) console.log('🛒 Checkout sem cupom');
+        window.location.href = '/checkout';
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('❌ Erro no checkout:', e);
+      window.location.href = '/checkout';
+    }
+  },
+
+  init() {
+    if (this.config.debug) console.log('🖐️ Vendedor Zueiro iniciando...');
+    if (this.config.high_contrast) {
+      document.body.classList.add('high-contrast');
+    }
+    this.checarInfluencer();
+    this.carregarCupomSalvo();
+    
+    this.carregarSugestoesCarrinho().then(() => {
+      if (this.config.debug) console.log('✅ Sugestões prontas:', this.sugestoesProdutos.length);
+    });
+    
+    this.monitorarCarrinho();
+    this.setupSwipe();
+    this.setupBalaoContrast();
+    this.carregarLeveTambem();
+    /*setTimeout(() => this.aparecer(), this.config.delay);*/
+
+    window.addEventListener('beforeunload', () => {
+      this.destroy();
+    });
+    
+    window.addEventListener('unload', () => {
+      this.destroy();
+    });
+    
+    if (this.config.debug) console.log('✅ Cleanup handlers registrados');
+  },
+
+  setupBalaoContrast() {
+    const balaoTexto = document.getElementById('vz-balao-texto');
+    if (!balaoTexto) return;
+    window.addEventListener('scroll', () => {
+      const rect = balaoTexto.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const elementUnder = document.elementFromPoint(x, y);
+      if (elementUnder) {
+        const bgColor = window.getComputedStyle(elementUnder).backgroundColor;
+        const rgb = bgColor.match(/\d+/g);
+        if (rgb) {
+          const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+          balaoTexto.style.color = brightness > 128 ? '#000' : '#fff';
+        }
+      }
+    });
+  },
+
+  setupSwipe() {
+    if (this.swipeHandlerAttached) return;
+    
+    const carrossel = document.getElementById('vz-carrossel');
+    if (!carrossel) return;
+    
+    let startX;
+    
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+    };
+    
+    const handleTouchMove = (e) => {
+      const diffX = startX - e.touches[0].clientX;
+      carrossel.scrollLeft += diffX;
+      startX = e.touches[0].clientX;
+    };
+    
+    carrossel.addEventListener('touchstart', handleTouchStart, {passive: true});
+    carrossel.addEventListener('touchmove', handleTouchMove, {passive: true});
+    
+    this.swipeHandlerAttached = true;
+    
+    this.swipeHandlers = {
+      touchstart: handleTouchStart,
+      touchmove: handleTouchMove,
+      element: carrossel
+    };
+  },
+
+  cleanupSwipe() {
+    if (this.swipeHandlers && this.swipeHandlers.element) {
+      this.swipeHandlers.element.removeEventListener('touchstart', this.swipeHandlers.touchstart);
+      this.swipeHandlers.element.removeEventListener('touchmove', this.swipeHandlers.touchmove);
+      this.swipeHandlers = null;
+      this.swipeHandlerAttached = false;
+    }
+  },
+
+  toggleDarkMode() {
+    this.darkMode = !this.darkMode;
+    document.body.classList.toggle('dark-mode', this.darkMode);
+  },
+
+  checarInfluencer() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('ref') && params.get('vz_mode') === 'custom') {
+      if (this.config.debug) console.log('Modo influencer detectado!');
+      this.config.personality = 'influencer';
+    }
+  },
+
+  /*aparecer() {
+    const mascote = document.getElementById('vz-mascote');
+    if (mascote) {
+      mascote.classList.add('visivel');
+      const msg = this.mensagens.inicial[Math.floor(Math.random() * this.mensagens.inicial.length)];
+      this.falar(msg);
+    }
+  },*/
+
+  falar(texto) {
+    if (!texto || typeof texto !== 'string') return;
+    
+    const balao = document.getElementById('vz-balao-texto');
+    if (!balao) return;
+    
+    balao.innerHTML = '';
+    let i = 0;
+    const digitar = setInterval(() => {
+      if (i < texto.length) {
+        balao.innerHTML += texto[i];
+        i++;
+      } else {
+        clearInterval(digitar);
+      }
+    }, 50);
+  },
+
+  /*tentarFechar() {
+    this.tentativas_fechar++;
+    if (this.tentativas_fechar === 1) {
+      const msg = this.mensagens.fechar[Math.floor(Math.random() * this.mensagens.fechar.length)];
+      this.falar(msg);
+      const mascote = document.getElementById('vz-mascote');
+      if (mascote) {
+        mascote.style.opacity = 0.5;
+        setTimeout(() => {
+          mascote.style.opacity = 1;
+        }, 500);
+      }
+    } else if (this.tentativas_fechar === 2) {
+      this.abrirGaveta();
+    } else if (this.config.chat_enabled) {
+      this.transformarEmChat();
+    } else {
+      const mascote = document.getElementById('vz-mascote');
+      if (mascote) mascote.style.display = 'none';
+    }
+  },
+  */
+
+  abrirGaveta() {
+    const gaveta = document.getElementById('vz-gaveta');
+    const overlay = document.getElementById('vz-overlay');
+    const mascote = document.getElementById('vz-mascote');
+    
+    if (gaveta) gaveta.classList.add('aberto');
+    if (overlay) overlay.style.display = 'block';
+    if (mascote) mascote.style.display = 'none';
+    
+    this.atualizarProgresso();
+    if (this.config.modo_gaveta === 'trilha') {
+      this.atualizarTrilha();
+      const chatBtn = document.querySelector('.vz-chat-btn');
+      if (chatBtn) chatBtn.style.display = 'none';
+    }
+  },
+
+  fecharGaveta() {
+    const gaveta = document.getElementById('vz-gaveta');
+    const overlay = document.getElementById('vz-overlay');
+    const mascote = document.getElementById('vz-mascote');
+    
+    if (gaveta) gaveta.classList.remove('aberto');
+    if (overlay) overlay.style.display = 'none';
+    /*if (mascote) {
+      mascote.style.display = 'block';
+      mascote.classList.add('visivel');
+    }*/
+  },
+
+  // ✅ Nova função com tratamento de erro
+  async checarCarrinho() {
+    try {
+      const response = await fetch('/cart.js');
+      if (!response.ok) throw new Error('Falha ao buscar carrinho');
+      
+      const dados = await response.json();
+      await this.processarCarrinho(dados);
+    } catch (e) {
+      if (this.config.debug) console.error('❌ Erro no monitor:', e);
+      // Não para o monitoramento, só loga o erro
+    }
+  },
+
+ async monitorarCarrinho() {
+    if (this.isMonitoring) return;
+    this.isMonitoring = true;
+    
+    // ✅ Primeira checagem imediata
+    await this.checarCarrinho();
+    
+    this.monitorCarrinhoInterval = setInterval(async () => {
+      try {
+        const response = await fetch('/cart.js');
+        if (!response.ok) throw new Error('Falha na API');
+        
+        const cart = await response.json();
+        this.processarCarrinho(cart);
+      } catch (e) {
+        if (this.config.debug) console.error('❌ Erro no monitor:', e);
+      }
+    }, 5000); // ✅ 5 segundos ao invés de 3
+  },
+  
+  // ✅ Nova função com tratamento de erro
+  async checarCarrinho() {
+    try {
+      const response = await fetch('/cart.js');
+      if (!response.ok) throw new Error('Falha ao buscar carrinho');
+      
+      const dados = await response.json();
+      await this.processarCarrinho(dados);
+    } catch (e) {
+      if (this.config.debug) console.error('❌ Erro no monitor:', e);
+      // Não para o monitoramento, só loga o erro
+    }
+  },
+
+  pararMonitoramento() {
+    if (this.monitorCarrinhoInterval) {
+      clearInterval(this.monitorCarrinhoInterval);
+      this.monitorCarrinhoInterval = null;
+      this.isMonitoring = false;
+      
+      if (this.config.debug) console.log('🛑 Monitoramento parado');
+    }
+  },
+
+ processarCarrinho(cart) {
+      // ✅ CACHE UNIFICADO: Valida tudo de uma vez
+      const valor_sem_brindes = this.calcularValorSemBrindes(cart);
+      const brindesAtuais = cart.items
+        .filter(item => item.properties && item.properties._brinde)
+        .map(b => b.key)
+        .sort()
+        .join(',');
+      
+      const agora = Date.now();
+      const tempoDesdeUltimo = agora - this.carrinhoCache.lastUpdate;
+      
+      // Verifica se realmente precisa atualizar
+      const precisaAtualizar = (
+        // Mudou algo importante
+        valor_sem_brindes !== this.carrinho_valor ||
+        brindesAtuais !== this.ultimosBrindesKeys ||
+        cart.item_count !== this.ultimoItemCount ||
+        // OU passou tempo suficiente desde última atualização
+        tempoDesdeUltimo > 2000
+      );
+      
+      // Skip se não mudou e foi recente
+      if (!precisaAtualizar) {
+        if (this.config.debug) console.log('⚡ Cache - skip update');
+        return;
+      }
+      
+      // Atualiza TODOS os caches
+      this.carrinho_valor = valor_sem_brindes;
+      this.cart_items = cart.items;
+      this.ultimosBrindesKeys = brindesAtuais;
+      this.ultimoItemCount = cart.item_count;
+      this.carrinhoCache.itemCount = cart.item_count;
+      this.carrinhoCache.totalPrice = cart.total_price;
+      this.carrinhoCache.lastUpdate = agora;
+      
+      // Atualiza UI
+      this.atualizarProgresso();
+      
+      if (this.config.modo_gaveta === 'trilha') {
+        this.atualizarTrilha();
+      }
+      
+      const valorComDesconto = this.carrinho_valor - (this.carrinho_valor * this.descontoPercentual / 100);
+      this.gerenciarBrindes(valorComDesconto, cart);
+      
+      this.atualizarCarrinhoUI(cart);
+      this.atualizarBadge(cart.item_count);
+  },
+
+  atualizarBadge(count) {
+    const badge = document.getElementById('vz-badge');
+    if (badge) badge.textContent = count;
+  },
+
+  calcularValorSemBrindes(cart) {
+    let total = 0;
+    cart.items.forEach(item => {
+      if (!item.properties || !item.properties._brinde) {
+        total += item.line_price;
+      }
+    });
+    return total / 100;
+  },
+
+  async gerenciarBrindes(valor, cart) {
+    if (this.brindeLock) return;
+    this.brindeLock = true;
+
+    try {
+      const tem_brinde1 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 1
+      );
+      const tem_brinde2 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 2
+      );
+      const tem_brinde3 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 3
+      );
+
+      if (valor >= this.config.brinde1_valor && !tem_brinde1) {
+        await this.adicionarBrinde(1);
+      } else if (valor < this.config.brinde1_valor && tem_brinde1) {
+        await this.removerBrinde(1, cart);
+      }
+
+      if (valor >= this.config.brinde2_valor && !tem_brinde2) {
+        await this.adicionarBrinde(2);
+      } else if (valor < this.config.brinde2_valor && tem_brinde2) {
+        await this.removerBrinde(2, cart);
+      }
+
+      if (valor >= this.config.brinde3_valor && !tem_brinde3) {
+        await this.adicionarBrinde(3);
+      } else if (valor < this.config.brinde3_valor && tem_brinde3) {
+        await this.removerBrinde(3, cart);
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('Erro em gerenciarBrindes:', e);
+    } finally {
+      setTimeout(() => {
+        this.brindeLock = false;
+      }, 1500);
+    }
+  },
+
+  async adicionarBrinde(numero) {
+    let variant_id;
+    if (numero === 1) variant_id = this.config.brinde1_id;
+    else if (numero === 2) variant_id = this.config.brinde2_id;
+    else if (numero === 3) variant_id = this.config.brinde3_id;
+    if (!variant_id) return;
+    
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant_id,
+          quantity: 1,
+          properties: {
+            '_brinde': true,
+            '_numero': numero
+          }
+        })
+      });
+      if (this.config.confetti) this.celebrar();
+     /* this.falar(`Você ganhou o brinde ${numero}! 🎁`);*/
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao adicionar brinde:', e);
+    }
+  },
+
+  async removerBrinde(numero, cart) {
+    const item = cart.items.find(i => 
+      i.properties && i.properties._brinde && i.properties._numero == numero
+    );
+    if (!item) return;
+    
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: item.key,
+          quantity: 0
+        })
+      });
+     /* this.falar(`Você perdeu o brinde ${numero}... 😢`);*/
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao remover brinde:', e);
+    }
+  },
+
+  atualizarProgresso() {
+    const valorComDesconto = this.carrinho_valor - (this.carrinho_valor * this.descontoPercentual / 100);
+    
+    const barra = document.querySelectorAll('.vz-progress-fill');
+    const msgs = document.querySelectorAll('.vz-progress-msg');
+    
+    let percent = 0;
+    let mensagem = '';
+    
+    const milestones = [
+      { valor: this.config.frete_gratis, nome: 'frete grátis', index: 0 },
+      { valor: this.config.brinde1_valor, nome: 'brinde 1', index: 1 },
+      { valor: this.config.brinde2_valor, nome: 'brinde 2', index: 2 },
+      { valor: this.config.brinde3_valor, nome: 'brinde 3', index: 3 }
+    ].filter(m => m.valor && m.valor > 0 && !isNaN(m.valor)).sort((a, b) => a.valor - b.valor);
+    
+    const maxValor = milestones[milestones.length - 1].valor;
+    
+    if (valorComDesconto >= maxValor) {
+      percent = 100;
+      const ultimoMarco = milestones[milestones.length - 1];
+      mensagem = milestones.length === 1 ? `🎉 Parabéns! ${ultimoMarco.nome} conquistado!` : '🎉 Parabéns! Todas as metas desbloqueadas!';
+    } else {
+      percent = Math.min((valorComDesconto / maxValor) * 100, 100);
+      
+      const proximaMeta = milestones.find(m => valorComDesconto < m.valor);
+      
+      if (proximaMeta) {
+        const falta = (proximaMeta.valor - valorComDesconto).toFixed(2);
+        mensagem = `Falta R$ ${falta} para ${proximaMeta.nome}!`;
+      } else {
+        mensagem = 'Você alcançou todas as metas! 🎉';
+      }
+    }
+    
+    barra.forEach(b => {
+      b.style.width = percent + '%';
+    });
+    
+    msgs.forEach(m => {
+      m.textContent = mensagem;
+    });
+    
+    document.querySelectorAll('.item-circle').forEach((circle) => {
+      const minValue = parseFloat(circle.dataset.minvalue);
+      const index = parseInt(circle.dataset.index);
+      
+      circle.classList.remove('achieved');
+      
+      if (minValue > 0 && valorComDesconto >= minValue) {
+        circle.classList.add('achieved');
+        
+        if (this.config.debug) {
+          console.log(`✅ Milestone ${index} achieved! (R$ ${valorComDesconto.toFixed(2)} >= R$ ${minValue})`);
+        }
+      } else {
+        if (this.config.debug) {
+          console.log(`⏳ Milestone ${index} pendente (R$ ${valorComDesconto.toFixed(2)} < R$ ${minValue})`);
+        }
+      }
+    });
+    
+    /*const brindeItems = document.querySelectorAll('.vz-brindes-trilha .vz-produto');
+    const progressoBrindes = document.getElementById('vz-brindes-progresso');
+    
+    if (brindeItems.length > 0) {
+      let percentBrindes = 0;
+      let brindesConquistados = 0;
+      
+      const temBrinde1 = this.config.brinde1_valor > 0;
+      const temBrinde2 = this.config.brinde2_valor > 0;
+      const temBrinde3 = this.config.brinde3_valor > 0;
+      
+      if (temBrinde3 && valorComDesconto >= this.config.brinde3_valor) {
+        percentBrindes = 100;
+        brindesConquistados = 3;
+      } else if (temBrinde2 && valorComDesconto >= this.config.brinde2_valor) {
+        percentBrindes = 66.67;
+        brindesConquistados = 2;
+      } else if (temBrinde1 && valorComDesconto >= this.config.brinde1_valor) {
+        percentBrindes = 33.33;
+        brindesConquistados = 1;
+      } else if (temBrinde1) {
+        percentBrindes = (valorComDesconto / this.config.brinde1_valor) * 33.33;
+        brindesConquistados = 0;
+      } else {
+        percentBrindes = 0;
+        brindesConquistados = 0;
+      }
+      
+      brindeItems.forEach((item, index) => {
+        item.classList.remove('conquistado', 'ativo');
+        const valorItem = parseFloat(item.dataset.valor);
+        
+        if (valorItem > 0 && valorComDesconto >= valorItem) {
+          item.classList.add('conquistado');
+        } else if (index === brindesConquistados) {
+          item.classList.add('ativo');
+        }
+      });
+      
+      if (progressoBrindes) {
+        progressoBrindes.style.width = percentBrindes + '%';
+      }
+    }
+    */
+  },
+
+  atualizarTrilha() {
+    const valorComDesconto = this.carrinho_valor - (this.carrinho_valor * this.descontoPercentual / 100);
+    
+    const items = document.querySelectorAll('.vz-trilha-item');
+    const progresso = document.getElementById('vz-trilha-progresso');
+    let percentualProgresso = 0;
+    let itemsConquistados = 0;
+    
+    items.forEach((item, index) => {
+      const valorItem = parseFloat(item.dataset.valor);
+      if (valorComDesconto >= valorItem && valorItem > 0) {
+        item.classList.add('conquistado');
+        item.classList.remove('ativo');
+        itemsConquistados++;
+      } else if (index === itemsConquistados) {
+        item.classList.add('ativo');
+        item.classList.remove('conquistado');
+      } else {
+        item.classList.remove('ativo', 'conquistado');
+      }
+    });
+    
+    const marcos = [
+      { valor: this.config.frete_gratis, peso: 25 },
+      { valor: this.config.brinde1_valor, peso: 50 },
+      { valor: this.config.brinde2_valor, peso: 75 },
+      { valor: this.config.brinde3_valor, peso: 100 }
+    ].filter(m => m.valor > 0).sort((a, b) => a.valor - b.valor);
+    
+    if (marcos.length === 0) {
+      percentualProgresso = 0;
+    } else {
+      const maxMarco = marcos[marcos.length - 1];
+      
+      if (valorComDesconto >= maxMarco.valor) {
+        percentualProgresso = 100;
+      } else {
+        const proximoMarco = marcos.find(m => valorComDesconto < m.valor);
+        if (!proximoMarco) {
+          percentualProgresso = 100;
+        } else {
+          const indice = marcos.indexOf(proximoMarco);
+          const marcoAnterior = indice > 0 ? marcos[indice - 1] : null;
+          
+          if (marcoAnterior) {
+            const rangeValor = proximoMarco.valor - marcoAnterior.valor;
+            const rangePeso = proximoMarco.peso - marcoAnterior.peso;
+            const progressoNoRange = valorComDesconto - marcoAnterior.valor;
+            percentualProgresso = marcoAnterior.peso + (progressoNoRange / rangeValor) * rangePeso;
+          } else {
+            const primeiroMarco = marcos[0];
+            percentualProgresso = (valorComDesconto / primeiroMarco.valor) * primeiroMarco.peso;
+          }
+        }
+      }
+    }
+    
+    if (progresso) {
+      progresso.style.width = Math.min(Math.max(percentualProgresso, 0), 100) + '%';
+    }
+  },
+
+  async adicionarAoCarrinho(variant_id) {
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant_id,
+          quantity: 1
+        })
+      });
+      
+      if (!response.ok) throw new Error('Falha ao adicionar');
+      
+      // ✅ Atualiza carrinho após adicionar
+      const cartResponse = await fetch('/cart.js');
+      const cart = await cartResponse.json();
+      
+      // ✅ Debounce para evitar múltiplos updates
+      this.debounce(() => this.processarCarrinho(cart), 300, 'add-to-cart')();
+      
+      this.abrirCarrinho();
+      /*this.falar('Produto adicionado! 🛒');*/
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao adicionar:', e);
+     /* this.falar('Ops! Erro ao adicionar.');*/
+    }
+  },
+
+  abrirCarrinho() {
+  const carrinho = document.getElementById('vz-carrinho');
+  const overlay = document.getElementById('vz-carrinho-overlay');
+  
+  if (carrinho) {
+    carrinho.classList.add('aberto');
+    this.estado_atual = 'carrinho_aberto';
+  }
+  
+  if (overlay) {
+    overlay.classList.add('ativo');
+  }
+  
+  this.renderCarrinho();
+},
+  
+
+  fecharCarrinho() {
+  const carrinho = document.getElementById('vz-carrinho');
+  const overlay = document.getElementById('vz-carrinho-overlay');
+  
+  if (carrinho) {
+    carrinho.classList.remove('aberto');
+    this.estado_atual = 'observando';
+  }
+  
+  if (overlay) {
+    overlay.classList.remove('ativo');
+  }
+},
+
+ destroy() {
+    
+
+    if (this.monitorCarrinhoInterval) {
+      clearInterval(this.monitorCarrinhoInterval);
+      this.monitorCarrinhoInterval = null;
+    }
+    
+    if (this.brindeCarrosselInterval) {
+      clearInterval(this.brindeCarrosselInterval);
+      this.brindeCarrosselInterval = null;
+    }
+    
+    // Limpa todos os debounce timers
+    Object.values(this.debounceTimers).forEach(timer => clearTimeout(timer));
+    this.debounceTimers = {};
+    
+    this.isMonitoring = false;
+    
+    if (this.config.debug) console.log('🧹 VZ destruído e limpo');
+  },
+
+  atualizarCarrinhoUI(cart) {
+    const countEl = document.getElementById('vz-cart-count');
+    if (countEl) countEl.textContent = cart.item_count;
+    
+    const brindes = cart.items.filter(item => item.properties && item.properties._brinde === true);
+    const itensNormais = cart.items.filter(item => !item.properties || item.properties._brinde !== true);
+
+    this.atualizarBrindesCarrossel(brindes);
+
+    const container = document.getElementById('vz-cart-items');
+    if (!container) return;
+    
+    const leveTambem = document.getElementById('vz-leve-tambem');
+    const cupomForm = document.getElementById('vz-cupom-form');
+    
+    if (itensNormais.length === 0 && brindes.length === 0) {
+      this.carrinho_valor = 0;
+      this.recalcularTotais();
+      this.renderSugestoesCarrinhoVazio();
+      
+      if (leveTambem) leveTambem.style.display = 'none';
+      if (cupomForm) cupomForm.style.display = 'none';
+      
+      return;
+    }
+    
+    if (leveTambem) leveTambem.style.display = '';
+    if (cupomForm) cupomForm.style.display = '';
+    
+    container.innerHTML = '';
+    
+    itensNormais.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'vz-carrinho-item';
+      const title = item.title || 'Produto';
+      const image = item.image || 'https://via.placeholder.com/60';
+      const price = (item.line_price / 100).toFixed(2);
+      const variant = item.variant_title || '';
+      const isBrinde = item.properties && item.properties._brinde;
+     
+      div.innerHTML = `
+        <img src="${image}" alt="${title}">
+        <div style="flex:1;max-height:90px;">
+          <div style="font-weight:600;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 265px;display: block;">${title}</div>
+          <div style="color:#666;font-size:10px;">${variant}</div>
+          <div style="font-weight:bold;font-size:13px;">R$ ${price}</div>
+          <div class="vz-carrinho-div-qnt">
+            <button class="vz-carrinho-btn-qnt" onclick="VZ.updateQty('${item.key}', ${Math.max(0, item.quantity - 1)})" style="border-color: #fff;width: 40px;height: 39px;background-color: #0000;margin: 0;color: #000;" aria-label="Diminuir quantidade">-</button>
+            <span style="margin:0 4px;font-size:12px;">${item.quantity}</span>
+            <button class="vz-carrinho-btn-qnt" onclick="VZ.updateQty('${item.key}', ${item.quantity + 1})" style="border-color: #fff;width: 40px;height: 39px;background-color: #0000;margin: 0;color: #000;" aria-label="Aumentar quantidade">+</button>
+          </div>
+          ${isBrinde ? 
+            '<span style="color:green;">Brinde!</span>' : 
+            `<button 
+              onclick="VZ.updateQty('${item.key}', 0)" 
+              class="cart-lixeira"
+              aria-label="Remover item"
+              data-remove-btn="true"
+            >
+              <span class="icon-trash-2"></span>
+            </button>`
+          }
+        </div>
+      `;
+      container.appendChild(div);
+    });
+    
+    this.recalcularTotais();
+    this.renderCupomAplicado();
+  },
+
+  atualizarBrindesCarrossel(brindes) {
+    const container = document.getElementById('vz-brindes-container');
+    const carrossel = document.getElementById('vz-brindes-carrossel');
+    
+    if (!container || !carrossel) return;
+
+    if (this.brindeCarrosselInterval) {
+      clearInterval(this.brindeCarrosselInterval);
+      this.brindeCarrosselInterval = null;
+    }
+
+    if (brindes.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'block';
+    carrossel.innerHTML = '';
+
+    brindes.forEach(brinde => {
+      const slide = document.createElement('div');
+      slide.className = 'vz-brinde-slide';
+      const title = brinde.title || 'Brinde';
+      const image = brinde.image || 'https://via.placeholder.com/50';
+      
+      slide.innerHTML = `
+        <img src="${image}" alt="${title}">
+        <div>
+          <div style="font-weight:bold; color:#54b101;font-size:12px;">🎁 ${title}</div>
+          <div style="font-size:12px; color:#666;">ganhou!</div>
+        </div>
+      `;
+      carrossel.appendChild(slide);
+    });
+
+    carrossel.style.transform = 'translateX(0)';
+
+    if (brindes.length > 1) {
+      let current = 0;
+      
+      this.brindeCarrosselInterval = setInterval(() => {
+        if (!carrossel.isConnected) {
+          clearInterval(this.brindeCarrosselInterval);
+          this.brindeCarrosselInterval = null;
+          return;
+        }
+        
+        current = (current + 1) % brindes.length;
+        carrossel.style.transform = `translateX(-${current * 100}%)`;
+      }, 3000);
+    }
+  },
+
+  async updateQty(key, qty) {
+    if (qty < 0) return;
+    
+    const itemElement = event?.target?.closest('.vz-carrinho-item');
+    const targetBtn = event?.target;
+    const isRemoveBtn = qty === 0;
+    
+    if (itemElement) {
+      itemElement.classList.add('updating');
+      
+      const buttons = itemElement.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = true);
+    }
+    
+    let originalHTML;
+    if (isRemoveBtn && targetBtn) {
+      originalHTML = targetBtn.innerHTML;
+      targetBtn.innerHTML = `
+        <svg class="vz-loading-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10" stroke-width="4" stroke-opacity="0.25"/>
+          <path d="M12 2a10 10 0 0 1 10 10" stroke-width="4" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/>
+          </path>
+        </svg>
+      `;
+    }
+    
+    try {
+      const response = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: key, quantity: qty})
+      });
+      
+      if (!response.ok) throw new Error('Erro ao atualizar');
+      
+      const cart = await response.json();
+      
+      if (itemElement && qty > 0) {
+        itemElement.style.transition = 'all 0.3s ease';
+        itemElement.style.transform = 'scale(1.02)';
+        itemElement.style.background = 'rgba(84, 177, 1, 0.05)';
+        
+        setTimeout(() => {
+          itemElement.style.transform = 'scale(1)';
+          itemElement.style.background = '';
+        }, 300);
+    }
+      
+      this.processarCarrinho(cart);
+      
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao atualizar:', e);
+      
+      if (itemElement) {
+        itemElement.classList.remove('updating');
+        const buttons = itemElement.querySelectorAll('button');
+        buttons.forEach(btn => btn.disabled = false);
+      }
+      
+      if (isRemoveBtn && targetBtn && originalHTML) {
+        targetBtn.innerHTML = originalHTML;
+      }
+      
+     /* this.falar('Ops! Erro ao atualizar. Tente novamente.');*/
+      
+    } finally {
+      if (itemElement) {
+        setTimeout(() => {
+          itemElement.classList.remove('updating');
+          const buttons = itemElement.querySelectorAll('button');
+          buttons.forEach(btn => btn.disabled = false);
+        }, 300);
+      }
+    }
+  },
+
+  transformarEmChat() {
+    const gaveta = document.getElementById('vz-gaveta');
+    const carrinho = document.getElementById('vz-carrinho');
+    const chat = document.getElementById('vz-chat');
+    
+    if (gaveta) gaveta.classList.remove('aberto');
+    if (carrinho) carrinho.classList.add('aberto');
+    if (chat) chat.classList.add('active');
+    
+    this.addMensagem('vendor', this.mensagens.chat[Math.floor(Math.random() * this.mensagens.chat.length)]);
+  },
+
+  addMensagem(tipo, texto) {
+    const chat = document.getElementById('vz-messages');
+    if (!chat) return;
+    
+    const msg = document.createElement('div');
+    msg.className = 'vz-msg vz-msg-' + tipo;
+    msg.textContent = texto;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+  },
+
+  enviarMensagem() {
+    const input = document.getElementById('vz-input');
+    if (!input) return;
+    
+    const texto = input.value;
+    if (!texto) return;
+    
+    this.addMensagem('customer', texto);
+    input.value = '';
+    
+    setTimeout(() => {
+      const respostas = {
+        'frete': 'Frete grátis em compras acima de R$ ' + this.config.frete_gratis + '!',
+        'prazo': 'Entregamos em 3-7 dias úteis!',
+        'troca': 'Trocas em até 30 dias!',
+        'pagamento': 'Aceitamos cartão, boleto e PIX!',
+        'desconto': 'Use o cupom PRIMEIRA10 para 10% off!'
+      };
+      
+      let resposta = 'Ótima pergunta! Entre em contato pelo WhatsApp para mais detalhes!';
+      Object.keys(respostas).forEach(key => {
+        if (texto.toLowerCase().includes(key)) {
+          resposta = respostas[key];
+        }
+      });
+      
+      this.addMensagem('vendor', resposta);
+    }, 1000);
+  },
+
+  celebrar() {
+    if (!this.config.confetti) return;
+    
+    const canvas = document.getElementById('vz-confetti-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        size: Math.random() * 10 + 5,
+        speed: Math.random() * 5 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        rotation: Math.random() * 360,
+        rotSpeed: Math.random() * 10 - 5
+      });
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y += p.speed;
+        p.rotation += p.rotSpeed;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+        if (p.y > canvas.height) p.y = 0;
+      });
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+    setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 3000);
+  }
+};
+
+// QUICK BUY
+const VZQuickBuy = {
+  productModal: null,
+  currentProduct: null,
+  
+  init() {
+    if (VZ.config.debug) console.log('⚡ Quick Buy iniciando...');
+    this.setupQuickBuyButtons();
+  },
+
+
+
+    productsWithThirdCountdown: [9237581594930, 9759928615218, 10009152553266, 9720541118770, 10022337151282],
+    getThirdCountdownEndDate() {
+  const now = new Date();
+  const sixDaysFromNow = new Date(now.getTime() + (6 * 24 * 60 * 60 * 1000));
+  return sixDaysFromNow;
+},
+    thirdCountdownInterval: null,
+
+    createThirdCountdown(targetDate, timerId) {
+      const updateCountdown = () => {
+        const now = new Date();
+        const diff = targetDate - now;
+        if (diff <= 0) return '0 dias e 00 : 00 : 00 horas';
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+      return `${days} dias e ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')} horas`;  
+      };
+      
+      const initialTime = updateCountdown();
+      if (this.thirdCountdownInterval) clearInterval(this.thirdCountdownInterval);
+      
+      this.thirdCountdownInterval = setInterval(() => {
+        const timerEl = document.getElementById(timerId);
+        if (timerEl) timerEl.textContent = updateCountdown();
+      }, 1000);
+      
+      return initialTime;
+    },
+
+    hasThirdCountdown(productId) {
+      return this.productsWithThirdCountdown.includes(parseInt(productId));
+    },
+
+      // IDs dos produtos Black Friday
+    blackFridayProducts: [
+      8611084501298,
+      8611086303538,
+      8782350483762,
+      8611111010610
+    ],
+
+    // Data fim da Black Friday (CONFIGURAR AQUI)
+    blackFridayEndDate: new Date('2025-11-30T23:59:59'),
+
+    // Intervalo do countdown (para limpar depois)
+    countdownInterval: null,
+
+    // Criar countdown
+    createCountdown(targetDate) {
+      const updateCountdown = () => {
+        const now = new Date();
+        const diff = targetDate - now;
+        
+        if (diff <= 0) {
+          return '00 dias e 00 : 00 : 00';
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        return `${days.toString().padStart(2, '0')} dias e ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+      };
+      
+      // Atualiza imediatamente
+      const initialTime = updateCountdown();
+      
+      // Atualiza a cada segundo
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+      
+      this.countdownInterval = setInterval(() => {
+        const timerEl = document.getElementById('black-countdown-timer');
+        if (timerEl) {
+          timerEl.textContent = updateCountdown();
+        }
+      }, 1000);
+      
+      return initialTime;
+    },
+
+    // Verificar se produto é Black Friday
+    isBlackFridayProduct(productId) {
+      return this.blackFridayProducts.includes(parseInt(productId));
+    },
+
+  
+  setupQuickBuyButtons() {
+    const isPDP = window.location.pathname.includes('/products/');
+    
+    if (isPDP) {
+      if (VZ.config.debug) console.log('⚡ Quick Buy: Modo PDP - Interceptando form submit');
+      
+      setTimeout(() => {
+        const productForms = document.querySelectorAll('form[action*="/cart/add"]');
+        
+        productForms.forEach(form => {
+          if (form.dataset.vzIntercepted) return;
+          form.dataset.vzIntercepted = 'true';
+          
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            if (VZ.config.debug) console.log('📦 PDP: Form interceptado');
+            
+            try {
+              const formData = new FormData(form);
+              const variantId = formData.get('id');
+              const quantity = formData.get('quantity') || 1;
+              
+              if (!variantId) {
+                throw new Error('Variant ID não encontrado');
+              }
+              
+              if (VZ.config.debug) console.log('🛒 Adicionando:', variantId, 'qty:', quantity);
+              
+              const response = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  id: variantId,
+                  quantity: parseInt(quantity)
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error('Erro ao adicionar produto');
+              }
+              
+              const data = await response.json();
+              if (VZ.config.debug) console.log('✅ Adicionado:', data);
+              
+              const submitBtn = form.querySelector('button[type="submit"], input[type="submit"], .product-form__submit');
+              if (submitBtn) {
+                const originalText = submitBtn.textContent || submitBtn.value;
+                const originalBg = submitBtn.style.background;
+                
+                submitBtn.textContent = '✓ Adicionado!';
+                submitBtn.disabled = true;
+                submitBtn.style.background = '#00c851';
+                
+                setTimeout(() => {
+                  submitBtn.textContent = originalText;
+                  submitBtn.disabled = false;
+                  submitBtn.style.background = originalBg;
+                }, 2000);
+              }
+              
+              const productContainer = form.closest('.product, .product-single, [data-product]');
+              const productImage = productContainer?.querySelector('img.product__image, .product-single__photo img, [data-product-image] img, .product__media img, .product__photo img');
+              
+              if (productImage) {
+                const clone = productImage.cloneNode(true);
+                clone.style.cssText = `
+                  position: fixed;
+                  width: 100px;
+                  height: 100px;
+                  object-fit: cover;
+                  z-index: 999999;
+                  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                  pointer-events: none;
+                  border-radius: 10px;
+                  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                `;
+                
+                const rect = productImage.getBoundingClientRect();
+                clone.style.top = rect.top + 'px';
+                clone.style.left = rect.left + 'px';
+                
+                document.body.appendChild(clone);
+                
+                setTimeout(() => {
+                  clone.style.top = '20px';
+                  clone.style.right = '20px';
+                  clone.style.left = 'auto';
+                  clone.style.opacity = '0';
+                  clone.style.transform = 'scale(0.2) rotate(360deg)';
+                }, 50);
+                
+                setTimeout(() => {
+                  clone.remove();
+                }, 900);
+              }
+              
+              setTimeout(() => {
+                VZ.abrirCarrinho();
+                VZ.falar('Produto adicionado! 🛒');
+              }, 300);
+              
+            } catch (error) {
+              console.error('❌ Erro ao adicionar produto:', error);
+              
+              if (VZ.config.debug) console.warn('⚠️ Fallback: submit nativo');
+              form.dataset.vzIntercepted = 'false';
+              form.removeEventListener('submit', arguments.callee);
+              form.submit();
+            }
+          }, true);
+        });
+        
+        if (VZ.config.debug) console.log(`⚡ ${productForms.length} forms da PDP interceptados`);
+      }, 1000);
+      
+      return;
+    }
+    
+    if (VZ.config.debug) console.log('⚡ Quick Buy: Modo Coleção - Abrindo modal');
+    
+    setTimeout(() => {
+      const selectors = [
+        '[data-add-to-cart]',
+        '.btn-add-to-cart',
+        '.quick-add',
+        '.product-form__submit',
+        'button[name="add"]',
+        '.btn--add-to-cart',
+        '.product__submit__add'
+      ];
+      
+      const buttons = document.querySelectorAll(selectors.join(','));
+      
+      buttons.forEach(btn => {
+        if (btn.dataset.vzProcessed) return;
+        btn.dataset.vzProcessed = 'true';
+        
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        newBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const productHandle = this.extractProductHandle(newBtn);
+          if (productHandle) {
+            await this.openQuickBuy(productHandle);
+          } else {
+            if (VZ.config.debug) console.warn('⚠️ Handle não encontrado');
+          }
+        });
+      });
+      
+      if (VZ.config.debug) console.log(`⚡ ${buttons.length} botões interceptados (Quick Buy modal)`);
+    }, 1000);
+  },
+  
+  extractProductHandle(button) {
+    const handle = 
+      button.dataset.productHandle || 
+      button.closest('[data-product-handle]')?.dataset.productHandle ||
+      button.closest('[data-product-url]')?.dataset.productUrl?.match(/\/products\/([^\/\?]+)/)?.[1] ||
+      button.closest('a[href*="/products/"]')?.href.match(/\/products\/([^\/\?]+)/)?.[1] ||
+      button.closest('form[action*="/cart/add"]')?.action.match(/\/products\/([^\/\?]+)/)?.[1];
+      
+    return handle;
+  },
+  
+  async openQuickBuy(productHandle) {
+    try {
+      const response = await fetch(`/products/${productHandle}.js`);
+      const product = await response.json();
+      
+      this.currentProduct = product;
+      this.populateModal(product);
+      
+      const quickbuy = document.getElementById('vz-quickbuy');
+      const overlay = document.getElementById('vz-overlay');
+      const mascote = document.getElementById('vz-mascote');
+      
+      if (quickbuy) quickbuy.classList.add('aberto');
+      if (overlay) overlay.style.display = 'block';
+      if (mascote) mascote.style.display = 'none';
+      
+      VZ.falar('Escolhe aí rapidinho! ⚡');
+      
+    } catch (e) {
+      console.error('Erro ao carregar produto:', e);
+      VZ.falar('Ops! Erro ao carregar...');
+    }
+  },
+
+  // IDs dos produtos Black Friday
+blackFridayProducts: [
+  8611084501298,
+  8611086303538,
+  8782350483762,
+  8611111010610,
+ /* 10022337151282*/
+],
+
+// Data fim da Black Friday (CONFIGURAR AQUI)
+blackFridayEndDate: new Date('2025-11-30T23:59:59'),
+
+// Intervalo do countdown
+countdownInterval: null,
+
+// Criar countdown
+createCountdown(targetDate) {
+  const updateCountdown = () => {
+    const now = new Date();
+    const diff = targetDate - now;
+    
+    if (diff <= 0) {
+      return '00 dias e 00 : 00 : 00';
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    return `${days.toString().padStart(2, '0')} dias e ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+  };
+  
+  const initialTime = updateCountdown();
+  
+  if (this.countdownInterval) {
+    clearInterval(this.countdownInterval);
+  }
+  
+  this.countdownInterval = setInterval(() => {
+    const timerEl = document.getElementById('black-countdown-timer');
+    if (timerEl) {
+      timerEl.textContent = updateCountdown();
+    }
+  }, 1000);
+  
+  return initialTime;
+},
+
+// Verificar se produto é Black Friday
+isBlackFridayProduct(productId) {
+  return this.blackFridayProducts.includes(parseInt(productId));
+},
+  
+  populateModal(product) {
+  const infoEl = document.getElementById('qb-product-info');
+  const hasThirdCountdown = this.hasThirdCountdown(product.id);
+  if (infoEl) {
+    infoEl.innerHTML = `
+      <img src="${product.featured_image}" alt="${product.title}" class="vz-qb-image">
+      <div class="vz-qb-details">
+        <h4 class="vz-qb-details-h4" style="margin: 0 0 10px 0;">${product.title}</h4>
+        <p class="vz-qb-details-p" style="color: #B7BBC1; margin: 0;">Escolha sua opção:</p>
+      </div>
+    `;
+  }
+  
+  const priceEl = document.getElementById('qb-price');
+  if (priceEl) {
+    const price = (product.price / 100).toFixed(2);
+    priceEl.innerHTML = `R$ ${price}`;
+  }
+  
+  const variantsEl = document.getElementById('qb-variants');
+  if (!variantsEl) return;
+  
+  variantsEl.innerHTML = '';
+ 
+    // Verificar se é produto Black Friday
+  const isBlackFriday = this.isBlackFridayProduct(product.id);
+  const variantsToShow = isBlackFriday ? product.variants.slice(0, 4) : product.variants.slice(0, 3);
+  
+  // ✅ LOOP COM INDEX PARA LABELS CONDICIONAIS
+  variantsToShow.forEach((variant, index) => {
+  const btn = document.createElement('button');
+  
+  const isBlackVariant = isBlackFriday && index === 3;
+  const isThirdWithCountdown = hasThirdCountdown && index === 2; // ← ADICIONAR
+  
+  btn.className = isBlackVariant ? 'vz-qb-variant-black' : 'vz-qb-variant';
+  
+  let variantImage = '';
+  
+  if (variant.featured_image) {
+    variantImage = variant.featured_image.src || variant.featured_image;
+  } else if (product.images && product.images[variant.position - 1]) {
+    variantImage = product.images[variant.position - 1];
+  } else if (variant.image_id && product.images) {
+    const foundImage = product.images.find(img => {
+      const imgId = typeof img === 'object' ? img.id : img;
+      return imgId == variant.image_id;
+    });
+    if (foundImage) {
+      variantImage = typeof foundImage === 'object' ? foundImage.src : foundImage;
+    }
+  }
+  
+  if (!variantImage) {
+    variantImage = product.featured_image || product.images?.[0] || '';
+  }
+  
+  if (variantImage && !variantImage.startsWith('http')) {
+    variantImage = 'https:' + variantImage;
+  }
+  
+  const variantTitle = variant.title == 'Default Title' ? 'Mix de Sabores' : variant.title;
+  const precoVariante = variant.price / 100;
+  
+  // ✅ LABELS (NÃO mostrar se é 3ª com countdown)
+  let labelMaisVendido = '';
+  let labelMenorPreco = '';
+  let labelFreteGratis = '';
+  
+  if (!isBlackVariant) {
+    if (index === 1) {
+      labelMaisVendido = `
+        <div class="prod-x9-option-label prod-x9-option-label-bottom">
+          Mais Vendido
+        </div>
+      `;
+    }
+    
+    // ✅ APENAS SE NÃO TEM COUNTDOWN
+    if (index === 2 && !isThirdWithCountdown) {
+      labelMenorPreco = `
+        <div class="prod-x9-option-label prod-x9-option-label-bottom">
+          Menor Preço
+        </div>
+      `;
+    }
+    if (isThirdWithCountdown) {
+     btn.classList.add('has-third-countdown');
+   }
+    
+    // ✅ APENAS SE NÃO TEM COUNTDOWN
+    if (precoVariante >= VZ.config.frete_gratis && !isThirdWithCountdown) {
+      labelFreteGratis = `
+        <div class="prod-x9-option-label-2 prod-x9-option-label-bottom">
+          Frete Grátis
+        </div>
+      `;
+    }
+  }
+  
+  // ✅ COUNTDOWN (se aplicável)
+  let countdownThirdHTML = '';
+  if (isThirdWithCountdown || isBlackVariant){
+    const timerId = `countdown-third-${variant.id}`;
+    const endDate = this.getThirdCountdownEndDate();
+    const countdownTime = this.createThirdCountdown(endDate, timerId);
+    
+        countdownThirdHTML = `
+      <div class="vz-qb-countdown-third-container">
+        <div class="vz-qb-countdown-third-label">TERMINA EM</div>
+        <div class="vz-qb-countdown-third-timer" id="${timerId}">${countdownTime}</div>
+      </div>
+    `;
+  }
+
+  
+  
+  // ✅ HTML DIFERENTE PARA VARIANTE BLACK
+  if (isBlackVariant) {
+    const countdownTime = this.createCountdown(this.blackFridayEndDate);
+    
+    btn.innerHTML = 
+    `${isBlackVariant
+    ? '<div style="display:block;" class="prod-x9-option-image desk-none auxiliar"><div class="vz-qb-third-label-black">OFERTA VERÃO</div>' 
+    : '<div style="display:block;" class="prod-x9-option-image desk-none">'}
+     <img class="prod-x9-option prod-x9-option-black"
+          src="${variantImage}"
+          srcset="${variantImage}"
+          sizes="(max-width: 768px) 200px, 300px"
+          loading="lazy"
+          alt="${variantTitle}">
+      </div>   
+      <div class="right-content">
+        <div class="labels-container-x9 ${isBlackVariant ? 'labels-x9-black' : ''}">
+          ${countdownThirdHTML}${labelMaisVendido}${labelMenorPreco}${labelFreteGratis}
+        </div>
+        <div class="vz-qb-variant-bt">
+          ${variantTitle}
+          ${isBlackVariant ? '<span class="vz-qb-third-label-frete">Frete Grátis</span>' : ''}
+        </div>
+        <div style="display:none;" class="prod-x9-option-image mobile-none">
+          <img class="prod-x9-option"
+            src="${variantImage}"
+            srcset="${variantImage}"
+            sizes="(max-width: 768px) 200px, 300px"
+            loading="lazy"
+            alt="${variantTitle}">
+        </div>
+        <div class="mobile-none variant-price-wrapper text-center mt-2">
+          <span class="block text-gray-600 text-[12px] text-juros">
+            <span class="">3x sem juros de</span> <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+          </span>
+          <span class="block font-bold text-juros-desk text-denavita-shopify text-[16px]" style="margin-top:-6px;text-align: center;">
+            <span style="color:#fff;" class="ou-a-vista">ou</span> <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span style="color:#fff;" class="text-a-vista">à vista</span>
+          </span>
+        </div>
+        <div class="desk-none variant-price-wrapper text-center mt-2">
+          <span class="text-gray-600 text-[12px] text-juros">
+            <span class="desk-none">3x de</span><span class="mobile-none">3x sem juros de</span> <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span style="color:#fff;" class="text-s-juros desk-none">s/ juros</span>
+          </span>
+          <span class="font-bold text-juros text-denavita-shopify text-[16px]">
+            <span style="color:#fff;" class="ou-a-vista">ou</span> <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span style="color:#fff;" class="text-a-vista">à vista</span>
+          </span>
+        </div>
+      </div>
+    `;
+  } else {
+    // HTML NORMAL (3 primeiras variantes)
+    // HTML NORMAL - Adicionar countdown no lugar das labels
+    btn.innerHTML = `
+    ${isThirdWithCountdown 
+  ? '<div style="display:block;" class="prod-x9-option-image desk-none auxiliar"><div class="vz-qb-third-label-black"></div>' 
+  : '<div style="display:block;" class="prod-x9-option-image desk-none">'}
+      <img class="prod-x9-option prod-x9-option-black"
+          src="${variantImage}"
+          srcset="${variantImage}"
+          sizes="(max-width: 768px) 200px, 300px"
+          loading="lazy"
+          alt="${variantTitle}">
+      </div>   
+      <div class="right-content">
+        <div class="labels-container-x9 ${isThirdWithCountdown ? 'labels-x9-black' : ''}">
+          ${countdownThirdHTML}${labelMaisVendido}${labelMenorPreco}${labelFreteGratis}
+        </div>
+        <div class="vz-qb-variant-bt">
+          ${variantTitle}
+          ${isThirdWithCountdown ? '<span class="vz-qb-third-label-frete desk-none">Frete Grátis</span>' : ''}
+        </div>
+          ${isThirdWithCountdown ? '<span class="vz-qb-third-label-frete">Frete Grátis</span>' : ''}
+        <div class="prod-x9-option-image mobile-none">
+          <img class="prod-x9-option"
+            src="${variantImage}"
+            srcset="${variantImage}"
+            sizes="(max-width: 768px) 200px, 300px"
+            loading="lazy"
+            alt="${variantTitle}">
+        </div>
+        <div class="mobile-none variant-price-wrapper text-center mt-2">
+          <span class="block text-gray-600 text-[12px] text-juros">
+            <span class="">3x sem juros de</span> <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+          </span>
+          <span class="block font-bold text-juros-desk text-denavita-shopify text-[16px]" style="margin-top:-6px;text-align: center;">
+            <span class="ou-a-vista">ou</span> <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span class="text-a-vista">à vista</span>
+          </span>
+        </div>
+        <div class="desk-none variant-price-wrapper text-center mt-2">
+          <span class="text-gray-600 text-[12px] text-juros">
+            <span class="desk-none">3x de</span><span class="mobile-none">3x sem juros de</span> <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span class="text-s-juros desk-none">s/ juros</span>
+          </span>
+          <span class="font-bold text-juros text-denavita-shopify text-[16px]">
+            <span class="ou-a-vista">ou</span> <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> <span class="text-a-vista">à vista</span>
+          </span>
+        </div>
+      </div>
+    `;
+  }
+    
+    if (variant.available) {
+      btn.onclick = () => this.addVariantToCart(variant);
+    } else {
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+    }
+    
+    variantsEl.appendChild(btn);
+  });
+  
+  /*if (product.variants.length > 3) {
+    const moreLink = document.createElement('div');
+    moreLink.style.marginTop = '10px';
+    moreLink.innerHTML = `
+      <a href="/products/${product.handle}" style="color: var(--vz-cor-sucesso);">
+        Ver todas as ${product.variants.length} opções →
+      </a>
+    `;
+    variantsEl.appendChild(moreLink);
+  }*/
+},
+  
+  async addVariantToCart(variant) {
+    const btn = event.currentTarget;
+    btn.classList.add('selecionado', 'adicionando');
+    
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant.id,
+          quantity: 1
+        })
+      });
+      
+      const msgEl = document.getElementById('qb-message');
+      if (msgEl) msgEl.textContent = '✅ Adicionado!';
+      
+      setTimeout(() => {
+        this.close();
+        VZ.abrirCarrinho();
+        if (msgEl) msgEl.textContent = '';
+      }, 1500);
+      
+    } catch (e) {
+      console.error('Erro:', e);
+      btn.classList.remove('selecionado', 'adicionando');
+      const msgEl = document.getElementById('qb-message');
+      if (msgEl) msgEl.textContent = '❌ Erro';
+    }
+  },
+  
+  close() {
+    if (this.countdownInterval) {
+    clearInterval(this.countdownInterval);
+    this.countdownInterval = null;
+  }
+  
+  if (this.thirdCountdownInterval) {
+    clearInterval(this.thirdCountdownInterval);
+    this.thirdCountdownInterval = null;
+  }
+
+    const quickbuy = document.getElementById('vz-quickbuy');
+    const overlay = document.getElementById('vz-overlay');
+    
+    if (quickbuy) quickbuy.classList.remove('aberto');
+    if (overlay) overlay.style.display = 'none';
+    
+    setTimeout(() => {
+      const mascote = document.getElementById('vz-mascote');
+      if (mascote) mascote.style.display = 'block';
+      VZ.falar('Produto no carrinho! 🛒');
+    }, 500);
+  }
+};
+
+(function() {
+  if (VZ.config.enabled) {
+    // Tenta iniciar imediatamente
+    if (document.readyState === 'loading') {
+      // HTML ainda carregando, espera um pouco
+      document.addEventListener('DOMContentLoaded', function() {
+        VZ.init();
+        VZQuickBuy.init();
+      });
+    } else {
+      // HTML já carregou, inicia agora!
+      VZ.init();
+      VZQuickBuy.init();
+    }
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Busca o ícone do carrinho
+  const cartIcon = document.getElementById('cart-icon-bubble');
+  
+  if (cartIcon) {
+    // Remove o href para não navegar
+    cartIcon.removeAttribute('href');
+    
+    // Adiciona cursor pointer
+    cartIcon.style.cursor = 'pointer';
+    
+    // Intercepta o clique
+    cartIcon.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Abre o carrinho VZ
+      if (typeof VZ !== 'undefined' && typeof VZ.abrirCarrinho === 'function') {
+        VZ.abrirCarrinho();
+      } else {
+        console.error('VZ.abrirCarrinho não encontrado');
+      }
+    });
+    
+    console.log('✅ Ícone do carrinho interceptado');
+  }
+});  
+</script>
+
+{% endif %}
+{% schema %}
+{
+  "name": "🏖️ Vendedor Denavita 2.1",
+  "settings": [
+    {
+      "type": "header",
+      "content": "⚙️ Configurações Gerais"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Ativar Vendedor Zueiro",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay_segundos",
+      "label": "Tempo até aparecer (segundos)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "personalidade",
+      "label": "Personalidade do Vendedor",
+      "options": [
+        {
+          "value": "zueiro",
+          "label": "🏖️ Zé Praia (Zueiro)"
+        },
+        {
+          "value": "amigavel",
+          "label": "😊 Amigável"
+        },
+        {
+          "value": "urgente",
+          "label": "⏰ Urgente (Black Friday)"
+        },
+        {
+          "value": "influencer",
+          "label": "✨ Modo Influencer"
+        }
+      ],
+      "default": "zueiro"
+    },
+    {
+      "type": "range",
+      "id": "mascote_size",
+      "label": "Tamanho do Mascote (px)",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "default": 120
+    },
+    {
+      "type": "image_picker",
+      "id": "mascote_imagem",
+      "label": "Imagem do Mascote",
+      "info": "Recomendado: PNG transparente 200x200px"
+    },
+    {
+      "type": "header",
+      "content": "🎮 Gamificação"
+    },
+    {
+      "type": "number",
+      "id": "valor_frete_gratis",
+      "label": "Valor para Frete Grátis (R$)",
+      "default": 150
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_1",
+      "label": "Valor para Brinde 1 (R$)",
+      "default": 250
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_1",
+      "label": "Produto Brinde 1",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_2",
+      "label": "Valor para Brinde 2 (R$)",
+      "default": 350
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_2",
+      "label": "Produto Brinde 2",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_3",
+      "label": "Valor para Brinde 3 (R$)",
+      "default": 450
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_3",
+      "label": "Produto Brinde 3",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "header",
+      "content": "🛍️ Produtos da Gaveta"
+    },
+    {
+      "type": "select",
+      "id": "modo_gaveta",
+      "label": "Modo de Exibição",
+      "options": [
+        {
+          "value": "carrossel",
+          "label": "Carrossel de Produtos"
+        },
+        {
+          "value": "trilha",
+          "label": "Trilha de Gamificação (Brindes)"
+        }
+      ],
+      "default": "carrossel",
+      "info": "Escolha como exibir os produtos na gaveta"
+    },
+    {
+      "type": "collection",
+      "id": "colecao_produtos",
+      "label": "Coleção para Carrossel",
+      "info": "Usada apenas no modo Carrossel"
+    },
+    {
+      "type": "header",
+      "content": "💬 Mensagens e Falas"
+    },
+    {
+      "type": "text",
+      "id": "mensagens_iniciais",
+      "label": "Mensagens Iniciais",
+      "default": "Psiu, vem cá!|Ô amigo!|Tenho uma oferta!|Ei, você aí!",
+      "info": "Separe com | (pipe)"
+    },
+    {
+      "type": "text",
+      "id": "mensagens_fechar",
+      "label": "Mensagens ao Tentar Fechar",
+      "default": "Pera aí!|Calma!|Não vai embora!|Espera um pouco!",
+      "info": "Separe com | (pipe)"
+    },
+    {
+      "type": "text",
+      "id": "mensagem_gaveta",
+      "label": "Título da Gaveta",
+      "default": "Brindes possíveis"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Personalização Visual"
+    },
+    {
+      "type": "color",
+      "id": "cor_primaria",
+      "label": "Cor Primária",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "cor_secundaria",
+      "label": "Cor Secundária",
+      "default": "#D2691E"
+    },
+    {
+      "type": "color",
+      "id": "cor_sucesso",
+      "label": "Cor de Sucesso",
+      "default": "#00c851"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_confetti",
+      "label": "Mostrar Confetti nas Conquistas",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "high_contrast_mode",
+      "label": "Ativar Modo Alto Contraste",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "📱 Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_enabled",
+      "label": "Ativar em Mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_mascote_size",
+      "label": "Tamanho Mobile (px)",
+      "min": 60,
+      "max": 120,
+      "step": 10,
+      "default": 80
+    },
+     {
+      "type": "header",
+      "content": "⚡ Quick Buy"
+    },
+    {
+      "type": "checkbox",
+      "id": "quickbuy_enabled",
+      "label": "Ativar Quick Buy",
+      "default": true,
+      "info": "Intercepta botões de compra para escolha rápida"
+    },
+    {
+      "type": "header",
+      "content": "🔧 Avançado"
+    },
+    {
+      "type": "checkbox",
+      "id": "debug_mode",
+      "label": "Modo Debug (console.log)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "chat_enabled",
+      "label": "Ativar Modo Chat",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "CSS Customizado",
+      "info": "Para ajustes finos"
+    },
+    {
+    "type": "header",
+    "content": "🛒 Carrinho - Leve Também"
+    },
+    {
+    "type": "collection",
+    "id": "colecao_leve_tambem",
+    "label": "Coleção 'Leve Também'",
+    "info": "Escolha até 5 produtos para o carrossel (recomendados/complementares)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vendedor Denavita",
+      "category": "Conversão"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,2528 @@
+{% if section.settings.enabled %}
+<style>
+  :root {
+    --vz-cor-primaria: {{ section.settings.cor_primaria }};
+    --vz-cor-secundaria: {{ section.settings.cor_secundaria }};
+    --vz-cor-sucesso: {{ section.settings.cor_sucesso }};
+    --vz-cor-texto: #333;
+    --vz-cor-acento: #FFD700;
+    --vz-cor-contraste: #fff;
+    --vz-spacing: 20px;
+    --btn-padding: unset;
+  }
+  .high-contrast {
+    filter: contrast(1.5);
+  }
+  .vz-mascote {
+    position: fixed;
+    bottom: 20px;
+    right: -200px;
+    width: {{ section.settings.mascote_size }}px;
+    height: {{ section.settings.mascote_size | plus: 30 }}px;
+    z-index: 99999;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+  }
+  .vz-mascote.visivel {
+    right: 20px;
+  }
+  .vz-mascote:hover {
+    animation: balanco-leve 2s infinite;
+  }
+  .vz-mascote-img {
+    width: 100%;
+    height: auto;
+  }
+  .vz-mascote-default {
+    font-size: {{ section.settings.mascote_size | divided_by: 2 }}px;
+    text-align: center;
+  }
+  .vz-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+    min-width: 20px;
+    text-align: center;
+  }
+  .vz-balao {
+    position: absolute;
+    bottom: 100%;
+    right: auto;
+    left: -150px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 250px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+  }
+  .vz-balao::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    border: 10px solid transparent;
+    border-top-color: white;
+  }
+  .vz-fechar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    color: #999;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #vz-balao-texto {
+    margin: 0;
+    font-size: 14px;
+    color: var(--vz-cor-texto);
+    text-shadow: 0 0 2px rgba(255,255,255,0.5);
+  }
+  .vz-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 99998;
+    display: none;
+  }
+  .vz-gaveta {
+    position: fixed;
+    bottom: -100%;
+    left: 10%;
+    right: 10%;
+    width: 80%;
+    height: 60vh;
+    background: linear-gradient(135deg, var(--vz-cor-primaria), var(--vz-cor-secundaria));
+    border-radius: 20px;
+    transition: bottom 0.5s ease;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-gaveta.aberto {
+    bottom: 0;
+  }
+  .vz-gaveta-header {
+    background: rgba(0,0,0,0.2);
+    color: white;
+    padding: var(--vz-spacing);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .vz-gaveta-header h3 {
+    margin: 0;
+    color: white;
+  }
+  #dark-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  .vz-gaveta-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .vz-gaveta-close:hover {
+    background: white;
+    color: var(--vz-cor-primaria);
+    transform: scale(1.1);
+  }
+  .vz-gaveta-body {
+    flex: 1;
+    padding: var(--vz-spacing);
+    overflow-y: auto;
+    background: white;
+    position: relative;
+  }
+  .vz-loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--vz-cor-sucesso);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .vz-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: var(--vz-spacing);
+  }
+  .vz-tab {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
+  .vz-tab.active {
+    border-bottom: 2px solid var(--vz-cor-sucesso);
+  }
+  .vz-tab-content {
+    display: none;
+  }
+  .vz-tab-content.active {
+    display: block;
+  }
+  .vz-progress-container {
+    font-size: 12px;
+    border-radius: 8px;
+    background: #ebffd9;
+    border: 1px solid #BDC0B9;
+    padding: 0 13px 30px;
+    margin: 5px auto 0;
+  }
+  .vz-progress {
+    background: #fad1d6;
+    height: 8px;
+    border-radius: 20px;
+    position: relative;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .vz-progress-fill {
+    height: 100%;
+    background: #bd2347;
+    border-radius: 20px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .vz-progress-msg {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    color: var(--vz-cor-texto);
+  }
+  .vz-milestone {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.5;
+    transition: all 0.3s;
+    flex: 1;
+    position: relative;
+  }
+  .vz-milestone.achieved {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  .vz-milestone .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .vz-milestone:hover .tooltip {
+    display: block;
+  }
+  .vz-produtos-carrossel,
+  .vz-recs {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: calc(var(--vz-spacing) * 1.5);
+    -webkit-overflow-scrolling: touch;
+  }
+  .vz-produto,
+  .vz-rec-item {
+    flex: 0 0 150px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid #eee;
+    transition: all 0.3s;
+  }
+  .vz-produto:hover,
+  .vz-rec-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--vz-cor-sucesso);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .vz-produto img,
+  .vz-rec-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  .vz-produto h4,
+  .vz-rec-item h4 {
+    font-size: 14px;
+    margin: 10px 0 5px;
+  }
+  .vz-produto p,
+  .vz-rec-item p {
+    font-weight: bold;
+    color: var(--vz-cor-sucesso);
+    margin: 0;
+  }
+  .vz-trilha-gamificacao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--vz-spacing) * 1.5);
+    position: relative;
+    background: linear-gradient(135deg, #f5f5f5, #ffffff);
+    border-radius: 15px;
+    margin: var(--vz-spacing);
+  }
+  .vz-trilha-item {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+    max-width: 120px;
+  }
+  .vz-trilha-circulo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(224,224,224,0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 10px;
+    transition: all 0.3s;
+    border: 3px solid #ccc;
+    position: relative;
+  }
+  .vz-trilha-item.ativo .vz-trilha-circulo {
+    background: linear-gradient(135deg, var(--vz-cor-sucesso), #00ff88);
+    border-color: var(--vz-cor-sucesso);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(0,255,136,0.5);
+  }
+  .vz-trilha-item.conquistado .vz-trilha-circulo {
+    background: var(--vz-cor-sucesso);
+    border-color: #00ff88;
+  }
+  .vz-trilha-item.conquistado .vz-trilha-check {
+    display: block;
+  }
+  .vz-trilha-check {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #00ff88;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .vz-trilha-linha {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: 1;
+    transform: translateY(-20px);
+  }
+  .vz-trilha-linha-progresso {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--vz-cor-sucesso), #00ff88);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .vz-trilha-titulo {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  .vz-trilha-valor {
+    font-size: 14px;
+    color: var(--vz-cor-sucesso);
+    font-weight: bold;
+  }
+  .vz-trilha-item.conquistado .vz-trilha-titulo {
+    color: var(--vz-cor-sucesso);
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  .vz-chat-btn {
+    position: absolute;
+    bottom: var(--vz-spacing);
+    right: var(--vz-spacing);
+    background: var(--vz-cor-sucesso);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .vz-carrinho {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-carrinho.aberto {
+    right: 0;
+  }
+  .vz-carrinho-header {
+    background: linear-gradient(135deg, var(--vz-cor-primaria), var(--vz-cor-secundaria));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    max-height: 33px;
+    height: auto;
+  }
+  .vz-brindes-container {
+    display: none;
+    margin: 9px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    box-sizing: border-box;
+    margin-left: 10px;
+  }
+  .vz-brindes-carrossel {
+    position: relative;
+    display: flex;
+    height: 65px;
+    width: 100%;
+    transition: transform 0.5s ease;
+    margin: 0 auto;
+  }
+  .vz-brinde-slide {
+    min-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+    border: 1px solid #BDC0B9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 200, 81, 0.1);
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+  .vz-brinde-slide img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  #vz-quickbuy {
+    position: fixed;
+    bottom: -100%;
+    height: auto;
+    background: linear-gradient(135deg, var(--vz-cor-primaria), var(--vz-cor-secundaria));
+    border-radius: 20px 20px 0 0;
+    transition: bottom 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 100002;
+    overflow: hidden;
+  }
+  #vz-quickbuy.aberto {
+    bottom: 0;
+  }
+  .vz-qb-header {
+    background: #153201;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .vz-qb-body {
+    background: white;
+    padding: 20px;
+    text-align: center;
+  }
+  .vz-qb-product-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .vz-qb-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .vz-qb-details {
+    flex: 1;
+    text-align: left;
+  }
+  .vz-qb-variants {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .vz-qb-variant {
+    padding: 0 20px;
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    color: #000;
+    border: 2px solid #DEDEDE;
+  }
+  .vz-qb-variant:hover {
+    
+    border: 2px solid #54b101;
+    color: #0B6809;
+    background:#fff;
+  }
+  .vz-qb-variant.selecionado {
+    
+    color: #fff;
+    border: 2px solid #54B101;
+  }
+  .vz-qb-variant.adicionando::after {
+    content: '✓';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #54B101;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.3s;
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+  .vz-qb-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--vz-cor-sucesso);
+    margin: 10px 0;
+    display: none;
+  }
+  .vz-carrinho-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--vz-spacing);
+    padding-top: 0;
+  }
+  .vz-carrinho-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .vz-carrinho-item img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    padding: 5px;
+    transition: opacity .3s;
+  }
+  .vz-carrinho-footer {
+    border-top: 2px solid #eee;
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .vz-carrinho-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .vz-checkout-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, var(--vz-cor-sucesso), #00ff88);
+    color: white;
+    border: none;
+    border-radius: 73px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    height: auto;
+  }
+  .vz-chat {
+    display: none;
+    padding: var(--vz-spacing);
+    background: #f8f9fa;
+    height: 100%;
+  }
+  .vz-chat.active {
+    display: flex;
+    flex-direction: column;
+  }
+  .vz-messages {
+    flex: 1;
+    max-height: 60vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .vz-msg {
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 70%;
+  }
+  .vz-msg-vendor {
+    background: #e8f5e9;
+  }
+  .vz-msg-customer {
+    background: #f3e5f5;
+    margin-left: auto;
+    text-align: right;
+  }
+  .vz-input-area {
+    display: flex;
+    gap: 10px;
+  }
+  .vz-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+  }
+  .vz-send {
+    padding: 10px 20px;
+    background: var(--vz-cor-sucesso);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #vz-confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 100002;
+  }
+  @keyframes cair {
+    to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  @keyframes balanco-leve {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+  @keyframes pula-pula {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  @keyframes tremendo {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --vz-cor-texto: #000;
+      --vz-cor-contraste: #000;
+    }
+    .vz-gaveta-body {
+      background: #333;
+    }
+    .vz-balao {
+      background: rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,0,0,0.2);
+      color: var(--vz-cor-texto);
+    }
+    .vz-carrinho {
+      background: #fff;
+    }
+    .vz-chat {
+      background: #222;
+    }
+    .vz-messages {
+      background: #333;
+    }
+    .vz-produtos-carrossel .vz-produto,
+    .vz-rec-item {
+      background: #444;
+      border-color: #555;
+    }
+    .vz-trilha-gamificacao {
+      background: linear-gradient(135deg, #333, #444);
+    }
+    .vz-trilha-circulo {
+      background: rgba(255,255,255,0.1);
+      border-color: #555;
+    }
+    .vz-progress {
+      background: #444;
+    }
+    .vz-input {
+      background: #333;
+      color: #eee;
+      border-color: #555;
+    }
+  }
+  @media (max-width: 768px) {
+    .vz-mascote {
+      width: {{ section.settings.mobile_mascote_size }}px;
+      height: {{ section.settings.mobile_mascote_size | plus: 30 }}px;
+    }
+    .vz-gaveta {
+      height: 80vh;
+      left: 0;
+      right: 0;
+      width: 100%;
+    }
+    .vz-carrinho {
+      width: 100%;
+    }
+    .vz-produtos-carrossel,
+    .vz-recs {
+      padding: 10px;
+    }
+    .vz-produto,
+    .vz-rec-item {
+      flex: 0 0 120px;
+    }
+    .vz-trilha-gamificacao {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .vz-trilha-linha {
+      width: 4px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+    .vz-trilha-item {
+      max-width: 100%;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .desk-none {
+      display: none !important;
+    }
+    .text-juros {
+      text-align: center;
+    }
+    text-juros-desk {
+      font-size: 14px;
+    }
+    #vz-quickbuy {
+      left: 2% !important;
+      right: 2% !important;
+      height: auto !important;
+      max-height: 483px !important;
+      border-radius: 10px 10px 0 0 !important;
+    }
+    .vz-qb-header {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+    .vz-qb-header-h3 {
+      color: #FFF;
+      font-size: 28px;
+      font-weight: 500;
+    }
+    .vz-qb-product-info {
+      max-width: 56%;
+      position: absolute;
+      bottom: 35%;
+    }
+    .vz-qb-variants {
+      zoom: 85%;
+      max-width: 891px;
+      margin: 10px auto;
+      margin-left: auto;
+     margin-right: 0;
+    }
+    .vz-qb-variant-bt {
+      color: #0B6809;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 auto;
+    }
+    .vz-qb-image {
+      width: 168px !important;
+      height: 168px !important;
+    }
+    .vz-qb-details {
+      max-width: 57%;
+    }
+    .vz-qb-details-h4 {
+      color: #000;
+      font-size: 22px;
+      font-weight: 500;
+    }
+    vz-qb-details-p {
+      color: rgba(75, 85, 99, 0.40);
+      font-size: 20px;
+      font-weight: 400;
+    }
+  }
+  @media screen and (max-width: 48em) {
+    #vz-quickbuy {
+      left: 1%;
+      right: 1%;
+      border-radius: 8px;
+      border: 2px solid;
+     
+    }
+    .vz-qb-header {
+      padding: 3px 15px;
+      padding-left: 30px;
+    }
+    .vz-qb-header-h3 {
+      font-size: 18px;
+      padding-bottom: 3px;
+    }
+    .vz-qb-btclick-x {
+      font-size: 25px;
+      padding: 0 10px 0 0;
+    }
+  }
+  button, .btn, .btn-primary, .btn-secondary {
+    text-transform: inherit !important;
+  }
+  .product-form__input:not(.color) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    zoom: 89%;
+  }
+  .product-form__input:not(.color) .bls__option-swatch,
+  .bls__product-color-swatches-text {
+    background: #ffffff;
+    border: 1px solid #69c306 !important;
+    border-radius: 10px !important;
+    padding: 10px !important;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease !important;
+    color: #000;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: auto;
+    margin: 2px !important;
+    gap: 15px;
+  }
+  .product-form__input:not(.color) .bls__option-swatch:hover,
+  .product-form__input:not(.color) .bls__option-swatch.active,
+  .bls__product-color-swatches-text.active {
+    background-color: #fff !important;
+    border: 2px solid #69c306 !important;
+    color: #54b101;
+  }
+  .labels-container-x9 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 0 2px 3px 4px;
+  }
+  .prod-x9-option-label,
+  .prod-x9-option-label-2 {
+    display: flex;
+    width: 90px;
+    padding: 4px 0 3px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 0 5px 5px;
+    color: #FFF;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-transform: uppercase;
+    height: 24px;
+  }
+  .prod-x9-option-label {
+    background: #0B6809;
+  }
+  .prod-x9-option-label-2 {
+    background-color: #F80;
+  }
+  .prod-x9-option-image {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    width: auto;
+    padding-left: unset;
+  }
+  .prod-x9-option {
+    height: auto;
+    max-width: 198px;
+    width: 197.33px;
+    flex-shrink: 0;
+  }
+  .text-juros {
+    color: #4B5563;
+    font-weight: 400;
+    font-size: 16px;
+  }
+  .text-s-juros {
+    color: #4B5563;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .value-parcela {
+    font-weight: 700;
+    color: #0B6809;
+    font-size: 24px;
+    margin-top: -10px;
+    display: block;
+  }
+  .ou-a-vista {
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .value-vista {
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .text-a-vista {
+    color: #4B5563;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .product-form__quantity {
+    display: flex !important;
+  }
+  .bls__visitors {
+    margin-top: -2.5rem;
+  }
+  .swatch-attribute-label {
+    color: #9ca3af !important;
+  }
+  .swatch-selected-value {
+    color: #000 !important;
+  }
+  .bls__product-label-detail {
+    position: relative;
+    top: -52px;
+    left: 43%;
+  }
+  .bls__zoom-image {
+    display: none;
+  }
+  .right-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    margin-top: 220px;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
+  .bls__product-swatches {
+    width: auto;
+    height: auto;
+    margin: 0;
+    display: flex;
+    width: 100%;
+    height: 24px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .variant-price-wrapper {
+    margin-top: 0 !important;
+    text-align: left;
+    width: 100%;
+  }
+  @media (max-width: 576px) {
+    .sticky-addcart-opstion ~ .product-form__buttons .product-form__quantity,
+    .sticky-addcart-product-form form.form select,
+    .mobile-none {
+      display: none !important;
+    }
+    .vz-qb-body {
+      padding: 15px 10px;
+    }
+    .vz-qb-image {
+      width: 93px;
+      height: 93px;
+    }
+    .vz-qb-details-h4 {
+      font-size: 18px;
+    }
+    .vz-qb-details-p {
+      font-size: 13px;
+      line-height: 16px;
+    }
+    .vz-qb-variants {
+      margin: 0 15px;
+    }
+    .vz-qb-variant {
+      padding: 0;
+      display: grid;
+      background-color: #fff !important;
+      grid-template-columns: repeat(3, 1fr);
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      height: auto;
+    }
+    .vz-qb-variant-bt {
+      line-height: 5px;
+      color: #0B6809 !important;
+    }
+    .bls__product-label-detail {
+      top: -51px;
+      left: 65%;
+    }
+    .prod-x9-option-image {
+      padding-left: 10px;
+    }
+    .prod-x9-option {
+      width: 100%;
+      width: 110px;
+      height: 110px;
+      flex-shrink: 0;
+    }
+    .labels-container-x9 {
+      padding: 2px 2px 3px 0px;
+    }
+    .prod-x9-option-label {
+      font-size: 10px !important;
+      flex-direction: column;
+      color: #FFF;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #0B6809;
+      display: flex;
+      width: 90px;
+      height: 23px;
+      padding: 3px 0;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .prod-x9-option-label-2 {
+      font-size: 9px !important;
+      flex-direction: column;
+      color: #FFF;
+      text-transform: uppercase;
+      border-radius: 5px;
+      background: #F80;
+      display: flex;
+      width: 90px;
+      height: 23px;
+      padding: 3px 0;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .bls__product-swatches {
+      display: flex;
+      width: 197px;
+      height: auto;
+      flex-shrink: 0;
+      color: #0B6809;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    .value-parcela {
+      font-size: 16px;
+    }
+    .text-s-juros,
+    .text-juros {
+      font-size: 13px;
+      color: #4B5563;
+    font-weight: 400;
+    display: block ruby;
+    }
+    .ou-a-vista,
+    .value-vista,
+    .text-a-vista {
+      font-size: 11px;
+    }
+  }
+  @media (max-width: 480px) {
+    .mobile-none {
+      display: none !important;
+    }
+    .product-form__input:not(.color) {
+      display: block;
+      gap: 5px;
+    }
+    .product-form__input:not(.color) .bls__option-swatch {
+      flex-direction: column !important;
+      gap: 5px;
+      padding: 6px !important;
+      font-size: 10px !important;
+      margin: 1.5px !important;
+      display: grid !important;
+      margin-top: 9px !important;
+      border-radius: 18px !important;
+      border: 2px solid #54B101 !important;
+      background: rgba(255, 255, 255, 0.00);
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .labels-container-x9 {
+      padding: 2px 2px 3px 1px;
+    }
+    .prod-x9-option-label {
+      width: 79px;
+      height: 18px;
+    }
+    .prod-x9-option-label-2 {
+      width: 79px;
+      height: 18px;
+    }
+    .bls__product-swatches {
+      width: 197px;
+    }
+    .variant-price-wrapper {
+      width: 203px;
+      height: 41px;
+      color: #4B5563;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 15px;
+      display: flex;
+    flex-direction: column;
+    justify-content: center;
+    }
+    .right-content {
+      margin-top: 0 !important;
+      width: 100%;
+      padding-left: 10px;
+    }
+    .prod-x9-option {
+      width: 83px;
+      height: 83px;
+    }
+  }
+  {{ section.settings.custom_css }}
+</style>
+<canvas id="vz-confetti-canvas" width="100%" height="100%"></canvas>
+<div id="vz-overlay" class="vz-overlay"></div>
+<div id="vz-mascote" class="vz-mascote">
+  {% if section.settings.mascote_imagem %}
+    <img src="{{ section.settings.mascote_imagem | img_url: '200x200' }}" alt="Vendedor" class="vz-mascote-img">
+  {% else %}
+    <div class="vz-mascote-default">🏖️</div>
+  {% endif %}
+  <span id="vz-badge" class="vz-badge">0</span>
+  <div class="vz-balao">
+    <button class="vz-fechar" onclick="VZ.tentarFechar()" aria-label="Fechar balão">×</button>
+    <p id="vz-balao-texto"></p>
+  </div>
+</div>
+<div id="vz-gaveta" class="vz-gaveta">
+  <div class="vz-gaveta-header">
+    <h3>{{ section.settings.mensagem_gaveta }}</h3>
+    <button id="dark-toggle" onclick="VZ.toggleDarkMode()" aria-label="Alternar modo escuro">🌙</button>
+    <button class="vz-gaveta-close" onclick="VZ.fecharGaveta()" aria-label="Fechar gaveta">×</button>
+  </div>
+  <div class="vz-gaveta-body">
+    <div class="vz-loading" id="vz-loading"></div>
+    <div class="vz-tabs">
+      <div class="vz-tab active" onclick="VZ.switchTab('progress')" aria-label="Aba Progresso">Progresso</div>
+      <div class="vz-tab" onclick="VZ.switchTab('recs')" aria-label="Aba Recomendações">Recomendações</div>
+    </div>
+    <div id="tab-progress" class="vz-tab-content active">
+      <div class="vz-progress">
+        <div class="vz-progress-fill"></div>
+        <div class="vz-milestone vz-milestone-1" data-valor="{{ section.settings.valor_frete_gratis }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Frete">
+            <path d="M3 3H21V21H3V3ZM5 5V19H19V5H5ZM10 10H14V14H10V10Z" fill="currentColor"/>
+          </svg>
+          Frete
+          <div class="tooltip">Frete Grátis: R$ {{ section.settings.valor_frete_gratis }}</div>
+        </div>
+        <div class="vz-milestone vz-milestone-2" data-valor="{{ section.settings.valor_brinde_1 }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 1">
+            <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+          </svg>
+          Brinde 1
+          <div class="tooltip">Brinde 1: R$ {{ section.settings.valor_brinde_1 }}</div>
+        </div>
+        <div class="vz-milestone vz-milestone-3" data-valor="{{ section.settings.valor_brinde_2 }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 2">
+            <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+          </svg>
+          Brinde 2
+          <div class="tooltip">Brinde 2: R$ {{ section.settings.valor_brinde_2 }}</div>
+        </div>
+        <div class="vz-milestone vz-milestone-4" data-valor="{{ section.settings.valor_brinde_3 }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 3">
+            <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+          </svg>
+          Brinde 3
+          <div class="tooltip">Brinde 3: R$ {{ section.settings.valor_brinde_3 }}</div>
+        </div>
+      </div>
+      <div class="vz-progress-msg"></div>
+      {% if section.settings.modo_gaveta == 'trilha' %}
+        <div class="vz-trilha-gamificacao">
+          <div class="vz-trilha-linha">
+            <div class="vz-trilha-linha-progresso" id="vz-trilha-progresso"></div>
+          </div>
+          <div class="vz-trilha-item" data-valor="{{ section.settings.valor_frete_gratis }}">
+            <div class="vz-trilha-circulo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Frete Grátis">
+                <path d="M3 3H21V21H3V3ZM5 5V19H19V5H5ZM10 10H14V14H10V10Z" fill="currentColor"/>
+              </svg>
+              <div class="vz-trilha-check">✓</div>
+            </div>
+            <div class="vz-trilha-titulo">Frete Grátis</div>
+            <div class="vz-trilha-valor">R$ {{ section.settings.valor_frete_gratis }}</div>
+          </div>
+          <div class="vz-trilha-item" data-valor="{{ section.settings.valor_brinde_1 }}">
+            <div class="vz-trilha-circulo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 1">
+                <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+              </svg>
+              <div class="vz-trilha-check">✓</div>
+            </div>
+            <div class="vz-trilha-titulo">
+              {% if section.settings.produto_brinde_1 %}
+                {{ section.settings.produto_brinde_1.title | truncate: 20 }}
+              {% else %}
+                Brinde 1
+              {% endif %}
+            </div>
+            <div class="vz-trilha-valor">R$ {{ section.settings.valor_brinde_1 }}</div>
+          </div>
+          <div class="vz-trilha-item" data-valor="{{ section.settings.valor_brinde_2 }}">
+            <div class="vz-trilha-circulo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 2">
+                <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+              </svg>
+              <div class="vz-trilha-check">✓</div>
+            </div>
+            <div class="vz-trilha-titulo">
+              {% if section.settings.produto_brinde_2 %}
+                {{ section.settings.produto_brinde_2.title | truncate: 20 }}
+              {% else %}
+                Brinde 2
+              {% endif %}
+            </div>
+            <div class="vz-trilha-valor">R$ {{ section.settings.valor_brinde_2 }}</div>
+          </div>
+          <div class="vz-trilha-item" data-valor="{{ section.settings.valor_brinde_3 }}">
+            <div class="vz-trilha-circulo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ícone Brinde 3">
+                <path d="M12 2L15 5H9L12 2ZM5 7H19V5H5V7ZM3 21H21V9H3V21ZM5 11H19V19H5V11Z" fill="currentColor"/>
+              </svg>
+              <div class="vz-trilha-check">✓</div>
+            </div>
+            <div class="vz-trilha-titulo">
+              {% if section.settings.produto_brinde_3 %}
+                {{ section.settings.produto_brinde_3.title | truncate: 20 }}
+              {% else %}
+                Brinde 3
+              {% endif %}
+            </div>
+            <div class="vz-trilha-valor">R$ {{ section.settings.valor_brinde_3 }}</div>
+          </div>
+        </div>
+      {% else %}
+        <div class="vz-produtos-carrossel" id="vz-carrossel">
+          {% if section.settings.colecao_produtos %}
+            {% for product in section.settings.colecao_produtos.products limit: 12 %}
+              <div class="vz-produto" onclick="VZ.adicionarAoCarrinho('{{ product.selected_or_first_available_variant.id }}')">
+                <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}">
+                <h4>{{ product.title | truncate: 30 }}</h4>
+                <p>{{ product.price | money }}</p>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div id="tab-recs" class="vz-tab-content">
+      <div class="vz-recs">
+        {% if section.settings.colecao_produtos %}
+          {% for product in section.settings.colecao_produtos.products limit: 12 %}
+            <div class="vz-rec-item" onclick="VZ.adicionarAoCarrinho('{{ product.selected_or_first_available_variant.id }}')">
+              <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}">
+              <h4>{{ product.title | truncate: 30 }}</h4>
+              <p>{{ product.price | money }}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    <button class="vz-chat-btn" onclick="VZ.transformarEmChat()" aria-label="Preciso de ajuda">💬 Preciso de ajuda</button>
+  </div>
+</div>
+<div id="vz-carrinho" class="vz-carrinho">
+  <div class="vz-carrinho-header">
+    <h3 style="margin: 0px;padding-left: 20px;font-size: 16px;color: #f0f0f0;" class="vz-carrinho-header-h3">Carrinho (<span id="vz-cart-count">0</span>)</h3>
+    <button onclick="VZ.fecharCarrinho()" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;" aria-label="Fechar carrinho">×</button>
+  </div>
+  <div class="vz-progress-container">
+<div class="vz-progress-msg" style="text-align:center;padding:0 20px;"></div>
+  <div class="vz-progress" style="margin:10px;">
+    <div class="vz-progress-fill"></div>
+  </div>
+</div>
+  <div class="vz-brindes-container" id="vz-brindes-container">
+    <div class="vz-brindes-carrossel" id="vz-brindes-carrossel"></div>
+  </div>
+  <div class="vz-carrinho-items" id="vz-cart-items"></div>
+  <div class="vz-carrinho-footer">
+    <div class="vz-carrinho-total">
+      <span>Total:</span>
+      <span id="vz-cart-total">R$ 0,00</span>
+    </div>
+    <button class="vz-checkout-btn" onclick="window.location.href='/checkout'" aria-label="Finalizar compra">Finalizar Compra</button>
+  </div>
+  <div id="vz-chat" class="vz-chat">
+    <div class="vz-messages" id="vz-messages"></div>
+    <div class="vz-input-area">
+      <input type="text" class="vz-input" id="vz-input" placeholder="Digite sua dúvida..." onkeypress="if(event.key==='Enter')VZ.enviarMensagem()" aria-label="Campo de mensagem">
+      <button class="vz-send" onclick="VZ.enviarMensagem()" aria-label="Enviar mensagem">Enviar</button>
+    </div>
+  </div>
+  
+
+</div>
+<div id="vz-quickbuy">
+  <div class="vz-qb-header">
+    <h3 class="vz-qb-header-h3" style="color: white; margin: 0;">Escolha sua opção</h3>
+    <button onclick="VZQuickBuy.close()" class="vz-qb-btclick-x" style="background: none; border: none; color: white; cursor: pointer;">×</button>
+  </div>
+  
+  <div class="vz-qb-body">
+    <div class="vz-qb-product-info" id="qb-product-info"></div>
+    <div class="vz-qb-variants" id="qb-variants"></div>
+    <div id="qb-message" style="font-size: 13px; margin-top: 0px; color: var(--vz-cor-sucesso); font-weight:500;"></div>
+    <div class="vz-qb-price" id="qb-price"></div>
+  </div>
+</div>
+<script>
+const VZ = {
+  config: {
+    enabled: {{ section.settings.enabled | json }},
+    delay: {{ section.settings.delay_segundos }}000,
+    personality: {{ section.settings.personalidade | json }},
+    modo_gaveta: {{ section.settings.modo_gaveta | json }},
+    frete_gratis: {{ section.settings.valor_frete_gratis }},
+    brinde1_valor: {{ section.settings.valor_brinde_1 }},
+    brinde2_valor: {{ section.settings.valor_brinde_2 }},
+    brinde3_valor: {{ section.settings.valor_brinde_3 }},
+    brinde1_id: '{{ section.settings.produto_brinde_1.selected_or_first_available_variant.id }}',
+    brinde2_id: '{{ section.settings.produto_brinde_2.selected_or_first_available_variant.id }}',
+    brinde3_id: '{{ section.settings.produto_brinde_3.selected_or_first_available_variant.id }}',
+    debug: {{ section.settings.debug_mode | json }},
+    confetti: {{ section.settings.mostrar_confetti | json }},
+    high_contrast: {{ section.settings.high_contrast_mode | json }}
+  },
+  brindeCarrosselInterval: null,
+  ultimosBrindesKeys: '',
+ultimoItemCount: 0,
+  estado_atual: 'observando',
+  tentativas_fechar: 0,
+  modo_chat: false,
+  carrinho_valor: 0,
+  brindes_no_carrinho: {
+    brinde1: false,
+    brinde2: false,
+    brinde3: false
+  },
+  cart_items: [],
+  darkMode: false,
+  brindeLock: false,
+  brindeCarrosselInterval: null,
+  mensagens: {
+    inicial: {{ section.settings.mensagens_iniciais | split: '|' | json }},
+    fechar: {{ section.settings.mensagens_fechar | split: '|' | json }},
+    chat: ['Como posso ajudar?', 'Alguma dúvida?', 'Tô aqui pra ajudar!']
+  },
+  init() {
+    if (this.config.debug) console.log('🏖️ Vendedor Zueiro iniciando...');
+    if (this.config.high_contrast) {
+      document.body.classList.add('high-contrast');
+    }
+    this.checarInfluencer();
+    this.monitorarCarrinho();
+    this.setupExitIntent();
+    this.setupSwipe();
+    this.setupBalaoContrast();
+    setTimeout(() => this.aparecer(), this.config.delay);
+  },
+  setupBalaoContrast() {
+    const balaoTexto = document.getElementById('vz-balao-texto');
+    window.addEventListener('scroll', () => {
+      const rect = balaoTexto.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const elementUnder = document.elementFromPoint(x, y);
+      if (elementUnder) {
+        const bgColor = window.getComputedStyle(elementUnder).backgroundColor;
+        const rgb = bgColor.match(/\d+/g);
+        if (rgb) {
+          const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+          balaoTexto.style.color = brightness > 128 ? '#000' : '#fff';
+        }
+      }
+    });
+  },
+  setupExitIntent() {
+    document.addEventListener('mouseleave', (e) => {
+      if (e.clientY < 0) {
+        this.abrirCarrinho();
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        this.abrirCarrinho();
+      }
+    });
+  },
+  setupSwipe() {
+    const carrossel = document.getElementById('vz-carrossel');
+    if (carrossel) {
+      let startX;
+      carrossel.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+      });
+      carrossel.addEventListener('touchmove', (e) => {
+        const diffX = startX - e.touches[0].clientX;
+        carrossel.scrollLeft += diffX;
+        startX = e.touches[0].clientX;
+      });
+    }
+  },
+  toggleDarkMode() {
+    this.darkMode = !this.darkMode;
+    document.body.classList.toggle('dark-mode', this.darkMode);
+  },
+  switchTab(tabId) {
+    document.querySelectorAll('.vz-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.vz-tab-content').forEach(content => content.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+  },
+  checarInfluencer() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('ref') && params.get('vz_mode') === 'custom') {
+      if (this.config.debug) console.log('Modo influencer detectado!');
+      this.config.personality = 'influencer';
+    }
+  },
+  aparecer() {
+    const mascote = document.getElementById('vz-mascote');
+    mascote.classList.add('visivel');
+    const msg = this.mensagens.inicial[Math.floor(Math.random() * this.mensagens.inicial.length)];
+    this.falar(msg);
+  },
+  falar(texto) {
+    const balao = document.getElementById('vz-balao-texto');
+    if (!balao) return;
+    balao.innerHTML = '';
+    let i = 0;
+    const digitar = setInterval(() => {
+      if (i < texto.length) {
+        balao.innerHTML += texto[i];
+        i++;
+      } else {
+        clearInterval(digitar);
+      }
+    }, 50);
+  },
+  tentarFechar() {
+    this.tentativas_fechar++;
+    if (this.tentativas_fechar === 1) {
+      const msg = this.mensagens.fechar[Math.floor(Math.random() * this.mensagens.fechar.length)];
+      this.falar(msg);
+      const mascote = document.getElementById('vz-mascote');
+      mascote.style.opacity = 0.5;
+      setTimeout(() => {
+        mascote.style.opacity = 1;
+      }, 500);
+    } else if (this.tentativas_fechar === 2) {
+      this.abrirGaveta();
+    } else if (this.config.chat_enabled) {
+      this.transformarEmChat();
+    } else {
+      document.getElementById('vz-mascote').style.display = 'none';
+    }
+  },
+  abrirGaveta() {
+    document.getElementById('vz-gaveta').classList.add('aberto');
+    document.getElementById('vz-overlay').style.display = 'block';
+    document.getElementById('vz-mascote').style.display = 'none';
+    this.atualizarProgresso();
+    if (this.config.modo_gaveta === 'trilha') {
+      this.atualizarTrilha();
+      document.querySelector('.vz-chat-btn').style.display = 'none';
+    }
+  },
+  fecharGaveta() {
+    document.getElementById('vz-gaveta').classList.remove('aberto');
+    document.getElementById('vz-overlay').style.display = 'none';
+    document.getElementById('vz-mascote').style.display = 'block';
+    document.getElementById('vz-mascote').classList.add('visivel');
+  },
+  async monitorarCarrinho() {
+    setInterval(async () => {
+      try {
+        document.getElementById('vz-loading').style.display = 'block';
+        const response = await fetch('/cart.js');
+        const cart = await response.json();
+        this.processarCarrinho(cart);
+        document.getElementById('vz-loading').style.display = 'none';
+      } catch(e) {
+        if (this.config.debug) console.error('Erro ao monitorar carrinho:', e);
+        document.getElementById('vz-loading').style.display = 'none';
+      }
+    }, 2000);
+  },
+  processarCarrinho(cart) {
+  const valor_sem_brindes = this.calcularValorSemBrindes(cart);
+  const brindesAtuais = cart.items
+    .filter(item => item.properties && item.properties._brinde)
+    .map(b => b.key)
+    .sort()
+    .join(',');
+
+  // 🌿 BOTE FÉ: só atualiza UI se algo mudou
+  const precisaAtualizar = (
+    valor_sem_brindes !== this.carrinho_valor ||
+    brindesAtuais !== this.ultimosBrindesKeys ||
+    cart.item_count !== this.ultimoItemCount
+  );
+
+  this.carrinho_valor = valor_sem_brindes;
+  this.cart_items = cart.items;
+  this.ultimosBrindesKeys = brindesAtuais;
+  this.ultimoItemCount = cart.item_count;
+
+  if (precisaAtualizar) {
+    this.atualizarProgresso();
+    if (this.config.modo_gaveta === 'trilha') {
+      this.atualizarTrilha();
+    }
+    this.gerenciarBrindes(valor_sem_brindes, cart);
+    this.atualizarCarrinhoUI(cart);
+    this.atualizarBadge(cart.item_count);
+    //this.personalizeTrilha();
+  }
+},
+
+  personalizeTrilha() {
+  if (this.cart_items.length > 0) {
+    const category = this.cart_items[0].product_type || 'geral';
+    document.querySelectorAll('.vz-trilha-titulo').forEach(titulo => {
+      // 🌿 BOTE FÉ: só adiciona se ainda não tiver o sufixo
+      const suffix = ` (para ${category})`;
+      if (!titulo.textContent.endsWith(suffix)) {
+        titulo.textContent = titulo.textContent.replace(/ \(para .*\)$/, '') + suffix;
+      }
+    });
+  }
+},
+  atualizarBadge(count) {
+    document.getElementById('vz-badge').textContent = count;
+  },
+  calcularValorSemBrindes(cart) {
+    let total = 0;
+    cart.items.forEach(item => {
+      if (!item.properties || !item.properties._brinde) {
+        total += item.line_price;
+      }
+    });
+    return total / 100;
+  },
+  async gerenciarBrindes(valor, cart) {
+    if (this.brindeLock) return;
+    this.brindeLock = true;
+
+    try {
+      const tem_brinde1 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 1
+      );
+      const tem_brinde2 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 2
+      );
+      const tem_brinde3 = cart.items.some(item => 
+        item.properties && item.properties._brinde && item.properties._numero == 3
+      );
+
+      if (valor >= this.config.brinde1_valor && !tem_brinde1) {
+        await this.adicionarBrinde(1);
+      } else if (valor < this.config.brinde1_valor && tem_brinde1) {
+        await this.removerBrinde(1, cart);
+      }
+
+      if (valor >= this.config.brinde2_valor && !tem_brinde2) {
+        await this.adicionarBrinde(2);
+      } else if (valor < this.config.brinde2_valor && tem_brinde2) {
+        await this.removerBrinde(2, cart);
+      }
+
+      if (valor >= this.config.brinde3_valor && !tem_brinde3) {
+        await this.adicionarBrinde(3);
+      } else if (valor < this.config.brinde3_valor && tem_brinde3) {
+        await this.removerBrinde(3, cart);
+      }
+    } catch (e) {
+      if (this.config.debug) console.error('Erro em gerenciarBrindes:', e);
+    } finally {
+      setTimeout(() => {
+        this.brindeLock = false;
+      }, 1500);
+    }
+  },
+  async adicionarBrinde(numero) {
+    let variant_id;
+    if (numero === 1) variant_id = this.config.brinde1_id;
+    else if (numero === 2) variant_id = this.config.brinde2_id;
+    else if (numero === 3) variant_id = this.config.brinde3_id;
+    if (!variant_id) return;
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant_id,
+          quantity: 1,
+          properties: {
+            '_brinde': true,
+            '_numero': numero
+          }
+        })
+      });
+      this.celebrar();
+      this.falar(`Você ganhou o brinde ${numero}! 🎁`);
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao adicionar brinde:', e);
+    }
+  },
+  async removerBrinde(numero, cart) {
+    let variant_id;
+    if (numero === 1) variant_id = this.config.brinde1_id;
+    else if (numero === 2) variant_id = this.config.brinde2_id;
+    else if (numero === 3) variant_id = this.config.brinde3_id;
+    const item = cart.items.find(i => 
+      i.properties && i.properties._brinde && i.properties._numero == numero
+    );
+    if (!item) return;
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: item.key,
+          quantity: 0
+        })
+      });
+      this.falar(`Você perdeu o brinde ${numero}... 😢`);
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao remover brinde:', e);
+    }
+  },
+  atualizarProgresso() {
+    const valor = this.carrinho_valor;
+    const barra = document.querySelectorAll('.vz-progress-fill');
+    const msgs = document.querySelectorAll('.vz-progress-msg');
+    let percent = 0;
+    let mensagem = '';
+    if (valor < this.config.frete_gratis) {
+      percent = (valor / this.config.frete_gratis) * 25;
+      const falta = (this.config.frete_gratis - valor).toFixed(2);
+      mensagem = `Falta R$ ${falta} pro frete grátis!`;
+    } else if (valor < this.config.brinde1_valor) {
+      percent = 25 + ((valor - this.config.frete_gratis) / (this.config.brinde1_valor - this.config.frete_gratis)) * 25;
+      const falta = (this.config.brinde1_valor - valor).toFixed(2);
+      mensagem = `Frete grátis ativo! Mais R$ ${falta} = brinde 1 🎁`;
+      document.querySelector('.vz-milestone-1').classList.add('achieved');
+    } else if (valor < this.config.brinde2_valor) {
+      percent = 50 + ((valor - this.config.brinde1_valor) / (this.config.brinde2_valor - this.config.brinde1_valor)) * 25;
+      const falta = (this.config.brinde2_valor - valor).toFixed(2);
+      mensagem = `1 brinde garantido! Mais R$ ${falta} para o brinde 2!`;
+      document.querySelector('.vz-milestone-1').classList.add('achieved');
+      document.querySelector('.vz-milestone-2').classList.add('achieved');
+    } else if (valor < this.config.brinde3_valor) {
+      percent = 75 + ((valor - this.config.brinde2_valor) / (this.config.brinde3_valor - this.config.brinde2_valor)) * 25;
+      const falta = (this.config.brinde3_valor - valor).toFixed(2);
+      mensagem = `2 brindes garantidos! Mais R$ ${falta} para o brinde 3!`;
+      document.querySelector('.vz-milestone-1').classList.add('achieved');
+      document.querySelector('.vz-milestone-2').classList.add('achieved');
+      document.querySelector('.vz-milestone-3').classList.add('achieved');
+    } else {
+      percent = 100;
+      mensagem = `Parabéns! Todos os brindes desbloqueados! 🎊`;
+      document.querySelectorAll('.vz-milestone').forEach(m => m.classList.add('achieved'));
+    }
+    barra.forEach(b => b.style.width = percent + '%');
+    msgs.forEach(m => m.textContent = mensagem);
+  },
+  atualizarTrilha() {
+    const valor = this.carrinho_valor;
+    const items = document.querySelectorAll('.vz-trilha-item');
+    const progresso = document.getElementById('vz-trilha-progresso');
+    let percentualProgresso = 0;
+    let itemsConquistados = 0;
+    items.forEach((item, index) => {
+      const valorItem = parseFloat(item.dataset.valor);
+      if (valor >= valorItem) {
+        item.classList.add('conquistado');
+        item.classList.remove('ativo');
+        itemsConquistados++;
+      } else if (index === itemsConquistados) {
+        item.classList.add('ativo');
+        item.classList.remove('conquistado');
+      } else {
+        item.classList.remove('ativo', 'conquistado');
+      }
+    });
+    if (valor >= this.config.brinde3_valor) {
+      percentualProgresso = 100;
+    } else if (valor >= this.config.brinde2_valor) {
+      percentualProgresso = 75;
+    } else if (valor >= this.config.brinde1_valor) {
+      percentualProgresso = 50;
+    } else if (valor >= this.config.frete_gratis) {
+      percentualProgresso = 25;
+    } else {
+      percentualProgresso = (valor / this.config.frete_gratis) * 25;
+    }
+    if (progresso) {
+      progresso.style.width = percentualProgresso + '%';
+    }
+  },
+  async adicionarAoCarrinho(variant_id) {
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant_id,
+          quantity: 1
+        })
+      });
+      this.abrirCarrinho();
+      this.falar('Produto adicionado! 🛒');
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao adicionar:', e);
+    }
+  },
+  abrirCarrinho() {
+    document.getElementById('vz-carrinho').classList.add('aberto');
+  },
+  fecharCarrinho() {
+    document.getElementById('vz-carrinho').classList.remove('aberto');
+  },
+  atualizarCarrinhoUI(cart) {
+  document.getElementById('vz-cart-count').textContent = cart.item_count;
+  document.getElementById('vz-cart-total').textContent = 'R$ ' + (cart.total_price / 100).toFixed(2);
+
+  // 🌿 Separa brindes dos itens normais
+  const brindes = cart.items.filter(item => item.properties && item.properties._brinde === true);
+  const itensNormais = cart.items.filter(item => !item.properties || item.properties._brinde !== true);
+
+  // 🌿 Atualiza o carrossel de brindes
+  this.atualizarBrindesCarrossel(brindes);
+
+  // 🌿 Renderiza só os itens normais
+  const container = document.getElementById('vz-cart-items');
+  container.innerHTML = '';
+  if (itensNormais.length === 0 && brindes.length === 0) {
+    container.innerHTML = '<p style="text-align:center;padding:40px;">Carrinho vazio 😢</p>';
+    return;
+  }
+  itensNormais.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'vz-carrinho-item';
+    const title = item.title || 'Produto';
+    const image = item.image || 'https://via.placeholder.com/60';
+    const price = (item.line_price / 100).toFixed(2);
+    const variant = item.variant_title || '';
+    const isBrinde = item.properties && item.properties._brinde;
+   
+    div.innerHTML = `
+      <img src="${image}" alt="${title}">
+      <div style="flex:1;">
+        <div style="font-weight:600;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 200px;display: block;">${title}</div>
+        <div style="color:#666;font-size:10px;">${variant}</div>
+        <div style="font-weight:bold;font-size:13px;">R$ ${price}</div>
+        <div style="margin-top: 5px;border: 1px solid #dedede;border-radius: 30px;width: 128px;">
+          <button onclick="VZ.updateQty('${item.key}', ${Math.max(0, item.quantity - 1)})" style="border-color: #fff;width: 50px;height: 39px;background-color: #0000;margin: 0;color: #000;" aria-label="Diminuir quantidade">-</button>
+          <span style="margin:0 4px;font-size:12px;">${item.quantity}</span>
+          <button onclick="VZ.updateQty('${item.key}', ${item.quantity + 1})" style="border-color: #fff;width: 50px;height: 39px;background-color: #0000;margin: 0;color: #000;" aria-label="Aumentar quantidade">+</button>
+        </div>
+        ${isBrinde ? 
+          '<span style="color:green;">Brinde!</span>' : 
+          '<button onclick="VZ.updateQty(\'' + item.key + '\', 0)" style="font-size:11px;color:#2e2e2e;border:0;background:0;cursor:pointer;" aria-label="Remover item">Remover</button>'
+        }
+      </div>
+      </div>
+      <div>
+      
+    `;
+    container.appendChild(div);
+  });
+},
+  
+atualizarBrindesCarrossel(brindes) {
+  const container = document.getElementById('vz-brindes-container');
+  const carrossel = document.getElementById('vz-brindes-carrossel');
+  
+  if (!container || !carrossel) return;
+
+  if (brindes.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  carrossel.innerHTML = '';
+
+  brindes.forEach(brinde => {
+    const slide = document.createElement('div');
+    slide.className = 'vz-brinde-slide';
+    const title = brinde.title || 'Brinde';
+    const image = brinde.image || 'https://via.placeholder.com/50';
+    slide.innerHTML = `
+      <img src="${image}" alt="${title}">
+      <div>
+        <div style="font-weight:bold; color: var(--vz-cor-sucesso);">🎁 ${title}</div>
+        <div style="font-size:12px; color:#666;">Brinde!</div>
+      </div>
+    `;
+    carrossel.appendChild(slide);
+  });
+
+  // Reinicia posição
+  carrossel.style.transform = 'translateX(0)';
+
+  // Só roda automático se tiver mais de 1 brinde
+  if (brindes.length > 1) {
+    let current = 0;
+    const interval = setInterval(() => {
+      current = (current + 1) % brindes.length;
+      carrossel.style.transform = `translateX(-${current * 100}%)`;
+    }, 3000);
+
+    if (this.brindeCarrosselInterval) {
+      clearInterval(this.brindeCarrosselInterval);
+    }
+    this.brindeCarrosselInterval = interval;
+  } else {
+    if (this.brindeCarrosselInterval) {
+      clearInterval(this.brindeCarrosselInterval);
+      this.brindeCarrosselInterval = null;
+    }
+  }
+},
+  async updateQty(key, qty) {
+    if (qty < 0) return;
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: key, quantity: qty})
+      });
+    } catch(e) {
+      if (this.config.debug) console.error('Erro ao atualizar:', e);
+    }
+  },
+
+  
+
+  transformarEmChat() {
+    document.getElementById('vz-gaveta').classList.remove('aberto');
+    document.getElementById('vz-carrinho').classList.add('aberto');
+    document.getElementById('vz-chat').classList.add('active');
+    this.addMensagem('vendor', this.mensagens.chat[Math.floor(Math.random() * this.mensagens.chat.length)]);
+  },
+  addMensagem(tipo, texto) {
+    const chat = document.getElementById('vz-messages');
+    const msg = document.createElement('div');
+    msg.className = 'vz-msg vz-msg-' + tipo;
+    msg.textContent = texto;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+  },
+  enviarMensagem() {
+    const input = document.getElementById('vz-input');
+    const texto = input.value;
+    if (!texto) return;
+    this.addMensagem('customer', texto);
+    input.value = '';
+    setTimeout(() => {
+      const respostas = {
+        'frete': 'Frete grátis em compras acima de R$ ' + this.config.frete_gratis + '!',
+        'prazo': 'Entregamos em 3-7 dias úteis!',
+        'troca': 'Trocas em até 30 dias!',
+        'pagamento': 'Aceitamos cartão, boleto e PIX!',
+        'desconto': 'Use o cupom PRIMEIRA10 para 10% off!'
+      };
+      let resposta = 'Ótima pergunta! Entre em contato pelo WhatsApp para mais detalhes!';
+      Object.keys(respostas).forEach(key => {
+        if (texto.toLowerCase().includes(key)) {
+          resposta = respostas[key];
+        }
+      });
+      this.addMensagem('vendor', resposta);
+    }, 1000);
+  },
+  celebrar() {
+    if (!this.config.confetti) return;
+    const canvas = document.getElementById('vz-confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        size: Math.random() * 10 + 5,
+        speed: Math.random() * 5 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        rotation: Math.random() * 360,
+        rotSpeed: Math.random() * 10 - 5
+      });
+    }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y += p.speed;
+        p.rotation += p.rotSpeed;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+        if (p.y > canvas.height) p.y = 0;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+    setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 3000);
+  }
+};
+
+// NOVO: MÓDULO QUICK BUY
+const VZQuickBuy = {
+  productModal: null,
+  currentProduct: null,
+  
+  init() {
+    if (VZ.config.debug) console.log('⚡ Quick Buy iniciando...');
+    this.setupQuickBuyButtons();
+  },
+  
+  setupQuickBuyButtons() {
+    // Aguarda um pouco pra garantir que a página carregou
+    setTimeout(() => {
+      // Seleciona todos os possíveis botões de compra
+      const selectors = [
+        '[data-add-to-cart]',
+        '.btn-add-to-cart',
+        '.quick-add',
+        '.product-form__submit',
+        'button[name="add"]',
+        '.btn--add-to-cart',
+        '.product__submit__add'
+      ];
+      
+      const buttons = document.querySelectorAll(selectors.join(','));
+      
+      buttons.forEach(btn => {
+        // Pula se já foi processado
+        if (btn.dataset.vzProcessed) return;
+        
+        // Marca como processado
+        btn.dataset.vzProcessed = 'true';
+        
+        // Clona o botão pra remover listeners antigos
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        newBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const productHandle = this.extractProductHandle(newBtn);
+          if (productHandle) {
+            await this.openQuickBuy(productHandle);
+          }
+        });
+      });
+      
+      if (VZ.config.debug) console.log(`⚡ ${buttons.length} botões interceptados`);
+    }, 1000);
+  },
+  
+  extractProductHandle(button) {
+    // Tenta várias formas de pegar o handle
+    const handle = 
+      button.dataset.productHandle || 
+      button.closest('[data-product-handle]')?.dataset.productHandle ||
+      button.closest('[data-product-url]')?.dataset.productUrl?.match(/\/products\/([^\/\?]+)/)?.[1] ||
+      button.closest('a[href*="/products/"]')?.href.match(/\/products\/([^\/\?]+)/)?.[1] ||
+      button.closest('form[action*="/cart/add"]')?.action.match(/\/products\/([^\/\?]+)/)?.[1];
+      
+    return handle;
+  },
+  
+  async openQuickBuy(productHandle) {
+    try {
+      const response = await fetch(`/products/${productHandle}.js`);
+      const product = await response.json();
+      
+      this.currentProduct = product;
+      this.populateModal(product);
+      
+      document.getElementById('vz-quickbuy').classList.add('aberto');
+      document.getElementById('vz-overlay').style.display = 'block';
+      document.getElementById('vz-mascote').style.display = 'none';
+      
+      VZ.falar('Escolhe aí rapidinho! ⚡');
+      
+    } catch (e) {
+      console.error('Erro ao carregar produto:', e);
+      VZ.falar('Ops! Erro ao carregar...');
+    }
+  },
+  
+  populateModal(product) {
+  const infoEl = document.getElementById('qb-product-info');
+  infoEl.innerHTML = `
+    <img src="${product.featured_image}" alt="${product.title}" class="vz-qb-image">
+    <div class="vz-qb-details">
+      <h4 class="vz-qb-details-h4" style="margin: 0 0 10px 0;">${product.title}</h4>
+      <p class="vz-qb-details-p" style="color: #B7BBC1; margin: 0;">Escolha sua opção:</p>
+    </div>
+  `;
+  
+  const priceEl = document.getElementById('qb-price');
+  const price = (product.price / 100).toFixed(2);
+  priceEl.innerHTML = `R$ ${price}`;
+  
+  const variantsEl = document.getElementById('qb-variants');
+  variantsEl.innerHTML = '';
+  
+  // 🌿 BOTE FÉ: limita a 3 variantes
+  const variantsToShow = product.variants.slice(0, 3);
+  
+  // 🌿 BOTE FÉ: percorre com índice pra saber se é primeiro/segundo
+  variantsToShow.forEach((variant, index) => {
+    const btn = document.createElement('button');
+    btn.className = 'vz-qb-variant';
+    
+    // PEGA A IMAGEM CORRETA DA VARIANTE (seu código original)
+    let variantImage = '';
+    if (variant.featured_image) {
+      variantImage = variant.featured_image.src || variant.featured_image;
+    } else if (product.images && product.images[variant.position - 1]) {
+      variantImage = product.images[variant.position - 1];
+    } else if (variant.image_id && product.images) {
+      const foundImage = product.images.find(img => {
+        const imgId = typeof img === 'object' ? img.id : img;
+        return imgId == variant.image_id;
+      });
+      if (foundImage) {
+        variantImage = typeof foundImage === 'object' ? foundImage.src : foundImage;
+      }
+    }
+    if (!variantImage) {
+      variantImage = product.featured_image || product.images?.[0] || '';
+    }
+    if (variantImage && !variantImage.startsWith('http')) {
+      variantImage = 'https:' + variantImage;
+    }
+    
+    // 🌿 BOTE FÉ: lógica pura de JavaScript (sem Liquid!)
+    const isFreteGratis = (variant.price > this.config.frete_gratis * 100); // frete_gratis em R$, variant.price em centavos
+    const showFreteGratis = isFreteGratis && (index > 0); // não na primeira (index 0)
+    const showMaisVendido = (index === 1); // só na segunda (index 1)
+    
+    // 🌿 BOTE FÉ: monta os labels dinamicamente
+    let labelsHtml = '';
+    if (showMaisVendido) {
+      labelsHtml += `
+        <div class="prod-x9-option-label prod-x9-option-label-bottom">
+          Mais Vendido
+        </div>
+      `;
+    }
+    if (showFreteGratis) {
+      labelsHtml += `
+        <div class="prod-x9-option-label-2 prod-x9-option-label-bottom">
+          Frete Grátis
+        </div>
+      `;
+    }
+    
+    btn.innerHTML = `
+      <div class="prod-x9-option-image desk-none">
+        <img class="prod-x9-option"
+          src="${variantImage}"
+          srcset="${variantImage}"
+          sizes="(max-width: 768px) 200px, 300px"
+          loading="lazy"
+          alt="${variant.title}">
+      </div>   
+      <div class="right-content">
+        <div class="labels-container-x9">
+          ${labelsHtml}
+        </div>
+        <div class="vz-qb-variant-bt">${variant.title}</div>
+        <div class="prod-x9-option-image mobile-none">
+          <img class="prod-x9-option"
+            src="${variantImage}"
+            srcset="${variantImage}"
+            sizes="(max-width: 768px) 200px, 300px"
+            loading="lazy"
+            alt="${variant.title}">
+        </div>
+        <div class="mobile-none variant-price-wrapper text-center mt-2">
+          <span class="block text-gray-600 text-[12px] text-juros">
+            <span class="">3x sem juros de</span> 
+            <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+          </span>
+          <span class="block font-bold text-juros-desk text-denavita-shopify text-[16px]" style="margin-top:-6px;text-align: center;">
+            <span class="ou-a-vista"> ou</span> 
+            <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> 
+            <span class="text-a-vista">á vista</span>
+          </span>
+        </div>
+        <div class="desk-none variant-price-wrapper text-center mt-2">
+          <span class="text-gray-600 text-[12px] text-juros">
+            <span class="desk-none"> 3x de</span>
+            <span class="mobile-none"> 3x sem juros de</span> 
+            <span class="value-parcela">R$ ${(Math.round((variant.price / 3 / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> 
+            <span class="text-s-juros desk-none">s/ juros</span>
+          </span>
+          <span class="font-bold text-juros text-denavita-shopify text-[16px]">
+            <span class="ou-a-vista"> ou</span> 
+            <span class="value-vista">R$ ${(Math.round((variant.price / 100) * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> 
+            <span class="text-a-vista">á vista</span>
+          </span>
+        </div>
+        ${variant.available ? '' : '<small style="color: red;">Esgotado</small>'}
+      </div>
+    `;
+    
+    if (variant.available) {
+      btn.onclick = () => this.addVariantToCart(variant);
+    } else {
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
+    }
+    
+    variantsEl.appendChild(btn);
+  });
+  
+  if (product.variants.length > 3) {
+    const moreLink = document.createElement('div');
+    moreLink.style.marginTop = '10px';
+    moreLink.innerHTML = `
+      <a href="/products/${product.handle}" style="color: var(--vz-cor-sucesso);">
+        Ver todas as ${product.variants.length} opções →
+      </a>
+    `;
+    variantsEl.appendChild(moreLink);
+  }
+},
+  
+  async addVariantToCart(variant) {
+    const btn = event.currentTarget;
+    btn.classList.add('selecionado', 'adicionando');
+    
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: variant.id,
+          quantity: 1
+        })
+      });
+      
+      document.getElementById('qb-message').textContent = '✅ Adicionado!';
+      
+      setTimeout(() => {
+        this.close();
+        VZ.abrirCarrinho();
+        document.getElementById('qb-message').textContent = ' ';
+      }, 1500);
+      
+    } catch (e) {
+      console.error('Erro:', e);
+      btn.classList.remove('selecionado', 'adicionando');
+      document.getElementById('qb-message').textContent = '❌ Erro';
+    }
+  },
+  
+  close() {
+    document.getElementById('vz-quickbuy').classList.remove('aberto');
+    document.getElementById('vz-overlay').style.display = 'none';
+    
+    setTimeout(() => {
+      document.getElementById('vz-mascote').style.display = 'block';
+      VZ.falar('Produto no carrinho! 🛒');
+    }, 500);
+  }
+};
+
+// INICIALIZAÇÃO COMPLETA
+document.addEventListener('DOMContentLoaded', () => {
+  if (VZ.config.enabled) {
+    VZ.init();
+    VZQuickBuy.init(); // NOVO!
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (VZ.config.enabled) {
+    VZ.init();
+  }
+});
+</script>
+{% endif %}
+{% schema %}
+{
+  "name": "🏖️ Vendedor Zueiro 2.1",
+  "settings": [
+    {
+      "type": "header",
+      "content": "⚙️ Configurações Gerais"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Ativar Vendedor Zueiro",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay_segundos",
+      "label": "Tempo até aparecer (segundos)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "personalidade",
+      "label": "Personalidade do Vendedor",
+      "options": [
+        {
+          "value": "zueiro",
+          "label": "🏖️ Zé Praia (Zueiro)"
+        },
+        {
+          "value": "amigavel",
+          "label": "😊 Amigável"
+        },
+        {
+          "value": "urgente",
+          "label": "⏰ Urgente (Black Friday)"
+        },
+        {
+          "value": "influencer",
+          "label": "✨ Modo Influencer"
+        }
+      ],
+      "default": "zueiro"
+    },
+    {
+      "type": "range",
+      "id": "mascote_size",
+      "label": "Tamanho do Mascote (px)",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "default": 120
+    },
+    {
+      "type": "image_picker",
+      "id": "mascote_imagem",
+      "label": "Imagem do Mascote",
+      "info": "Recomendado: PNG transparente 200x200px"
+    },
+    {
+      "type": "header",
+      "content": "🎮 Gamificação"
+    },
+    {
+      "type": "number",
+      "id": "valor_frete_gratis",
+      "label": "Valor para Frete Grátis (R$)",
+      "default": 150
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_1",
+      "label": "Valor para Brinde 1 (R$)",
+      "default": 250
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_1",
+      "label": "Produto Brinde 1",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_2",
+      "label": "Valor para Brinde 2 (R$)",
+      "default": 350
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_2",
+      "label": "Produto Brinde 2",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "number",
+      "id": "valor_brinde_3",
+      "label": "Valor para Brinde 3 (R$)",
+      "default": 450
+    },
+    {
+      "type": "product",
+      "id": "produto_brinde_3",
+      "label": "Produto Brinde 3",
+      "info": "⚠️ Criar produto com valor R$ 0,01 e ocultar da loja"
+    },
+    {
+      "type": "header",
+      "content": "🛍️ Produtos da Gaveta"
+    },
+    {
+      "type": "select",
+      "id": "modo_gaveta",
+      "label": "Modo de Exibição",
+      "options": [
+        {
+          "value": "carrossel",
+          "label": "Carrossel de Produtos"
+        },
+        {
+          "value": "trilha",
+          "label": "Trilha de Gamificação (Brindes)"
+        }
+      ],
+      "default": "carrossel",
+      "info": "Escolha como exibir os produtos na gaveta"
+    },
+    {
+      "type": "collection",
+      "id": "colecao_produtos",
+      "label": "Coleção para Carrossel",
+      "info": "Usada apenas no modo Carrossel"
+    },
+    {
+      "type": "header",
+      "content": "💬 Mensagens e Falas"
+    },
+    {
+      "type": "text",
+      "id": "mensagens_iniciais",
+      "label": "Mensagens Iniciais",
+      "default": "Psiu, vem cá!|Ô amigo!|Tenho uma oferta!|Ei, você aí!",
+      "info": "Separe com | (pipe)"
+    },
+    {
+      "type": "text",
+      "id": "mensagens_fechar",
+      "label": "Mensagens ao Tentar Fechar",
+      "default": "Pera aí!|Calma!|Não vai embora!|Espera um pouco!",
+      "info": "Separe com | (pipe)"
+    },
+    {
+      "type": "text",
+      "id": "mensagem_gaveta",
+      "label": "Título da Gaveta",
+      "default": "Escolhe um que eu te deixo em paz!"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Personalização Visual"
+    },
+    {
+      "type": "color",
+      "id": "cor_primaria",
+      "label": "Cor Primária",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "cor_secundaria",
+      "label": "Cor Secundária",
+      "default": "#D2691E"
+    },
+    {
+      "type": "color",
+      "id": "cor_sucesso",
+      "label": "Cor de Sucesso",
+      "default": "#00c851"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_confetti",
+      "label": "Mostrar Confetti nas Conquistas",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "high_contrast_mode",
+      "label": "Ativar Modo Alto Contraste",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "📱 Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_enabled",
+      "label": "Ativar em Mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_mascote_size",
+      "label": "Tamanho Mobile (px)",
+      "min": 60,
+      "max": 120,
+      "step": 10,
+      "default": 80
+    },
+     {
+      "type": "header",
+      "content": "⚡ Quick Buy"
+    },
+    {
+      "type": "checkbox",
+      "id": "quickbuy_enabled",
+      "label": "Ativar Quick Buy",
+      "default": true,
+      "info": "Intercepta botões de compra para escolha rápida"
+    },
+    {
+      "type": "header",
+      "content": "🔧 Avançado"
+    },
+    {
+      "type": "checkbox",
+      "id": "debug_mode",
+      "label": "Modo Debug (console.log)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "chat_enabled",
+      "label": "Ativar Modo Chat",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "CSS Customizado",
+      "info": "Para ajustes finos maiores"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vendedor Zueiro x",
+      "category": "Conversão"
+    }
+  ]
+}
+{% endschema %}

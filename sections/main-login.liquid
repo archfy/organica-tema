@@ -1,0 +1,119 @@
+{{ 'custormer.css' | asset_url | stylesheet_tag }}
+<div class="customer-forgot" id="recover">
+  <div class="container">
+    <div class="row row-cols-md-2">
+      <div class="recover-form customer-form mb-40">
+        <h3 class="title-customer">Recuperar senha</h3>
+        <p class="subtext mb-20">
+            Esqueceu sua senha? Sem problemas. Informe seu e-mail abaixo e enviaremos um link para você criar uma nova senha.
+        </p>
+        {%- form 'recover_customer_password' -%}
+          {%- assign recover_success = form.posted_successfully? -%}
+          {%- if form.errors -%}
+            {%- assign message = form.errors | default_errors | strip_html -%}
+              <p class="error">
+                  {{ message }}
+              </p>
+            {%- endif -%}
+            <div class="form-field form-group mb-15 d-flex flex-column">
+                <label class="form-label mb-3" for="RecoverEmail">
+                    E-mail
+                    <span class="required">*</span>
+                </label>
+                <input
+                    type="email"
+                    value=""
+                    name="email"
+                    id="RecoverEmail"
+                    autocomplete="email"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    placeholder="E-mail"
+                    aria-required="true"
+                    aria-invalid="true"
+                    required
+                >
+            </div>
+            <div class="form-actions mt-30">
+                <input type="submit" class="btn-primary w-full text-center" value="Enviar link de recuperação">
+            </div>
+        {%- endform -%}
+      </div>
+      <div class="content-register mb-40">
+        <h3 class="title-customer">
+          Não tem uma conta ainda?
+        </h3>
+        <p class="mb-30">
+          Crie sua conta agora e aproveite descontos exclusivos, checkout mais rápido e acompanhe seus pedidos com facilidade.
+        </p>
+        <a href="{{ routes.account_register_url }}" class="btn btn-primary w-full text-center">Criar conta</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="customer-login">
+  <div class="container">
+    <div class="row row-cols-md-2">
+      <div class="login-form customer-form">
+        <h3 class="title-customer">
+          Entrar na conta
+        </h3>
+        {%- if recover_success == true -%}
+          <p class="success">Enviamos as instruções de recuperação para o seu e-mail.</p>
+        {%- endif -%}
+        {%- form 'customer_login', class: 'customer-login-form' -%}
+            {%- if form.errors -%}
+                {%- assign message = form.errors.messages['form'] -%}
+                  <p class="error">
+                      {{ message }}
+                  </p>
+            {%- endif -%}
+            <div class="form-group mb-15 d-flex flex-column form-field">
+                <label class="form-label mb-3" for="CustomerEmail">
+                    E-mail
+                    <span class="required">*</span>
+                </label>
+                <input
+                    type="email"
+                    name="customer[email]"
+                    id="CustomerEmail"
+                    placeholder="E-mail"
+                    required
+                >
+            </div>
+            {%- if form.password_needed -%}
+                <div class="form-group mb-20 d-flex flex-column form-field">
+                    <label class="form-label mb-3" for="CustomerPassword">
+                        Senha
+                        <span class="required">*</span>
+                    </label>
+                    <input
+                        type="password"
+                        name="customer[password]"
+                        id="CustomerPassword"
+                        placeholder="Senha"
+                        required
+                    >
+                </div>
+            {%- endif -%}
+            <div class="form-actions mt-20 d-flex flex-column">
+              <a href="#recover" class="forget-password">
+                <span class="text">Esqueceu sua senha?</span>
+              </a>
+              <input type="submit" class="btn-primary mt-30" value="Entrar">
+            </div>
+        {%- endform -%}
+      </div>
+      <div class="content-register">
+        <h3 class="title-customer">
+          Não tem uma conta ainda?
+        </h3>
+        <p class="mb-30">
+          Crie sua conta agora e aproveite descontos exclusivos, checkout mais rápido e acompanhe seus pedidos com facilidade.
+        </p>
+        <a href="{{ routes.account_register_url }}" class="btn btn-primary w-full text-center">Criar conta</a>
+      </div>
+    </div>
+  </div>
+</div>

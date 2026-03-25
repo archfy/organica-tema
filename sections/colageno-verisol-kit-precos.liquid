@@ -1,0 +1,1117 @@
+{% comment %}
+  Seção Shopify: Abas de Produtos/Sabores - Kit de Preços (Refatorado para BLOCKS e Ajustes Finais)
+  - Estrutura dinâmica para até 5 abas/sabores, gerenciadas por blocks.
+  - Cada aba pode ter até 3 opções de compra (imagem, preço, botão, etc.) configuráveis dentro do próprio bloco da aba.
+  - Customização total via editor de tema para cada aba e suas opções.
+  - CSS independente e otimizado para equilíbrio visual.
+  - JavaScript puro, sem conflito, adaptado para a nova estrutura de blocks.
+  - Comentários para integração dos links de checkout.
+  - Erros corrigidos em HTML, CSS, Liquid e Schema.
+  - Melhoria significativa na usabilidade do editor do tema.
+  - Adicionado controle de largura (%) e altura máxima (px) de imagem (Desktop/Mobile) via settings.
+  - Corrigido o problema de preenchimento do botão.
+  - Imagens centralizadas dentro dos cards.
+  - Adicionados dois campos de texto customizáveis acima de cada imagem, com controle total de estilo (fonte, cor, background, border-radius).
+  - **CORRIGIDO: Erro de sintaxe Liquid em acesso dinâmico a configurações.**
+{% endcomment %}
+
+{%- style -%}
+/* ========== [INÍCIO] CSS da Seção Shopify: Abas de Produtos/Sabores ========== */
+.x9-shopify-tabs-section-{{ section.id }} {
+  font-family: inherit;
+  padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px 0;
+  background: {{ section.settings.section_bg_color }};
+}
+
+.x9-tabs-area-{{ section.id }} {
+  border: {{ section.settings.border_width }}px solid {{ section.settings.border_color | default: '#e0e0e0' }};
+  border-radius: {{ section.settings.border_radius }}px;
+  padding: {{ section.settings.area_padding_top }}px {{ section.settings.area_padding_side }}px {{ section.settings.area_padding_bottom }}px {{ section.settings.area_padding_side }}px;
+  background: {{ section.settings.area_bg_color }};
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  max-width: 1200px; /* Máximo de largura para o container principal */
+  margin: 0 auto; /* Centraliza o container principal */
+  padding-left: max({{ section.settings.area_padding_side }}px, env(safe-area-inset-left));
+  padding-right: max({{ section.settings.area_padding_side }}px, env(safe-area-inset-right));
+}
+
+.x9-tabs-header {
+  display: flex;
+  justify-content: center; /* Centraliza as abas */
+  flex-wrap: wrap; /* Permite que as abas quebrem a linha em telas menores */
+  gap: 2px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid {{ section.settings.tab_border_color | default: '#e0e0e0' }};
+  overflow-x: auto; /* Adiciona scroll horizontal se as abas excederem o espaço */
+  -webkit-overflow-scrolling: touch; /* Melhora o scroll em iOS */
+}
+
+.x9-tab-button {
+  background-color: {{ section.settings.tab_bg_color | default: '#f0f0f0' }};
+  color: {{ section.settings.tab_text_color | default: '#555' }};
+  border: 1px solid {{ section.settings.tab_border_color | default: '#e0e0e0' }};
+  border-bottom: none; /* Remove a borda inferior para visual de aba */
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: {{ section.settings.tab_font_size }}px;
+  font-weight: {{ section.settings.tab_font_weight }};
+  transition: all 0.3s ease;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  white-space: nowrap; /* Evita que o texto da aba quebre */
+}
+
+.x9-tab-button:hover:not(.active) {
+  background-color: {{ section.settings.tab_hover_bg_color | default: '#e9e9e9' }};
+  color: {{ section.settings.tab_hover_text_color | default: '#333' }};
+}
+
+.x9-tab-button.active {
+  background-color: {{ section.settings.tab_active_bg_color | default: '#fff' }};
+  color: {{ section.settings.tab_active_text_color | default: '#333' }};
+  border-color: {{ section.settings.tab_active_border_color | default: '#d0d0d0' }};
+  font-weight: {{ section.settings.tab_active_font_weight }};
+  position: relative; /* Para a borda inferior simulada */
+  z-index: 1; /* Para sobrepor a borda inferior do header */
+}
+
+.x9-tab-button.active::after { /* Simula a linha inferior da aba ativa */
+  content: '';
+  position: absolute;
+  bottom: -1px; /* Alinha com a borda do header */
+  left: 0;
+  width: 100%;
+  height: 1px; /* Espessura da linha */
+  background-color: {{ section.settings.tab_active_bg_color | default: '#fff' }}; /* Cor da linha */
+  z-index: 2;
+}
+
+.x9-tabs-content {
+  position: relative;
+  min-height: 200px; /* Garante que o container de conteúdo não colapse */
+}
+
+.x9-tab-pane {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  animation: fadeIn 0.5s forwards;
+  position: absolute; /* Permite que os panes se sobreponham e ocultem */
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.x9-tab-pane.show {
+  display: block;
+  opacity: 1;
+  position: relative; /* Retorna ao fluxo normal quando ativo */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.x9-product-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adaptável para 3 colunas */
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch; /* Garante que os cards tenham a mesma altura */
+  padding: 0 10px; /* Pequeno padding para evitar que os cards toquem as bordas laterais */
+}
+
+.x9-product-option-card {
+  background: {{ section.settings.card_bg_color | default: '#fff' }};
+  border: 1px solid {{ section.settings.card_border_color | default: '#e0e0e0' }};
+  border-radius: {{ section.settings.card_border_radius }}px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaça o conteúdo */
+  align-items: center; /* CENTRALIZA ITENS FLEX HORIZONTALMENTE: AQUI ESTÁ A CHAVE PARA IMAGENS CENTRALIZADAS */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  transition: transform 0.2s ease;
+}
+
+.x9-product-option-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Base style for the new labels */
+.x9-option-label {
+  margin-bottom: 5px; /* Adjust spacing between labels and image */
+  width: fit-content; /* Ensure background color wraps content */
+  max-width: 100%; /* Prevent overflow */
+  text-align: center;
+  /* display: block; -- Já é um div, então é block por padrão. */
+}
+
+.x9-option-image {
+  margin-bottom: 15px;
+  display: flex; /* Já é um flex container para a imagem dentro dele */
+  align-items: center;
+  justify-content: center;
+  /* Customização de largura em % e altura máxima para desktop */
+  width: {{ section.settings.option_image_width_desktop }}%;
+  max-height: {{ section.settings.option_image_height_desktop }}px;
+  height: auto; /* Permite que max-height funcione corretamente */
+}
+.x9-option-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.x9-option-title {
+  font-size: {{ section.settings.card_title_font_size }}px;
+  font-weight: {{ section.settings.card_title_font_weight }};
+  color: {{ section.settings.card_title_color | default: '#333' }};
+  margin: 10px;
+  line-height: 1.2;
+}
+
+.x9-option-old-price {
+  font-size: {{ section.settings.old_price_font_size }}px;
+  color: {{ section.settings.old_price_color | default: '#999' }};
+  text-decoration: line-through;
+  margin-bottom: 5px;
+}
+
+.x9-option-price {
+  font-size: {{ section.settings.price_font_size }}px;
+  font-weight: {{ section.settings.price_font_weight }};
+  color: {{ section.settings.price_color | default: '#e74c3c' }};
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.x9-option-discount {
+  font-size: {{ section.settings.discount_font_size }}px;
+  color: {{ section.settings.discount_color | default: '#fff' }};
+  background-color: {{ section.settings.discount_back_color | default: '#FF0000' }};
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin: 10px 0 0;
+  border-radius: 48px;
+  padding: {{ section.settings.discount_padding | default: '8px' }}px;
+  width: {{ section.settings.discount_width | default: '70%' }}%;
+}
+
+.x9-option-installments,
+.x9-option-installments-note {
+  font-size: {{ section.settings.installments_font_size }}px;
+  color: {{ section.settings.installments_color | default: '#666' }};
+  line-height: 1.2;
+ 
+}
+.x9-option-installments{
+  margin: 15px;
+  margin-bottom: 0px;
+}
+
+.x9-option-installments-note {
+  font-style: italic; 
+  margin-bottom: 15px!important;
+}
+
+/* Blocos de Conteúdo Customizáveis (Topo e Inferior) */
+.x9-option-block {
+  margin-bottom: 10px;
+}
+.x9-option-block-bottom {
+   margin-top: 0px;
+  margin-bottom: 15px; /* Adiciona margem antes do botão */
+}
+.x9-option-block p {
+  margin: 0;
+  font-size: 14px; /* Ajuste para o texto interno */
+  color: #777;
+}
+
+.x9-buy-button {
+  display: block;
+  width: 100%;
+  /* Correção do preenchimento com !important para garantir funcionalidade */
+  padding: {{ section.settings.button_padding_top_bottom }}px {{ section.settings.button_padding_left_right }}px !important;
+  background-color: {{ section.settings.button_bg_color | default: '#007bff' }};
+  color: {{ section.settings.button_text_color | default: '#fff' }} !important;
+  text-align: center;
+  text-decoration: none;
+  border-radius: {{ section.settings.button_border_radius }}px;
+  font-size: {{ section.settings.button_font_size }};
+  font-weight: {{ section.settings.button_font_weight }};
+  transition: background-color 0.3s ease;
+  margin-top: auto; /* Empurra o botão para a parte inferior do card */
+}
+
+.x9-buy-button:hover {
+  background-color: {{ section.settings.button_hover_bg_color | default: '#0056b3' }};
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .x9-tabs-area-{{ section.id }} {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .x9-tab-button {
+    font-size: {{ section.settings.tab_font_size_mobile }}px;
+    padding: 8px 12px;
+  }
+  .x9-product-options-grid {
+    grid-template-columns: 1fr; /* Uma coluna em mobile */
+    padding: 0;
+  }
+  .x9-option-image {
+    /* Customização de largura em % e altura máxima para mobile */
+    width: {{ section.settings.option_image_width_mobile }}%;
+    max-height: {{ section.settings.option_image_height_mobile }}px;
+    height: auto; /* Permite que max-height funcione corretamente */
+  }
+  .x9-option-title {
+    font-size: {{ section.settings.card_title_font_size_mobile }}px;
+  }
+  .x9-option-old-price {
+    font-size: {{ section.settings.old_price_font_size_mobile }}px;
+  }
+  .x9-option-price {
+    font-size: {{ section.settings.price_font_size_mobile }}px;
+  }
+  .x9-option-discount {
+    font-size: {{ section.settings.discount_font_size_mobile }}px;
+  }
+  .x9-option-installments,
+  .x9-option-installments-note {
+    font-size: {{ section.settings.installments_font_size_mobile }}px;
+  }
+  .x9-buy-button {
+    font-size: {{ section.settings.button_font_size_mobile }}px;
+    padding: 10px 15px !important; /* Mobile padding também com !important */
+  }
+
+  /* Specific styles for each label type and instance (for mobile adjustments) */
+  {% for block in section.blocks %}
+    {% for i in (1..3) %}
+      {%- liquid
+        assign label_top_fs_mob_key = "option_label_top_" | append: i | append: "_font_size_mobile"
+        assign label_bottom_fs_mob_key = "option_label_bottom_" | append: i | append: "_font_size_mobile"
+        assign label_top_text_key = "option_label_top_" | append: i | append: "_text"
+        assign label_bottom_text_key = "option_label_bottom_" | append: i | append: "_text"
+
+        assign label_top_fs_mob = block.settings[label_top_fs_mob_key]
+        assign label_bottom_fs_mob = block.settings[label_bottom_fs_mob_key]
+        assign label_top_text = block.settings[label_top_text_key]
+        assign label_bottom_text = block.settings[label_bottom_text_key]
+      -%}
+      {% if label_top_text != blank %}
+      .x9-option-label-top-{{ section.id }}-{{ block.id }}-{{ i }} {
+        font-size: {{ label_top_fs_mob }}px !important; /* Use !important for mobile override */
+        width: 100%;
+        margin-bottom:10px!important;
+      }
+      {% endif %}
+      {% if label_bottom_text != blank %}
+      .x9-option-label-bottom-{{ section.id }}-{{ block.id }}-{{ i }} {
+        font-size: {{ label_bottom_fs_mob }}px !important;
+        width: 100%;
+      }
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+}
+/* ========== [FIM] CSS da Seção Shopify: Abas de Produtos/Sabores ========== */
+{%- endstyle -%}
+
+<div class="x9-shopify-tabs-section-{{ section.id }}">
+  <div class="x9-tabs-area-{{ section.id }}">
+
+    <div id="kit-precos" class="x9-tabs-header">
+      {% for block in section.blocks %}
+        {%- liquid
+          assign tab_name = block.settings.tab_name
+          assign tab_id = block.id
+        -%}
+        <button class="x9-tab-button{% if forloop.first %} active{% endif %}" data-tab="{{ tab_id }}">{{ tab_name }}</button>
+      {% endfor %}
+    </div>
+
+    <div class="x9-tabs-content">
+      {% for block in section.blocks %}
+        {%- liquid
+          assign tab_id = block.id
+        -%}
+        <div id="tab-{{ tab_id }}" class="x9-tab-pane{% if forloop.first %} show{% endif %}" data-tab-content="{{ tab_id }}">
+          <div class="x9-product-options-grid">
+            {% for i in (1..3) %}
+              {%- liquid
+                assign image_key = "image_" | append: i
+                assign image = block.settings[image_key]
+
+                assign option_title_key = "option_title_" | append: i
+                assign option_title = block.settings[option_title_key]
+
+                assign preco_antigo_key = "option_preco_antigo_" | append: i
+                assign preco_antigo = block.settings[preco_antigo_key]
+
+                assign price_key = "option_price_" | append: i
+                assign price = block.settings[price_key]
+
+                assign discount_key = "option_discount_" | append: i
+                assign discount = block.settings[discount_key]
+
+                assign parcelas_key = "option_parcelas_" | append: i
+                assign parcelas = block.settings[parcelas_key]
+
+                assign installments_note_key = "option_installments_note_" | append: i
+                assign installments_note = block.settings[installments_note_key]
+
+                assign bloco_superior_key = "option_bloco_superior_" | append: i
+                assign bloco_superior = block.settings[bloco_superior_key]
+
+                assign bloco_inferior_key = "option_bloco_inferior_" | append: i
+                assign bloco_inferior = block.settings[bloco_inferior_key]
+
+                assign btn_link_key = "btn_link_" | append: i
+                assign btn_link = block.settings[btn_link_key]
+
+                assign btn_text_key = "btn_text_" | append: i
+                assign btn_text = block.settings[btn_text_key]
+
+                
+                assign label_top_text_key = "option_label_top_" | append: i | append: "_text"
+                assign label_top_fs_desk_key = "option_label_top_" | append: i | append: "_font_size_desktop"
+                assign label_top_fs_mob_key = "option_label_top_" | append: i | append: "_font_size_mobile"
+                assign label_top_color_key = "option_label_top_" | append: i | append: "_color"
+                assign label_top_fw_key = "option_label_top_" | append: i | append: "_font_weight"
+                assign label_top_ls_key = "option_label_top_" | append: i | append: "_letter_spacing"
+                assign label_top_lh_key = "option_label_top_" | append: i | append: "_line_height"
+                assign label_top_bg_color_key = "option_label_top_" | append: i | append: "_bg_color"
+                assign label_top_br_key = "option_label_top_" | append: i | append: "_border_radius"
+                assign label_top_padding_key = "option_label_top_" | append: i | append: "_padding"
+
+                assign label_top_text = block.settings[label_top_text_key]
+                assign label_top_fs_desk = block.settings[label_top_fs_desk_key]
+                assign label_top_fs_mob = block.settings[label_top_fs_mob_key]
+                assign label_top_color = block.settings[label_top_color_key]
+                assign label_top_fw = block.settings[label_top_fw_key]
+                assign label_top_ls = block.settings[label_top_ls_key]
+                assign label_top_lh = block.settings[label_top_lh_key]
+                assign label_top_bg_color = block.settings[label_top_bg_color_key]
+                assign label_top_br = block.settings[label_top_br_key]
+                assign label_top_padding = block.settings[label_top_padding_key]
+
+                assign label_bottom_text_key = "option_label_bottom_" | append: i | append: "_text"
+                assign label_bottom_fs_desk_key = "option_label_bottom_" | append: i | append: "_font_size_desktop"
+                assign label_bottom_fs_mob_key = "option_label_bottom_" | append: i | append: "_font_size_mobile"
+                assign label_bottom_color_key = "option_label_bottom_" | append: i | append: "_color"
+                assign label_bottom_fw_key = "option_label_bottom_" | append: i | append: "_font_weight"
+                assign label_bottom_ls_key = "option_label_bottom_" | append: i | append: "_letter_spacing"
+                assign label_bottom_lh_key = "option_label_bottom_" | append: i | append: "_line_height"
+                assign label_bottom_bg_color_key = "option_label_bottom_" | append: i | append: "_bg_color"
+                assign label_bottom_br_key = "option_label_bottom_" | append: i | append: "_border_radius"
+                assign label_bottom_padding_key = "option_label_bottom_" | append: i | append: "_padding"
+
+                assign label_bottom_text = block.settings[label_bottom_text_key]
+                assign label_bottom_fs_desk = block.settings[label_bottom_fs_desk_key]
+                assign label_bottom_fs_mob = block.settings[label_bottom_fs_mob_key]
+                assign label_bottom_color = block.settings[label_bottom_color_key]
+                assign label_bottom_fw = block.settings[label_bottom_fw_key]
+                assign label_bottom_ls = block.settings[label_bottom_ls_key]
+                assign label_bottom_lh = block.settings[label_bottom_lh_key]
+                assign label_bottom_bg_color = block.settings[label_bottom_bg_color_key]
+                assign label_bottom_br = block.settings[label_bottom_br_key]
+                assign label_bottom_padding = block.settings[label_bottom_padding_key]
+              -%}
+
+              {% if option_title != blank or image != blank or label_top_text != blank or label_bottom_text != blank %}
+                <div class="x9-product-option-card">
+                  {% if bloco_superior != blank %}
+                    <div class="x9-option-block x9-option-block-top">
+                      {{ bloco_superior }}
+                    </div>
+                  {% endif %}
+
+                  {% if label_top_text != blank %}
+                    <div class="x9-option-label x9-option-label-top-{{ section.id }}-{{ block.id }}-{{ i }}"
+                         style="
+                            {% if label_top_bg_color != 'transparent' %}background-color: {{ label_top_bg_color }};{% endif %}
+                            {% if label_top_br != blank %}border-radius: {{ label_top_br }}px;{% endif %}
+                            {% if label_top_padding != blank %}padding: {{ label_top_padding }};{% endif %}
+                            color: {{ label_top_color }};
+                            font-size: {{ label_top_fs_desk }}px;
+                            font-weight: {{ label_top_fw }};
+                            letter-spacing: {{ label_top_ls }}px;
+                            line-height: {{ label_top_lh }};
+                            text-align: center; /* Ensure text is centered within its own label div */
+                            width: 100%;
+                            margin-bottom: 5px; /* Small margin between labels */
+                         ">
+                      {{ label_top_text }}
+                    </div>
+                  {% endif %}
+
+                  {% if label_bottom_text != blank %}
+                    <div class="x9-option-label x9-option-label-bottom-{{ section.id }}-{{ block.id }}-{{ i }}"
+                         style="
+                            {% if label_bottom_bg_color != 'transparent' %}background-color: {{ label_bottom_bg_color }};{% endif %}
+                            {% if label_bottom_br != blank %}border-radius: {{ label_bottom_br }}px;{% endif %}
+                            {% if label_bottom_padding != blank %}padding: {{ label_bottom_padding }};{% endif %}
+                            color: {{ label_bottom_color }};
+                            font-size: {{ label_bottom_fs_desk }}px;
+                            font-weight: {{ label_bottom_fw }};
+                            letter-spacing: {{ label_bottom_ls }}px;
+                            line-height: {{ label_bottom_lh }};
+                            text-align: center;
+                            width: 100%;
+                            margin-bottom: 5px; /* Small margin between labels and image */
+                         ">
+                      {{ label_bottom_text }}
+                    </div>
+                  {% endif %}
+
+                  {% if option_title != blank %}
+                    <h3 class="x9-option-title">{{ option_title }}</h3>
+                  {% endif %}
+
+                  {% if image != blank %}
+                    <div class="x9-option-image">
+                      <img src="{{ image | image_url: width: 300 }}" alt="{{ image.alt | default: option_title }}" loading="lazy">
+                    </div>
+                  {% endif %}
+
+                  {% if preco_antigo != blank %}
+                    <p class="x9-option-old-price">{{ preco_antigo }}</p>
+                  {% endif %}
+                  {% if price != blank %}
+                    <p class="x9-option-price">{{ price }}</p>
+                  {% endif %}
+
+                  {% if discount != blank %}
+                    <p class="x9-option-discount">{{ discount }}</p>
+                  {% endif %}
+
+                  {% if parcelas != blank %}
+                    <p class="x9-option-installments">{{ parcelas }}</p>
+                  {% endif %}
+                  {% if installments_note != blank %}
+                    <p class="x9-option-installments-note">{{ installments_note }}</p>
+                  {% endif %}
+
+                  {% if bloco_inferior != blank %}
+                    <div class="x9-option-block x9-option-block-bottom">
+                      {{ bloco_inferior }}
+                    </div>
+                  {% endif %}
+
+                  {% if btn_link != blank and btn_text != blank %}
+                    <a href="{{ btn_link }}" class="x9-buy-button" data-kit-value="{{ option_title | handleize }}">
+                      {{ btn_text }}
+                    </a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('.x9-shopify-tabs-section-{{ section.id }}');
+    if (section) {
+      const tabButtons = section.querySelectorAll('.x9-tabs-header .x9-tab-button');
+      const tabPanes = section.querySelectorAll('.x9-tabs-content .x9-tab-pane');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove 'active' from all buttons
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          // Remove 'show' from all panes
+          tabPanes.forEach(pane => pane.classList.remove('show'));
+
+          // Add 'active' to clicked button
+          this.classList.add('active');
+
+          // Show corresponding tab pane
+          const targetTabId = this.dataset.tab;
+          const targetPane = section.querySelector(`#tab-${targetTabId}`); // Use section.querySelector for specific targeting
+          if (targetPane) {
+            targetPane.classList.add('show');
+          }
+        });
+      });
+
+      // Ensure the first tab is active and shown on initial load, if any tabs exist
+      if (tabButtons.length > 0 && tabPanes.length > 0) {
+        tabButtons[0].classList.add('active');
+        tabPanes[0].classList.add('show');
+      }
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Colageno Abas Preco/Kits",
+  "tag": "section",
+  "class": "shopify-section-tabs-kits",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais da Seção"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Cor de Fundo da Seção",
+      "default": "#fafbfc"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Espaçamento Interno Superior (Seção)",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 32
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Espaçamento Interno Inferior (Seção)",
+      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Área do Conteúdo"
+    },
+    {
+      "type": "color",
+      "id": "area_bg_color",
+      "label": "Cor de Fundo da Área Principal",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Espessura da Borda da Área Principal",
+      "min": 0, "max": 5, "step": 1, "unit": "px", "default": 1
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Cor da Borda da Área Principal",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Raio da Borda da Área Principal",
+      "min": 0, "max": 30, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "area_padding_top",
+      "label": "Espaçamento Interno Superior (Área)",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 24
+    },
+    {
+      "type": "range",
+      "id": "area_padding_bottom",
+      "label": "Espaçamento Interno Inferior (Área)",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "area_padding_side",
+      "label": "Espaçamento Interno Lateral (Área)",
+      "min": 0, "max": 30, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Configurações das Abas"
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "label": "Tamanho da Fonte (Desktop)",
+      "min": 12, "max": 100, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size_mobile",
+      "label": "Tamanho da Fonte (Mobile)",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tab_font_weight",
+      "label": "Peso da Fonte (Normal)",
+      "min": 300, "max": 700, "step": 100, "default": 400
+    },
+    {
+      "type": "range",
+      "id": "tab_active_font_weight",
+      "label": "Peso da Fonte (Ativa)",
+      "min": 300, "max": 700, "step": 100, "default": 600
+    },
+    {
+      "type": "color",
+      "id": "tab_bg_color",
+      "label": "Cor de Fundo da Aba",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "tab_text_color",
+      "label": "Cor do Texto da Aba",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_bg_color",
+      "label": "Cor de Fundo da Aba (Hover)",
+      "default": "#e9e9e9"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_text_color",
+      "label": "Cor do Texto da Aba (Hover)",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_bg_color",
+      "label": "Cor de Fundo da Aba (Ativa)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_text_color",
+      "label": "Cor do Texto da Aba (Ativa)",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "tab_border_color",
+      "label": "Cor da Borda da Aba",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_border_color",
+      "label": "Cor da Borda da Aba (Ativa)",
+      "default": "#d0d0d0"
+    },
+    {
+      "type": "header",
+      "content": "Configurações dos Cards de Opções"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Cor de Fundo do Card",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Raio da Borda do Card",
+      "min": 0, "max": 20, "step": 1, "unit": "px", "default": 10
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Cor da Borda do Card",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "option_image_width_desktop",
+      "label": "Largura da Imagem (Desktop) %",
+      "min": 10, "max": 100, "step": 1, "unit": "%",
+      "default": 80,
+      "info": "Largura da imagem dentro do card de opção para desktop em porcentagem."
+    },
+    {
+      "type": "range",
+      "id": "option_image_height_desktop",
+      "label": "Altura Máx. da Imagem (Desktop)",
+      "min": 50, "max": 300, "step": 5, "unit": "px",
+      "default": 150,
+      "info": "Altura máxima da imagem dentro do card de opção para desktop."
+    },
+    {
+      "type": "range",
+      "id": "option_image_width_mobile",
+      "label": "Largura da Imagem (Mobile) %",
+      "min": 10, "max": 100, "step": 1, "unit": "%",
+      "default": 90,
+      "info": "Largura da imagem dentro do card de opção para mobile em porcentagem."
+    },
+    {
+      "type": "range",
+      "id": "option_image_height_mobile",
+      "label": "Altura Máx. da Imagem (Mobile)",
+      "min": 40, "max": 200, "step": 5, "unit": "px",
+      "default": 120,
+      "info": "Altura máxima da imagem dentro do card de opção para mobile."
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size",
+      "label": "Tamanho da Fonte do Título (Desktop)",
+      "min": 16, "max": 100, "step": 1, "unit": "px", "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size_mobile",
+      "label": "Tamanho da Fonte do Título (Mobile)",
+      "min": 14, "max": 55, "step": 1, "unit": "px", "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_weight",
+      "label": "Peso da Fonte do Título",
+      "min": 400, "max": 900, "step": 100, "default": 700
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Cor do Título do Card",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Preços"
+    },
+    {
+      "type": "range",
+      "id": "old_price_font_size",
+      "label": "Tam. Fonte Preço Antigo (Desktop)",
+      "min": 12, "max": 100, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "old_price_font_size_mobile",
+      "label": "Tam. Fonte Preço Antigo (Mobile)",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 14
+    },
+    {
+      "type": "color",
+      "id": "old_price_color",
+      "label": "Cor do Preço Antigo",
+      "default": "#999999"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Tam. Fonte Preço Atual (Desktop)",
+      "min": 10, "max": 100, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_font_size_mobile",
+      "label": "Tam. Fonte Preço Atual (Mobile)",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_font_weight",
+      "label": "Peso da Fonte Preço Atual",
+      "min": 500, "max": 900, "step": 100, "default": 800
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Cor do Preço Atual",
+      "default": "#e74c3c"
+    },
+    {
+      "type": "range",
+      "id": "discount_font_size",
+      "label": "Tam. Fonte Desconto (Desktop)",
+      "min": 14, "max": 100, "step": 1, "unit": "px", "default": 18
+    },
+    {
+      "type": "range",
+      "id": "discount_font_size_mobile",
+      "label": "Tam. Fonte Desconto (Mobile)",
+      "min": 12, "max": 55, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "color",
+      "id": "discount_color",
+      "label": "Cor do Texto de Desconto",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "discount_back_color",
+      "label": "Cor do Texto de Desconto",
+      "default": "#FF0000"
+    },
+    {
+      "type": "range",
+      "id": "discount_padding",
+      "label": "Espaçamento da altura",
+      "min": 1, "max": 15, "step": 1, "unit": "px", "default": 8
+    },
+    {
+      "type": "range",
+      "id": "discount_width",
+      "label": "Largura da cor de fundo",
+      "min": 10, "max": 100, "step": 1, "unit": "%",
+      "default": 90,
+      "info": "Largura da do preenchimento da cor de fundo em porcentagem."
+    },
+    {
+      "type": "range",
+      "id": "installments_font_size",
+      "label": "Tam. Fonte Parcelas (Desktop)",
+      "min": 12, "max": 100, "step": 1, "unit": "px", "default": 15
+    },
+    {
+      "type": "range",
+      "id": "installments_font_size_mobile",
+      "label": "Tam. Fonte Parcelas (Mobile)",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 13
+    },
+    {
+      "type": "color",
+      "id": "installments_color",
+      "label": "Cor do Texto de Parcelas",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Botão"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Tam. Fonte do Botão (Desktop)",
+      "min": 14, "max": 55, "step": 1, "unit": "px", "default": 18
+    },
+    {
+      "type": "range",
+      "id": "button_font_size_mobile",
+      "label": "Tam. Fonte do Botão (Mobile)",
+      "min": 12, "max": 40, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "label": "Peso da Fonte do Botão",
+      "min": 400, "max": 900, "step": 100, "default": 700
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Cor de Fundo do Botão",
+      "default": "#007bff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Cor de Fundo do Botão (Hover)",
+      "default": "#0056b3"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Cor do Texto do Botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Raio da Borda do Botão",
+      "min": 0, "max": 30, "step": 1, "unit": "px", "default": 5
+    },
+    {
+      "type": "range",
+      "id": "button_padding_top_bottom",
+      "label": "Preenchimento Superior/Inferior do Botão",
+      "min": 5, "max": 20, "step": 1, "unit": "px", "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_left_right",
+      "label": "Preenchimento Lateral do Botão",
+      "min": 10, "max": 40, "step": 1, "unit": "px", "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_item",
+      "name": "Item da Aba (Sabor/Kit)",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_name",
+          "label": "Nome da Aba (Sabor)",
+          "default": "Sabor A"
+        },
+        {
+          "type": "header",
+          "content": "Opção de Compra 1"
+        },
+        {
+          "type": "header",
+          "content": "Opção 1 - Campo de Texto 1 (Acima Imagem)"
+        },
+        { "type": "richtext", "id": "option_bloco_superior_1", "label": "Opção 1 - Bloco Topo (HTML)", "default": "<p>apague o conteúdo</p>" },
+        
+        { "type": "text", "id": "option_label_top_1_text", "label": "Opção 1 - Texto 1", "default": "Teste" },
+        { "type": "range", "id": "option_label_top_1_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_top_1_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_top_1_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_top_1_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_top_1_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_top_1_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_top_1_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_top_1_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_top_1_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+
+        {
+          "type": "header",
+          "content": "Opção 1 - Campo de Texto 2 (Acima Imagem)"
+        },
+
+        { "type": "text", "id": "option_label_bottom_1_text", "label": "Opção 1 - Texto 1", "default": "Teste" },
+        { "type": "range", "id": "option_label_bottom_1_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_bottom_1_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_bottom_1_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_bottom_1_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_bottom_1_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_bottom_1_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_bottom_1_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_bottom_1_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_bottom_1_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+
+
+        { "type": "text", "id": "option_title_1", "label": "Opção 1 - Título", "default": "Kit 1 Mês" },
+        { "type": "image_picker", "id": "image_1", "label": "Opção 1 - Imagem" },     
+        { "type": "text", "id": "option_preco_antigo_1", "label": "Opção 1 - Preço Antigo", "default": "de R$ 99,90" },
+        { "type": "text", "id": "option_price_1", "label": "Opção 1 - Preço à Vista", "default": "por R$ 79,90 à vista." },
+        { "type": "text", "id": "option_discount_1", "label": "Opção 1 - Texto de Desconto", "default": "Economize 20%!" },
+        { "type": "text", "id": "option_parcelas_1", "label": "Opção 1 - Parcelas", "default": "Em até 3x de R$ 26,63" },
+        { "type": "text", "id": "option_installments_note_1", "label": "Opção 1 - Nota Parcelas", "default": "sem juros" },        
+        { "type": "richtext", "id": "option_bloco_inferior_1", "label": "Opção 1 - Bloco Inferior (HTML)", "default": "<p>apague o conteúdo</p>" },
+        { "type": "url", "id": "btn_link_1", "label": "Opção 1 - Link do Botão" },
+        { "type": "text", "id": "btn_text_1", "label": "Opção 1 - Texto do Botão", "default": "Comprar Kit 1" },
+
+        { "type": "header", "content": "Opção de Compra 2" },
+        {
+          "type": "header",
+          "content": "Opção 2 - Campo de Texto 1 (Acima Imagem)"
+        },
+        { "type": "richtext", "id": "option_bloco_superior_2", "label": "Opção 2 - Bloco Topo (HTML)", "default": "<p>apague o conteúdo</p>" },
+        
+        { "type": "text", "id": "option_label_top_2_text", "label": "Opção 2 - Texto 2", "default": "Teste" },
+        { "type": "range", "id": "option_label_top_2_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_top_2_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_top_2_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_top_2_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_top_2_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_top_2_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_top_2_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_top_2_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_top_2_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+
+        {
+          "type": "header",
+          "content": "Opção 2 - Campo de Texto 2 (Acima Imagem)"
+        },
+        { "type": "text", "id": "option_label_bottom_2_text", "label": "Opção 2 - Texto 2", "default": "Teste" },
+        { "type": "range", "id": "option_label_bottom_2_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_bottom_2_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_bottom_2_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_bottom_2_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_bottom_2_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_bottom_2_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_bottom_2_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_bottom_2_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_bottom_2_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+        
+        
+        { "type": "text", "id": "option_title_2", "label": "Opção 2 - Título", "default": "Kit 1 Mês" },
+        { "type": "image_picker", "id": "image_2", "label": "Opção 2 - Imagem" },     
+        { "type": "text", "id": "option_preco_antigo_2", "label": "Opção 2 - Preço Antigo", "default": "de R$ 99,90" },
+        { "type": "text", "id": "option_price_2", "label": "Opção 2 - Preço à Vista", "default": "por R$ 79,90 à vista." },
+        { "type": "text", "id": "option_discount_2", "label": "Opção 2 - Texto de Desconto", "default": "Economize 20%!" },
+        { "type": "text", "id": "option_parcelas_2", "label": "Opção 2 - Parcelas", "default": "Em até 3x de R$ 26,63" },
+        { "type": "text", "id": "option_installments_note_2", "label": "Opção 2 - Nota Parcelas", "default": "sem juros" },        
+        { "type": "richtext", "id": "option_bloco_inferior_2", "label": "Opção 2 - Bloco Inferior (HTML)", "default": "<p>apague o conteúdo</p>" },
+        { "type": "url", "id": "btn_link_2", "label": "Opção 2 - Link do Botão" },
+        { "type": "text", "id": "btn_text_2", "label": "Opção 2 - Texto do Botão", "default": "Comprar Kit 2" },
+
+        { "type": "header", "content": "Opção de Compra 3" },
+        {
+          "type": "header",
+          "content": "Opção 3 - Campo de Texto 1 (Acima Imagem)"
+        },
+
+        { "type": "richtext", "id": "option_bloco_superior_3", "label": "Opção 3 - Bloco Topo (HTML)", "default": "<p>apague o conteúdo</p>" },
+        
+        { "type": "text", "id": "option_label_top_3_text", "label": "Opção 3 - Texto 1", "default": "Teste" },
+        { "type": "range", "id": "option_label_top_3_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_top_3_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_top_3_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_top_3_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_top_3_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_top_3_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_top_3_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_top_3_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_top_3_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+
+        
+        {
+          "type": "header",
+          "content": "Opção 3 - Campo de Texto 2 (Acima Imagem)"
+        },
+
+        { "type": "text", "id": "option_label_bottom_3_text", "label": "Opção 3 - Texto 2", "default": "Teste" },
+        { "type": "range", "id": "option_label_bottom_3_font_size_desktop", "label": "Tam. Fonte (Desktop)", "min": 10, "max": 60, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "option_label_bottom_3_font_size_mobile", "label": "Tam. Fonte (Mobile)", "min": 8, "max": 55, "step": 1, "unit": "px", "default": 12 },
+        { "type": "color", "id": "option_label_bottom_3_color", "label": "Cor do Texto", "default": "#fff" },
+        { "type": "range", "id": "option_label_bottom_3_font_weight", "label": "Peso da Fonte", "min": 300, "max": 900, "step": 100, "default": 600 },
+        { "type": "range", "id": "option_label_bottom_3_letter_spacing", "label": "Espaçamento Entre Letras", "min": -2, "max": 5, "step": 0.1, "unit": "px", "default": 0.5 },
+        { "type": "range", "id": "option_label_bottom_3_line_height", "label": "Altura da Linha", "min": 0.8, "max": 2.0, "step": 0.1, "default": 1.3 },
+        { "type": "color", "id": "option_label_bottom_3_bg_color", "label": "Cor de Fundo", "default": "#54B101" },
+        { "type": "range", "id": "option_label_bottom_3_border_radius", "label": "Raio da Borda Fundo", "min": 0, "max": 35, "step": 1, "unit": "px", "default": 35 },
+        { "type": "text", "id": "option_label_bottom_3_padding", "label": "Padding (Ex: 5px 10px)", "default": "10px 10px" },
+
+         { "type": "text", "id": "option_title_3", "label": "Opção 3 - Título", "default": "Kit 5 Meses" },
+        { "type": "image_picker", "id": "image_3", "label": "Opção 3 - Imagem" },
+        { "type": "text", "id": "option_preco_antigo_3", "label": "Opção 3 - Preço Antigo", "default": "de R$ 499,50" },
+        { "type": "text", "id": "option_price_3", "label": "Opção 3 - Preço à Vista", "default": "por R$ 249,75 à vista." },
+        { "type": "text", "id": "option_discount_3", "label": "Opção 3 - Texto de Desconto", "default": "MELHOR CUSTO-BENEFÍCIO! Economize 50%!" },
+        { "type": "text", "id": "option_parcelas_3", "label": "Opção 3 - Parcelas", "default": "Em até 10x de R$ 24,98" },
+        { "type": "text", "id": "option_installments_note_3", "label": "Opção 3 - Nota Parcelas", "default": "sem juros" },
+        { "type": "richtext", "id": "option_bloco_inferior_3", "label": "Opção 3 - Bloco Inferior (HTML)", "default": "<p>apague o conteúdo</p>" },
+        { "type": "url", "id": "btn_link_3", "label": "Opção 3 - Link do Botão" },
+        { "type": "text", "id": "btn_text_3", "label": "Opção 3 - Texto do Botão", "default": "Comprar Kit 3" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colageno Abas Preco/Kits",
+      "category": "Preço e Oferta",
+      "blocks": [
+        { "type": "tab_item", "settings": { "tab_name": "Sabor Baunilha" } },
+        { "type": "tab_item", "settings": { "tab_name": "Sabor Chocolate" } },
+        { "type": "tab_item", "settings": { "tab_name": "Sabor Morango" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

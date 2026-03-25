@@ -1,0 +1,630 @@
+{% comment %}
+  Seção Shopify: Bloco Intro 2 - Sophia.ArtistaQuantica
+  - Molde adaptável a qualquer novo produto.
+  - Título principal da seção (opcional) e botão customizável em uma div separada, centralizados.
+  - Coluna da esquerda com até duas imagens customizáveis (largura, espaçamento e título Rich Text, e AGORA com personalização de bordas).
+  - Coluna da direita com conteúdo de texto principal.
+  - O botão agora aparece no final do bloco, abaixo das colunas, com opções de alinhamento.
+  - Todas as classes CSS e IDs HTML são unicamente identificadas com a assinatura '-sophiaAQ-intro2'.
+{% endcomment %}
+
+{%- liquid
+  assign current_section_id = section.id
+  assign background_color = section.settings.background_color
+  assign border_color = section.settings.border_color
+  assign border_thickness = section.settings.border_thickness
+  assign border_radius = section.settings.border_radius
+  assign container_margin_left = section.settings.container_margin_left
+  assign container_margin_right = section.settings.container_margin_right
+  assign section_padding_top = section.settings.section_padding_top
+  assign section_padding_bottom = section.settings.section_padding_bottom
+  assign inner_padding = section.settings.inner_padding
+  assign content_vertical_align = section.settings.content_vertical_align
+  assign reverse_columns = section.settings.reverse_columns
+
+  assign main_section_title = section.settings.main_section_title
+  assign main_section_title_color = section.settings.main_section_title_color
+  assign main_section_title_font_size = section.settings.main_section_title_font_size
+  assign main_section_title_align = section.settings.main_section_title_align
+  assign main_section_title_max_width = section.settings.main_section_title_max_width
+  
+
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+  assign button_bg_color = section.settings.button_bg_color
+  assign button_text_color = section.settings.button_text_color
+  assign button_font_size = section.settings.button_font_size
+  assign button_padding_y = section.settings.button_padding_y
+  assign button_padding_x = section.settings.button_padding_x
+  assign button_border_radius = section.settings.button_border_radius
+  assign button_anchor_js = section.settings.button_anchor_js
+  assign button_align = section.settings.button_align
+
+  
+  assign main_text_content = section.settings.main_text_content
+  assign main_text_color = section.settings.main_text_color
+  assign main_text_strong_color = section.settings.main_text_strong_color
+  assign main_text_italic_color = section.settings.main_text_italic_color
+  assign main_text_font_size = section.settings.main_text_font_size
+  
+
+  assign image_border_radius = section.settings.image_border_radius
+  assign image_border_thickness = section.settings.image_border_thickness
+  assign image_border_color = section.settings.image_border_color
+-%}
+
+{%- style -%}
+  /* ========== [INÍCIO] CSS da Seção Shopify: Bloco Intro 2 - Sophia.ArtistaQuantica ========== */
+  .section-intro2-sophiaAQ-intro2-{{ current_section_id }} {
+    padding-top: {{ section_padding_top | default: 40 }}px;
+    padding-bottom: {{ section_padding_bottom | default: 40 }}px;
+    margin-left: {{ container_margin_left | default: 0 }}px;
+    margin-right: {{ container_margin_right | default: 0 }}px;
+  }
+
+  .x20custom-container-sophiaAQ-intro2 {
+    background-color: {{ background_color }};
+    border: {{ border_thickness }}px solid {{ border_color }};
+    border-radius: {{ border_radius }}px;
+    margin: 0 10px;
+    padding: {{ inner_padding }}px;
+    overflow: hidden;
+    display: flex;
+    align-items: {{ content_vertical_align }};
+    justify-content: center;
+    flex-direction: column; /* Sempre em coluna para acomodar o título principal e o botão no final */
+  }
+
+  .x20main-section-header-sophiaAQ-intro2 {
+    width: 100%;
+    max-width: {{ main_section_title_max_width }}px;
+    text-align: {{ main_section_title_align }};
+    margin-bottom: 30px; /* Espaçamento entre o cabeçalho e as colunas */
+    {% if main_section_title == blank %}
+      margin-bottom: 0; /* Remove margem se não houver título */
+    {% endif %}
+  }
+
+  .x20main-section-title-sophiaAQ-intro2 {
+    color: {{ main_section_title_color }};
+    font-size: {{ main_section_title_font_size }}px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+
+  .x20grid-container-sophiaAQ-intro2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .col-50-sophiaAQ-intro2 {
+    width: 100%;
+  }
+
+  .x20image-column-sophiaAQ-intro2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza as imagens dentro da coluna */
+    justify-content: center;
+  }
+
+  .x20image-wrapper-sophiaAQ-intro2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o título e a imagem dentro do wrapper */
+    width: 100%;
+    margin-bottom: {{ section.settings.image_spacing }}px; /* Espaçamento entre as imagens */
+  }
+
+  .x20image-title-sophiaAQ-intro2 {
+    margin-bottom: 5px;
+    text-align: center; /* Centraliza o título da imagem */
+    width: 100%;
+  }
+
+  .x20image-wrapper-sophiaAQ-intro2 img {
+    display: block;
+    height: auto; /* Altura automática por padrão */
+    max-width: 100%;
+    /* Novas propriedades de borda para as imagens */
+    border-radius: {{ image_border_radius }}px;
+    border: {{ image_border_thickness }}px solid {{ image_border_color }};
+    background-color: {{ background_color }}; /* Garante que a "sobra" seja da cor do fundo do container */
+    overflow: hidden; /* Garante que a borda arredondada seja aplicada corretamente */
+  }
+
+  .x20text-column-sophiaAQ-intro2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left; /* Padrão para texto em coluna */
+    height: 100%;
+    color: {{ main_text_color }};
+    font-size: {{ main_text_font_size }}px;
+
+  }
+  .x20text-column-sophiaAQ-intro2 strong {
+    color: {{ main_text_strong_color }};
+    font-weight: bold;
+  }
+  .x20text-column-sophiaAQ-intro2 em {
+    color: {{ main_text_italic_color }};
+    font-style: inherit; 
+  }
+
+  
+  .x20text-column-sophiaAQ-intro2 p {
+    margin-bottom: 1em;
+    line-height: 1.6;
+  }
+
+  /* Garante que imagens dentro do richtext não transbordem */
+  .x20text-column-sophiaAQ-intro2 img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Estilos para o container do botão no final */
+  .x20button-container-sophiaAQ-intro2 {
+    width: 100%;
+    margin-top: 15px; /* Espaçamento entre as colunas e o botão */
+    text-align: {{ button_align }}; /* Alinhamento do botão */
+  }
+
+  .x20section-button-sophiaAQ-intro2 {
+    background-color: {{ button_bg_color }};
+    color: {{ button_text_color }};
+    font-size: {{ button_font_size }}px;
+    padding: {{ button_padding_y }}px {{ button_padding_x }}px;
+    border-radius: {{ button_border_radius }}px;
+    text-decoration: none;
+    display: inline-block; /* Permite alinhar o botão */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .x20section-button-sophiaAQ-intro2:hover {
+    filter: brightness(1.1);
+  }
+
+  /* ========== Media Queries para Responsividade ========== */
+  @media (max-width: 767px) {
+    .section-intro2-sophiaAQ-intro2-{{ current_section_id }} {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    .x20custom-container-sophiaAQ-intro2 {
+      padding: 30px 15px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    .x20main-section-title-sophiaAQ-intro2 {
+      font-size: {{ section.settings.main_section_title_font_size_mobile }}px;
+    }
+    .x20section-button-sophiaAQ-intro2 {
+      padding: 15px 30px;
+      width: 100%;
+      text-align: center; /* Botão sempre centralizado em mobile */
+    }
+    .x20button-container-sophiaAQ-intro2 {
+      text-align: center; /* Força centralização do container do botão em mobile */
+    }
+    /* Ajusta largura das imagens para mobile */
+    .x20image-wrapper-sophiaAQ-intro2 img {
+      width: {{ section.settings.image_width_mobile }}%!important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .x20grid-container-sophiaAQ-intro2 {
+      flex-direction: row;
+      gap: 3rem;
+    }
+    {% if reverse_columns %}
+      .x20grid-container-sophiaAQ-intro2 {
+        flex-direction: row-reverse;
+      }
+    {% endif %}
+
+    .col-50-sophiaAQ-intro2 {
+      flex: 1;
+      width: 50%;
+    }
+    .x20custom-container-sophiaAQ-intro2 {
+      padding: {{ inner_padding | default: 60 }}px;
+    }
+    /* Ajusta largura das imagens para desktop */
+    .x20image-wrapper-sophiaAQ-intro2 img {
+      width: {{ section.settings.image_width_desktop }}%!important;
+    }
+  }
+
+  /* ========== [FIM] CSS da Seção Shopify: Bloco Intro 2 - Sophia.ArtistaQuantica ========== */
+{%- endstyle -%}
+
+<section class="section-intro2-sophiaAQ-intro2-{{ current_section_id }}" data-section-id="{{ current_section_id }}">
+  <div class="x20custom-container-sophiaAQ-intro2">
+    {% if main_section_title != blank %}
+      <div class="x20main-section-header-sophiaAQ-intro2">
+        <h2 class="x20main-section-title-sophiaAQ-intro2">
+          {{ main_section_title }}
+        </h2>
+      </div>
+    {% endif %}
+
+    <div class="x20grid-container-sophiaAQ-intro2">
+      <div class="col-50-sophiaAQ-intro2 x20image-column-sophiaAQ-intro2">
+        {% for i in (1..2) %}
+          {% capture image_setting %}image_{{ i }}{% endcapture %}
+          {% capture image_title_setting %}image_title_{{ i }}{% endcapture %}
+          {% if section.settings[image_setting] != blank %}
+            <div class="x20image-wrapper-sophiaAQ-intro2" style="margin-bottom: {% if i == 1 and section.settings.image_2 != blank %}{{ section.settings.image_spacing }}px{% else %}0px{% endif %};">
+              {% if section.settings[image_title_setting] != blank %}
+                <div class="x20image-title-sophiaAQ-intro2">
+                  {{ section.settings[image_title_setting] }}
+                </div>
+              {% endif %}
+              <img
+                src="{{ section.settings[image_setting] | img_url: 'master' }}"
+                alt="{{ section.settings[image_setting].alt | default: 'Imagem de Produto ' | append: i }}"
+                width="{{ section.settings[image_setting].width }}"
+                height="{{ section.settings[image_setting].height }}"
+                loading="lazy"
+                style="width: {% if request.host contains 'myshopify.com' or request.path contains 'admin' %}{{ section.settings.image_width_desktop }}%{% else %}{{ section.settings.image_width_mobile }}%{% endif %};"
+              >
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="col-50-sophiaAQ-intro2 x20text-column-sophiaAQ-intro2">
+        {% if main_text_content != blank %}
+          {{ main_text_content }}
+        {% else %}
+          <p><strong>Conteúdo Rico do Produto:</strong> Utilize este espaço para detalhar os benefícios, características e informações importantes do seu produto. Edite no customizador com texto formatado, listas e o que mais precisar!</p>
+          <ul>
+            <li>Benefício Chave 1: Qualidade Superior</li>
+            <li>Benefício Chave 2: Inovação Garantida</li>
+            <li>Benefício Chave 3: Fácil de Usar</li>
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if button_text != blank %}
+      <div class="x20button-container-sophiaAQ-intro2">
+        <a href="{{ button_link }}" class="x20section-button-sophiaAQ-intro2"
+          {% if button_anchor_js != blank %}onclick="{{ button_anchor_js }}"{% endif %}>
+          {{ button_text }}
+        </a>
+        {% if button_anchor_js != blank %}
+          <p style="font-size: 0.75rem; color: #666; margin-top: 5px;">
+            <small>Instruções JS: {{ button_anchor_js }}</small>
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Colágeno Verisol Intro 2",
+  "tag": "section",
+  "class": "section-intro2-sophiaAQ-intro2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configurações Gerais da Seção"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de Fundo do Container Principal",
+      "default": "#f9f9f9",
+      "info": "Esta cor será aplicada ao container interno que envolve o conteúdo."
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Cor da Borda do Container Principal",
+      "default": "#dddddd"
+    },
+    {
+      "type": "range",
+      "id": "border_thickness",
+      "label": "Espessura da Borda do Container Principal",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 1
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Raio da borda do Container Principal",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "default": 10
+    },
+    {
+      "type": "range",
+      "id": "container_margin_left",
+      "label": "Margem Esquerda Externa da Seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 0,
+      "info": "Define a margem externa à esquerda da seção principal."
+    },
+    {
+      "type": "range",
+      "id": "container_margin_right",
+      "label": "Margem Direita Externa da Seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 0,
+      "info": "Define a margem externa à direita da seção principal."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Espaçamento superior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Espaçamento inferior da seção",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40
+    },
+    {
+      "type": "range",
+      "id": "inner_padding",
+      "label": "Espaçamento interno do container",
+      "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40,
+      "info": "Espaçamento entre a borda do container e seu conteúdo interno."
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align",
+      "label": "Alinhamento Vertical das Colunas",
+      "options": [
+        { "value": "flex-start", "label": "Topo" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Fundo" }
+      ],
+      "default": "center",
+      "info": "Alinha verticalmente o conteúdo das colunas dentro do container principal."
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_columns",
+      "label": "Inverter ordem das colunas (conteúdo da direita à esquerda)",
+      "default": false,
+      "info": "Em desktop, a coluna de texto será exibida à esquerda e a de imagens à direita."
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Título da Seção"
+    },
+    {
+      "type": "text",
+      "id": "main_section_title",
+      "label": "Título Principal da Seção",
+      "default": "Benefícios Incríveis para o Seu Produto!"
+    },
+    {
+      "type": "range",
+      "id": "main_section_title_max_width",
+      "min": 100, "max": 1000, "step": 25, "unit": "px", "label": "Largura máxima do texto",
+      "default": 500
+    },
+    {
+      "type": "color",
+      "id": "main_section_title_color",
+      "label": "Cor do Título Principal",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "range",
+      "id": "main_section_title_font_size",
+      "min": 12, "max": 60, "step": 2, "unit": "px", "label": "Tamanho da Fonte (Desktop)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "main_section_title_font_size_mobile",
+      "min": 12, "max": 40, "step": 1, "unit": "px", "label": "Tamanho da Fonte (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "main_section_title_align",
+      "label": "Alinhamento do Título Principal",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Configurações do Botão (no final do Bloco)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto do Botão",
+      "default": "Compre Agora"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do Botão"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Cor de Fundo do Botão",
+      "default": "#3498db"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Cor do Texto do Botão",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "label": "Tamanho da fonte",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "min": 5, "max": 30, "step": 1, "unit": "px", "label": "Preenchimento Vertical",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "min": 10, "max": 200, "step": 5, "unit": "px", "label": "Preenchimento Horizontal",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0, "max": 30, "step": 1, "unit": "px", "label": "Raio da Borda",
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "button_align",
+      "label": "Alinhamento do Botão",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "liquid",
+      "id": "button_anchor_js",
+      "label": "Código JavaScript para o Botão (onclick)",
+      "info": "Ex: alert('Olá!'); ou minhaFuncaoCustomizada();"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Imagens (Esquerda)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Imagem 1"
+    },
+    {
+      "type": "richtext",
+      "id": "image_title_1",
+      "label": "Título da Imagem 1",
+      "default": "<h6>Título da Imagem 1</h6>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Imagem 2"
+    },
+    {
+      "type": "richtext",
+      "id": "image_title_2",
+      "label": "Título da Imagem 2",
+      "default": "<h6>Título da Imagem 2</h6>"
+    },
+    {
+      "type": "range",
+      "id": "image_spacing",
+      "min": 0, "max": 50, "step": 5, "unit": "px", "label": "Espaçamento entre Imagens",
+      "default": 20,
+      "info": "Define o espaçamento entre a Imagem 1 e a Imagem 2 (se a Imagem 2 for adicionada)."
+    },
+    {
+      "type": "range",
+      "id": "image_width_desktop",
+      "min": 50, "max": 100, "step": 5, "unit": "%", "label": "Largura da Imagem (Desktop)",
+      "default": 100,
+      "info": "Define a largura da imagem em relação à largura da coluna em desktop."
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile",
+      "min": 50, "max": 100, "step": 5, "unit": "%", "label": "Largura da Imagem (Mobile)",
+      "default": 100,
+      "info": "Define a largura da imagem em relação à largura da coluna em mobile."
+    },
+    {
+      "type": "header",
+      "content": "Bordas das Imagens"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Raio da Borda das Imagens",
+      "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0,
+      "info": "Arredonda os cantos das imagens."
+    },
+    {
+      "type": "range",
+      "id": "image_border_thickness",
+      "label": "Espessura da Borda das Imagens",
+      "min": 0, "max": 10, "step": 1, "unit": "px", "default": 0,
+      "info": "Define a espessura da borda. Defina como 0 para não ter borda."
+    },
+    {
+      "type": "color",
+      "id": "image_border_color",
+      "label": "Cor da Borda das Imagens",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Configurações da Coluna de Texto (Direita)"
+    },
+    {
+      "type": "richtext",
+      "id": "main_text_content",
+      "label": "Conteúdo Principal de Texto",
+      "default": "<p>Este espaço é ideal para apresentar detalhes sobre o seu produto, destacando sua proposta de valor e características essenciais.</p><ul><li>Benefício Chave 1: Qualidade Superior</li><li>Benefício Chave 2: Inovação Garantida</li><li>Benefício Chave 3: Fácil de Usar</li></ul>"
+    },
+    {
+      "type": "range",
+      "id": "main_text_font_size",
+      "label": "Tamanho da fonte (do Conteúdo Principal)",
+      "min": 10, "max": 55, "step": 1, "unit": "px", "default": 16
+    },
+    {
+      "type": "color",
+      "id": "main_text_color",
+      "label": "Cor do Texto Principal",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "main_text_strong_color",
+      "label": "Cor do Negrito",
+      "default": "#444444"
+    },
+    {
+      "type": "color",
+      "id": "main_text_italic_color",
+      "label": "Cor do Contraste Italico",
+      "default": "#555555"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colágeno Verisol Intro 2",
+      "category": "Custom",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}
