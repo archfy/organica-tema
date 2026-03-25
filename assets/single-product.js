@@ -166,6 +166,29 @@ class VariantRadiosProductSingle extends HTMLElement {
         } else if (!this.currentVariant.available) {
             bls__price.classList.add('price--sold-out');
         }
+
+        // Recalcula parcelamento após troca de variante
+        (function(priceCents) {
+            var MIN_INSTALLMENT = 5000;
+            var MAX_INSTALLMENTS = 10;
+            var count = Math.floor(priceCents / MIN_INSTALLMENT);
+            var installmentsWrapper = document.querySelector('[data-installments-wrapper]');
+            var parcelaPdpEls = document.querySelectorAll('.value-parcela-pdp');
+            if (count < 2) {
+                if (installmentsWrapper) installmentsWrapper.style.display = 'none';
+            } else {
+                if (count > MAX_INSTALLMENTS) count = MAX_INSTALLMENTS;
+                var value = Math.floor(priceCents / count);
+                var valueStr = 'R$ ' + (value / 100).toFixed(2).replace('.', ',');
+                if (installmentsWrapper) {
+                    installmentsWrapper.style.display = '';
+                    var span = installmentsWrapper.querySelector('.value-parcela-pdp');
+                    if (span) span.textContent = valueStr;
+                }
+                parcelaPdpEls.forEach(function(el) { el.textContent = valueStr; });
+            }
+        })(this.currentVariant.price);
+
         this.toggleAddButton(!this.currentVariant.available, variantStrings);
     }
 
