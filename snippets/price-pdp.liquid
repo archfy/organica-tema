@@ -1,4 +1,13 @@
 <style>
+  /* Parcelamento sempre em linha própria, abaixo do preço */
+  .price__installments,
+  [data-installments-wrapper] {
+    display: block !important;
+    flex-basis: 100% !important;
+    width: 100% !important;
+    margin-top: 4px;
+  }
+
   .price__discount-badge {
     background-color: #ff0000;
     color: #FFFFFF;
