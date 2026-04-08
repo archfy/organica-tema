@@ -459,6 +459,66 @@
   }
   
   console.log('✅ [PRICE-PDP v4.0] Todos os listeners instalados!');
-  
+
+  // ========================================
+  // PATCH variant-selects: garante atualização de parcelamento
+  // ========================================
+  function patchVariantSelects() {
+    var VariantSelectsClass = customElements.get('variant-selects');
+    if (!VariantSelectsClass) return;
+
+    var _orig = VariantSelectsClass.prototype.renderProductInfo;
+    VariantSelectsClass.prototype.renderProductInfo = function() {
+      _orig.call(this);
+      var priceCents = this.currentVariant && this.currentVariant.price;
+      if (!priceCents) return;
+
+      // Atualiza [data-installments-wrapper] em #price-pdp-wrapper
+      var priceWrap = document.getElementById('price-pdp-wrapper');
+      var wrapper = priceWrap && priceWrap.querySelector('[data-installments-wrapper]');
+      var instCount = Math.floor(priceCents / 5000);
+      if (instCount > 10) instCount = 10;
+
+      if (instCount >= 2) {
+        var instValue = Math.floor(priceCents / instCount);
+        var instStr = 'R$ ' + (instValue / 100).toFixed(2).replace('.', ',');
+        // Reconstrói wrapper se não existe
+        if (!wrapper && priceWrap) {
+          var bls = priceWrap.querySelector('.bls__price');
+          if (bls) {
+            var div = document.createElement('div');
+            div.className = 'price__installments';
+            div.setAttribute('data-installments-wrapper', '');
+            div.innerHTML = '<span class="text-gray-600 text-[12px] text-juros-grid">ou ' + instCount + 'x de <span class="value-parcela-pdp" style="display:inline-block">' + instStr + '</span></span>';
+            bls.appendChild(div);
+            wrapper = div;
+          }
+        } else if (wrapper) {
+          wrapper.style.display = '';
+          var sp = wrapper.querySelector('.value-parcela-pdp');
+          if (sp) sp.textContent = instStr;
+        }
+        // Atualiza todos .value-parcela-pdp externos
+        document.querySelectorAll('.value-parcela-pdp').forEach(function(el) {
+          el.textContent = instStr;
+        });
+      } else {
+        // Preço baixo: esconde installments wrapper mas atualiza spans com divisão por 3
+        if (wrapper) wrapper.style.display = 'none';
+        var simpleStr = 'R$ ' + (priceCents / 3 / 100).toFixed(2).replace('.', ',');
+        document.querySelectorAll('.value-parcela-pdp').forEach(function(el) {
+          el.textContent = simpleStr;
+        });
+      }
+    };
+    console.log('✅ [PRICE-PDP] VariantSelects.renderProductInfo patchado!');
+  }
+
+  if (customElements.get('variant-selects')) {
+    patchVariantSelects();
+  } else {
+    customElements.whenDefined('variant-selects').then(patchVariantSelects);
+  }
+
 })();
 </script>
