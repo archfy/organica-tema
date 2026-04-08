@@ -254,7 +254,12 @@
       `;
     }
     
-    // Parcelamento dinâmico
+    // Fecha bls__product-price (flex container) antes do parcelamento
+    priceHTML += `
+        </div>
+    `;
+
+    // Parcelamento dinâmico (fora do flex container, linha abaixo do preço)
     if (installments) {
       priceHTML += `
           <div class="price__installments" data-installments-wrapper>
@@ -268,9 +273,8 @@
     } else {
       console.log('💳 [PRICE-PDP v4.0] Sem parcelamento (parcela ficaria < R$50)');
     }
-    
+
     priceHTML += `
-        </div>
       </div>
     `;
     
